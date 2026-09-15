@@ -1,0 +1,273 @@
+﻿@import "tailwindcss";
+
+/* ==========================================================================
+   1. CORE THEME CONFIGURATION (Tailwind v4 @theme Architecture)
+   ========================================================================== */
+@theme {
+	/* --- Typography Core Engine --- */
+	--font-sans: "Geist", system-ui, -apple-system, sans-serif;
+	--font-display: "Geist", var(--font-sans);
+	--font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+	/* --- Direct Variable Bindings (Decoupled Light/Dark Mappings) --- */
+	--color-bg-canvas: var(--bg-canvas);
+	--color-fg-default: var(--fg-default);
+	--color-fg-muted: var(--fg-muted);
+	--color-border-subtle: var(--border-subtle);
+	--color-panel-bg: var(--panel-bg);
+
+	/* --- Absolute Structural Naming Scales --- */
+	--color-primary-50: var(--primary-50);
+	--color-primary-500: var(--primary-500); /* Core Action Accent */
+	--color-primary-600: var(--primary-600);
+
+	--color-secondary-50: var(--secondary-50);
+	--color-secondary-500: var(--secondary-500); /* Secondary Highlight */
+	--color-secondary-600: var(--secondary-600);
+
+	--color-tertiary-50: var(--tertiary-50);
+	--color-tertiary-500: var(
+		--tertiary-500
+	); /* Destructive Actions / Highlights */
+	--color-tertiary-600: var(--tertiary-600);
+
+	/* --- UI Functional States --- */
+	--color-success: oklch(0.72 0.16 150);
+	--color-warning: oklch(0.78 0.17 75);
+	--color-danger: oklch(0.63 0.22 25);
+
+	/* --- Typography Fluid Scaling Scale --- */
+	--text-title-hero: clamp(2.25rem, 6vw, 3.75rem);
+	--text-title-main: clamp(1.5rem, 4vw, 2.25rem);
+	--text-title-card: 1.25rem;
+	--text-desc-base: 1rem;
+	--text-desc-muted: 0.875rem;
+
+	/* --- Structural Layout System Tokens --- */
+	--radius-panel: 12px;
+	--radius-control: 6px;
+
+	/* --- Custom Z-Index Stacking Context Scale --- */
+	--z-index-dropdown: 1000;
+	--z-index-sticky: 1020;
+	--z-index-fixed: 1030;
+	--z-index-modal: 1040;
+	--z-index-popover: 1050;
+	--z-index-tooltip: 1060;
+}
+
+/* ==========================================================================
+   2. EXPLICIT INTERIOR PERCEPTUAL STRUCTURAL THEMES
+   ========================================================================== */
+:root {
+	/* --- Light Theme Palette Configs --- */
+	--bg-canvas: oklch(0.985 0.004 260);
+	--fg-default: oklch(0.15 0.01 260);
+	--fg-muted: oklch(0.45 0.01 260);
+	--border-subtle: oklch(0.872 0.012 260);
+	--panel-bg: oklch(0.95 0.008 260);
+	--glow-intensity: 0.06;
+
+	/* Naming Standard Scales Bound To Light Coordinates */
+	--primary-50: oklch(0.96 0.03 250);
+	--primary-500: oklch(0.52 0.16 250);
+	--primary-600: oklch(0.44 0.15 250);
+
+	--secondary-50: oklch(0.96 0.03 290);
+	--secondary-500: oklch(0.5 0.18 290);
+	--secondary-600: oklch(0.42 0.17 290);
+
+	--tertiary-50: oklch(0.95 0.04 20);
+	--tertiary-500: oklch(0.6 0.2 20);
+	--tertiary-600: oklch(0.5 0.19 20);
+}
+
+html.dark {
+	/* --- Pitch Midnight Sapphire System Theme Configs --- */
+	--bg-canvas: oklch(0.13 0.008 260);
+	--fg-default: oklch(0.95 0 0);
+	--fg-muted: oklch(0.65 0 0);
+	--border-subtle: oklch(0.23 0.012 260);
+	--panel-bg: oklch(0.08 0.01 260);
+	--glow-intensity: 0.25;
+
+	/* Naming Standard Scales Bound To Sapphire Coordinates */
+	--primary-50: oklch(0.25 0.05 250);
+	--primary-500: oklch(0.62 0.18 250);
+	--primary-600: oklch(0.54 0.17 250);
+
+	--secondary-50: oklch(0.22 0.05 290);
+	--secondary-500: oklch(0.58 0.21 290);
+	--secondary-600: oklch(0.5 0.2 290);
+
+	--tertiary-50: oklch(0.22 0.05 20);
+	--tertiary-500: oklch(0.63 0.22 20);
+	--tertiary-600: oklch(0.53 0.21 20);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not(.light) {
+		/* Automatic System Mode Fallback Hooks */
+		--bg-canvas: oklch(0.13 0.008 260);
+		--fg-default: oklch(0.95 0 0);
+		--fg-muted: oklch(0.65 0 0);
+		--border-subtle: oklch(0.23 0.012 260);
+		--panel-bg: oklch(0.08 0.01 260);
+		--glow-intensity: 0.25;
+
+		--primary-50: oklch(0.25 0.05 250);
+		--primary-500: oklch(0.62 0.18 250);
+		--primary-600: oklch(0.54 0.17 250);
+
+		--secondary-50: oklch(0.22 0.05 290);
+		--secondary-500: oklch(0.58 0.21 290);
+		--secondary-600: oklch(0.5 0.2 290);
+
+		--tertiary-50: oklch(0.22 0.05 20);
+		--tertiary-500: oklch(0.63 0.22 20);
+		--tertiary-600: oklch(0.53 0.21 20);
+	}
+}
+
+/* ==========================================================================
+   3. GLOBAL BASE LAYER STANDARDIZATIONS
+   ========================================================================== */
+@layer base {
+	* {
+		border-color: var(--color-border-subtle);
+	}
+
+	html,
+	body {
+		background-color: var(--color-bg-canvas);
+		color: var(--color-fg-default);
+		font-family: var(--font-sans);
+		min-height: 100vh;
+		scroll-behavior: smooth;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/* Structural Native Component Form Resets */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		letter-spacing: -0.025em;
+		color: var(--color-fg-default);
+	}
+
+	/* Optimized Native Code Block Defaults */
+	code,
+	pre {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+	}
+
+	/* Custom Scrollbar Handling */
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+	::-webkit-scrollbar-track {
+		background: var(--color-bg-canvas);
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--color-border-subtle);
+		border-radius: 4px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--color-primary-500);
+	}
+}
+
+/* ==========================================================================
+   4. APPLIED PRODUCTION CORE ABSTRACTION UTILITIES
+   ========================================================================== */
+@layer utilities {
+	/* --- Advanced Typographic Layout Shortcuts --- */
+	.text-hero {
+		font-size: var(--text-title-hero);
+		line-height: 1.1;
+		font-weight: 800;
+		letter-spacing: -0.04em;
+	}
+
+	.text-title {
+		font-size: var(--text-title-main);
+		line-height: 1.25;
+		font-weight: 700;
+	}
+
+	.text-description {
+		font-size: var(--text-desc-base);
+		color: var(--color-fg-muted);
+		line-height: 1.6;
+	}
+
+	.text-muted-sm {
+		font-size: var(--text-desc-muted);
+		color: var(--color-fg-muted);
+		line-height: 1.5;
+	}
+
+	/* --- Dashboard Complex Frame Structural Containers --- */
+	.panel-container {
+		background-color: var(--color-panel-bg);
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius-panel);
+		padding: 1.5rem;
+		transition: box-shadow 0.2s ease-in-out;
+	}
+
+	.interactive-control {
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius-control);
+		background-color: var(--color-bg-canvas);
+		padding: 0.5rem 1rem;
+		color: var(--color-fg-default);
+		font-size: 0.875rem;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.interactive-control:focus {
+		outline: none;
+		border-color: var(--color-primary-500);
+		box-shadow: 0 0 0 2px rgba(40, 100, 250, var(--glow-intensity));
+	}
+
+	.interactive-control:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		background-color: var(--color-panel-bg);
+	}
+
+	/* --- Complex Structural Glow Modifications --- */
+	.glow-primary {
+		box-shadow: 0 0 25px 2px rgba(40, 100, 250, var(--glow-intensity));
+	}
+
+	.glow-secondary {
+		box-shadow: 0 0 25px 2px rgba(180, 50, 250, var(--glow-intensity));
+	}
+
+	/* --- Production Page Structural Micro Layout Shorthands --- */
+	.page-layout-wrapper {
+		max-w: 80rem; /* 1280px master desktop constraint grid */
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.flex-center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
