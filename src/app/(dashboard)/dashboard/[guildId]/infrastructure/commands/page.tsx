@@ -18,6 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import { useGuildSnapshot } from "@/hooks/useGuildSnapshot";
+import MultiOptionDropdown from "@/components/ui/MultiOptionDropdown";
 import RoleDropdown from "@/components/ui/RoleDropdown";
 import ChannelDropdown from "@/components/ui/ChannelDropdown";
 import CategoryDropdown from "@/components/ui/CategoryDropdown";
@@ -541,14 +542,14 @@ export default function Page() {
 		return (
 			<div
 				key={cmd.name}
-				className={`border border-border-subtle bg-panel-bg/20 rounded-xl shadow-xs animate-in fade-in duration-150 ${
+				className={`border border-border-subtle bg-panel-bg/20 rounded-xl shadow-xs ${
 					needsConfig ? "border-amber-500/30 bg-amber-500/5" : ""
 				}`}
 			>
 				{/* Command Header - Always Visible */}
 				<div
 					onClick={() => toggleExpand(cmd.name)}
-					className="p-4 cursor-pointer hover:bg-panel-bg/30 transition-all"
+					className="p-4 cursor-pointer hover:bg-panel-bg/30"
 				>
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 						<div className="min-w-0 flex-1">
@@ -626,7 +627,7 @@ export default function Page() {
 
 				{/* Expanded Configuration */}
 				{isExpanded && (
-					<div className="px-4 pb-4 pt-4 border-t border-border-subtle/20 space-y-4 animate-in fade-in duration-150">
+					<div className="px-4 pb-4 pt-4 border-t border-border-subtle/20 space-y-4">
 						{/* Required Configuration Dropdowns */}
 						{flattenRequirements(cmd.requirements).length > 0 && (
 							<div className="space-y-2">
@@ -755,14 +756,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Allowed Roles
 								</label>
-								<RoleDropdown
-									value={cmd.allowed_roles?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											allowed_roles: value ? [value] : null,
-										})
-									}
-									roles={roleOptions}
+<MultiOptionDropdown
+										values={cmd.allowed_roles ?? []}
+										onChange={(values) => updateCommand(cmd.name, { allowed_roles: values.length ? values : null })}
+										options={roleOptions.map((role) => ({ value: role.id, label: role.name }))}
+										ariaLabel="Allowed roles"
 									placeholder="Select allowed role"
 								/>
 							</div>
@@ -770,14 +768,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Denied Roles
 								</label>
-								<RoleDropdown
-									value={cmd.denied_roles?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											denied_roles: value ? [value] : null,
-										})
-									}
-									roles={roleOptions}
+<MultiOptionDropdown
+										values={cmd.denied_roles ?? []}
+										onChange={(values) => updateCommand(cmd.name, { denied_roles: values.length ? values : null })}
+										options={roleOptions.map((role) => ({ value: role.id, label: role.name }))}
+										ariaLabel="Denied roles"
 									placeholder="Select denied role"
 								/>
 							</div>
@@ -788,15 +783,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Allowed Channels
 								</label>
-								<ChannelDropdown
-									value={cmd.allowed_channels?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											allowed_channels: value ? [value] : null,
-										})
-									}
-									channels={channels}
-									threads={threads}
+<MultiOptionDropdown
+										values={cmd.allowed_channels ?? []}
+										onChange={(values) => updateCommand(cmd.name, { allowed_channels: values.length ? values : null })}
+										options={[...channels, ...threads].map((channel) => ({ value: channel.id, label: channel.name }))}
+										ariaLabel="Allowed channels"
 									placeholder="Select allowed channel"
 								/>
 							</div>
@@ -804,15 +795,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Disallowed Channels
 								</label>
-								<ChannelDropdown
-									value={cmd.disallowed_channels?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											disallowed_channels: value ? [value] : null,
-										})
-									}
-									channels={channels}
-									threads={threads}
+<MultiOptionDropdown
+										values={cmd.disallowed_channels ?? []}
+										onChange={(values) => updateCommand(cmd.name, { disallowed_channels: values.length ? values : null })}
+										options={[...channels, ...threads].map((channel) => ({ value: channel.id, label: channel.name }))}
+										ariaLabel="Disallowed channels"
 									placeholder="Select disallowed channel"
 								/>
 							</div>
@@ -832,7 +819,7 @@ export default function Page() {
 	}
 
 	return (
-		<div className="w-full p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto text-left overflow-visible">
+		<div className="w-full p-6 lg:p-8 space-y-6 select-none max-w-7xl mx-auto text-left overflow-visible pb-24">
 			{/* HUD PANEL HEADER */}
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-subtle pb-6">
 				<div>
