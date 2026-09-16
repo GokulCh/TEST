@@ -17,8 +17,7 @@ export function ThemeScope({ children, dashboard = false }: { children: React.Re
       applyThemePreset(localStorage.getItem("guild-theme") ?? "default");
       return;
     }
-    for (const variable of THEME_VARIABLES) root.style.removeProperty(variable);
-    delete root.dataset.theme;
+    applyThemePreset("default");
   }, [dashboard]);
 
   return <>{children}</>;
