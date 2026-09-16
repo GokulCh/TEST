@@ -66,7 +66,7 @@ export default function OptionDropdown({
 				aria-expanded={isOpen}
 				aria-label={ariaLabel}
 				onClick={() => setIsOpen((open) => !open)}
-				className="flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-border-subtle bg-bg-canvas/40 px-3 text-left font-mono text-xs text-fg-default transition-colors focus:border-primary-500/60 focus:outline-none focus:ring-1 focus:ring-primary-500/30"
+				className="flex h-10 w-full items-center justify-between gap-2 rounded-lg border border-border-subtle bg-bg-canvas/40 px-3 text-left font-mono text-sm text-fg-default transition-[border-color,box-shadow,background-color] duration-200 focus:border-primary-500/60 focus:outline-none focus:ring-1 focus:ring-primary-500/30"
 			>
 				<span className={`flex min-w-0 items-center gap-2 truncate ${selected ? "" : "text-fg-muted"}`}>
 					{selected?.icon}
@@ -87,7 +87,7 @@ export default function OptionDropdown({
 								placeholder={searchPlaceholder}
 								aria-label={searchPlaceholder}
 								onChange={(event) => setSearchQuery(event.target.value)}
-								className="h-8 w-full rounded-md border border-border-subtle bg-bg-canvas/40 pl-8 pr-2 font-mono text-[11px] text-fg-default outline-none placeholder:text-fg-muted focus:border-primary-500/60"
+								className="h-9 w-full rounded-md border border-border-subtle bg-bg-canvas/40 pl-8 pr-2 font-mono text-sm text-fg-default outline-none placeholder:text-fg-muted focus:border-primary-500/60"
 							/>
 						</div>
 					</div>
@@ -100,7 +100,7 @@ export default function OptionDropdown({
 								disabled={option.disabled}
 								key={option.value}
 								onClick={() => selectOption(option)}
-								className={`flex min-h-9 w-full items-center gap-2 rounded-md px-3 py-2 text-left font-mono text-[11px] text-fg-default transition-colors hover:bg-bg-canvas/70 disabled:cursor-not-allowed disabled:opacity-50 ${option.value === value ? "bg-primary-500/10 text-primary-400" : ""}`}
+								className={`flex min-h-10 w-full items-center gap-2 rounded-md px-3 py-2 text-left font-mono text-sm text-fg-default transition-[background-color,color] duration-150 hover:bg-bg-canvas/70 disabled:cursor-not-allowed disabled:opacity-50 ${option.value === value ? "bg-primary-500/10 text-primary-400" : ""}`}
 							>
 								{option.icon}
 								<span className="min-w-0 flex-1 truncate">{option.label}</span>

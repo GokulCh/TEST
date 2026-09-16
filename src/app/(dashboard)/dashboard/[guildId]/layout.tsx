@@ -11,7 +11,7 @@ export default async function GuildLayout({ children, params }: Props) {
 	return (
 		<GuildConfigProvider guildSnowflake={guildId}>
 			<PageAccessGuard>
-				{children}
+				<div className="dashboard-page-enter">{children}</div>
 			</PageAccessGuard>
 		</GuildConfigProvider>
 	);

@@ -206,11 +206,29 @@ html.dark {
    4. APPLIED PRODUCTION CORE ABSTRACTION UTILITIES
    ========================================================================== */
 @keyframes public-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes dashboard-page-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 .public-enter { animation: public-enter 500ms cubic-bezier(.22,1,.36,1) both; }
+.dashboard-page-enter { animation: dashboard-page-enter 320ms cubic-bezier(.22,1,.36,1) both; }
+
+@layer base {
+	select {
+		appearance: none;
+		background-color: color-mix(in oklab, var(--color-bg-canvas) 88%, transparent);
+		background-image: linear-gradient(45deg, transparent 50%, var(--color-fg-muted) 50%), linear-gradient(135deg, var(--color-fg-muted) 50%, transparent 50%);
+		background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%;
+		background-repeat: no-repeat;
+		background-size: 5px 5px, 5px 5px;
+		min-height: 2.5rem;
+		padding-right: 2.5rem !important;
+		transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+	}
+	select:focus-visible { outline: none; border-color: var(--color-primary-500); box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary-500) 22%, transparent); }
+	select option { background: var(--color-panel-bg); color: var(--color-fg-default); padding: 0.65rem; }
+}
 .public-card { transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease, box-shadow 220ms ease; }
 .public-card:hover { box-shadow: 0 18px 50px rgba(0,0,0,.18); }
-@media (prefers-reduced-motion: reduce) { .public-enter { animation: none; } .public-card, .public-card:hover { transition: none; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .public-enter, .dashboard-page-enter { animation: none; } .public-card, .public-card:hover { transition: none; transform: none; } select { transition: none; } }
 
 @layer utilities {
 		/* Keep dense dashboard labels readable without changing the visual system. */
