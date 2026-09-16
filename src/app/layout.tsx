@@ -1,4 +1,5 @@
 ﻿import { ThemeProvider } from "@/components/shared/theme-provider"
+import { ThemeScope } from "@/components/shared/theme-scope"
 import type { Metadata } from "next"
 import "./globals.css"
 
@@ -15,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        <ThemeProvider>        <div className="motion-page contents">{children}</div></ThemeProvider>
+        <ThemeProvider><ThemeScope><div className="motion-page contents">{children}</div></ThemeScope></ThemeProvider>
       </body>
     </html>
   )

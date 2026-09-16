@@ -1,10 +1,11 @@
 import { Swords } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { ThemeScope } from "@/components/shared/theme-scope";
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-bg-canvas text-fg-default font-sans antialiased flex flex-col justify-between overflow-x-hidden">
+    <ThemeScope><div className="min-h-screen bg-bg-canvas text-fg-default font-sans antialiased flex flex-col justify-between overflow-x-hidden">
       
       {/* PERSISTENT HEADER FRAME - Extends to 1520px wide layout grid constraints */}
       <header className="sticky top-0 z-sticky border-b border-border-subtle bg-bg-canvas/50 backdrop-blur-md">
@@ -42,6 +43,6 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         </div>
       </footer>
 
-    </div>
+    </div></ThemeScope>
   );
 }

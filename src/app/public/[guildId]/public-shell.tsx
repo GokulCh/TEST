@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { ArrowRight, Menu, Swords, Trophy, Users, ShoppingBag, Gamepad2, X } from "lucide-react"
 import { useState } from "react"
 import { guildDisplayName, guildDomain } from "./data"
+import { ThemeScope } from "@/components/shared/theme-scope"
 
 const links = [
   ["Overview", ""], ["Players", "/players"], ["Games", "/games"], ["Leaderboard", "/leaderboard"], ["Store", "/store"],
@@ -14,7 +15,7 @@ export function PublicShell({ guildId, children }: { guildId: string; children: 
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const base = `/public/${guildId}`
-  return <div className="flex min-h-screen flex-col bg-[#070a0f] text-white selection:bg-cyan-400/30">
+  return <ThemeScope><div className="flex min-h-screen flex-col bg-[#070a0f] text-white selection:bg-cyan-400/30">
     <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#070a0f]/85 backdrop-blur-xl">
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href={base} className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
@@ -31,7 +32,7 @@ export function PublicShell({ guildId, children }: { guildId: string; children: 
     </header>
     <main className="flex-1">{children}</main>
     <footer className="border-t border-white/[0.08] px-5 py-8 sm:px-8"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-xs text-white/40 sm:flex-row"><span>{guildDisplayName(guildId)} · Competitive community portal</span><span className="font-mono">POWERED BY MYRBW.DEV</span></div></footer>
-  </div>
+  </div></ThemeScope>
 }
 
 export const publicIcons = { Users, Trophy, ShoppingBag, Gamepad2 }
