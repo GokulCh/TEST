@@ -260,6 +260,7 @@ html.dark {
 @keyframes modal-enter { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 .public-enter, .motion-page { animation: page-enter 420ms cubic-bezier(.22,1,.36,1) both; }
+.motion-page:has(.no-page-motion) { animation: none !important; }
 .motion-fade { animation: fade-enter 300ms ease-out both; }
 .motion-modal { animation: modal-enter 240ms cubic-bezier(.22,1,.36,1) both; }
 .motion-stagger > * { animation: page-enter 420ms cubic-bezier(.22,1,.36,1) both; }
