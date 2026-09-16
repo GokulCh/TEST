@@ -45,6 +45,7 @@ interface ThemePreset {
 }
 
 const PRESETS: Record<string, ThemePreset> = {
+	default: { id: "default", name: "Default Matrix", primary: "#38bdf8", panelBg: "#111827", canvasBg: "#080b12" },
 	indigo: { id: "indigo", name: "Core Indigo", primary: "#4f46e5", panelBg: "#1e1b4b", canvasBg: "#090514" },
 	emerald: { id: "emerald", name: "Obsidian Emerald", primary: "#10b981", panelBg: "#064e3b", canvasBg: "#020617" },
 	rose: { id: "rose", name: "Crimson Velvet", primary: "#f43f5e", panelBg: "#4c0519", canvasBg: "#0f0507" },
@@ -84,7 +85,7 @@ export function SetupWizard() {
 	const [activeGuild, setActiveGuild] = useState<SelectedGuildContext | null>(null);
 	const [subdomain, setSubdomain] = useState("");
 	const [themeMode, setThemeMode] = useState<"preset" | "custom">("preset");
-	const [selectedPreset, setSelectedPreset] = useState("emerald");
+	const [selectedPreset, setSelectedPreset] = useState("default");
 	const [customPrimary, setCustomPrimary] = useState("#3b82f6");
 	const [customPanel, setCustomPanel] = useState("#1e293b");
 	const customCanvas = "#0f172a";
@@ -185,8 +186,16 @@ export function SetupWizard() {
 		return { id: "custom", name: "Custom Matrix Node", primary: customPrimary, panelBg: customPanel, canvasBg: customCanvas };
 	}, [themeMode, selectedPreset, customPrimary, customPanel]);
 
-	// ── Step transitions ───��─────────────────────────────────────────────────
-	const handleStepTransition = (nextStep: VisualStep) => {
+	// ── Step transitions ───���─────────────────────────────────────────────────
+		useEffect(() => {
+			document.documentElement.style.setProperty("--primary-500", activeThemeColors.primary);
+			document.documentElement.style.setProperty("--primary-600", activeThemeColors.primary);
+			document.documentElement.style.setProperty("--primary-50", `${activeThemeColors.primary}26`);
+			document.documentElement.style.setProperty("--panel-bg", activeThemeColors.panelBg);
+			document.documentElement.style.setProperty("--bg-canvas", activeThemeColors.canvasBg);
+		}, [activeThemeColors]);
+
+		const handleStepTransition = (nextStep: VisualStep) => {
 		setIsSimulating(true);
 		setTimeout(() => {
 			setIsSimulating(false);
@@ -363,7 +372,7 @@ export function SetupWizard() {
 					</div>
 				)}
 
-				{/* ═══════════════ STEP 2: SERVER SELECT ═══════════════ */}
+				{/* ═══════════════ STEP 2: SERVER SELECT ══════════════��� */}
 				{step === "SERVER_SELECT" && (
 					<div className="w-full flex flex-col items-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
 						<div className="max-w-3xl space-y-4">

@@ -37,7 +37,14 @@ const steps: TourStep[] = [
     side: "right",
   },
   {
-    eyebrow: "04 // READY TO CONFIGURE",
+    eyebrow: "04 // COMMAND PROTOCOL",
+    title: "Commands are configurable",
+    body: "Open Commands from the sidebar to configure prefixes, slash commands, permissions, cooldowns, and routing rules.",
+    target: "[data-tour='commands-nav']",
+    side: "right",
+  },
+  {
+    eyebrow: "05 // READY TO CONFIGURE",
     title: "You are ready to build",
     body: "Configure queues, commands, roles, and portals at your own pace. You can restart this guide from the dashboard anytime.",
     target: "[data-tour='sidebar']",

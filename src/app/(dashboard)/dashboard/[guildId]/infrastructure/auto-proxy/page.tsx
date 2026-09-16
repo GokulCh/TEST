@@ -32,9 +32,18 @@ export default function Page() {
 	useEffect(() => {
 		if (!meta) return;
 		if (meta.server && typeof meta.server === "object") {
-			const serverData = meta.server as GameServerConfig;
-			setServer(serverData);
-			setSavedServer(serverData);
+const serverData = meta.server as GameServerConfig;
+				const normalizedServer: GameServerConfig = {
+					...serverData,
+					host: serverData.host ?? "",
+					port: serverData.port ?? 25565,
+					version: serverData.version ?? "1.8.9",
+					auth: serverData.auth ?? { type: "none" },
+					verification: serverData.verification ?? { provider: "none" },
+					tierKeywords: serverData.tierKeywords ?? {},
+				};
+				setServer(normalizedServer);
+				setSavedServer(normalizedServer);
 		}
 		if (Array.isArray(meta.bots)) {
 			const botsData = meta.bots as BotStoredConfig[];

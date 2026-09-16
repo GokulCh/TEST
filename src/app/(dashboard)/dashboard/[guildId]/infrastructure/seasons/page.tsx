@@ -18,6 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import type { SeasonConfig, EloEngineConfig } from "@/lib/db-types";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 export default function Page() {
 	const { meta, config, isLoading, isSaving, saveMetaSection, saveConfigSection } = useGuildConfig();
@@ -224,11 +225,11 @@ export default function Page() {
 								</div>
 								<div className="space-y-1">
 									<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Start Date</label>
-									<input type="date" value={s.start_date?.slice(0, 10) ?? ""} onChange={(e) => updateSeason(s.id, { start_date: e.target.value })} className="w-full h-8 px-2.5 bg-bg-canvas/40 border border-border-subtle rounded-md font-mono text-xs text-fg-default focus:outline-none" />
+									<DatePicker value={s.start_date?.slice(0, 10) ?? ""} onChange={(value) => updateSeason(s.id, { start_date: value })} placeholder="Select start date" />
 								</div>
 								<div className="space-y-1">
 									<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">End Date</label>
-									<input type="date" value={(s.end_date ?? "").slice(0, 10)} onChange={(e) => updateSeason(s.id, { end_date: e.target.value })} className="w-full h-8 px-2.5 bg-bg-canvas/40 border border-border-subtle rounded-md font-mono text-xs text-fg-default focus:outline-none" />
+									<DatePicker value={(s.end_date ?? "").slice(0, 10)} onChange={(value) => updateSeason(s.id, { end_date: value })} placeholder="Select end date" />
 								</div>
 							</div>
 

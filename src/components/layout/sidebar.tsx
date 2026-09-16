@@ -54,6 +54,7 @@ const DEVELOPER_USER_ID = "716417561008275497";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useUnsavedChangesContext } from "@/lib/contexts/changes-context";
+import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 
 // Page ID mapping for access control
 const PATH_TO_PAGE_ID: Record<string, string> = {
@@ -598,8 +599,9 @@ export function Sidebar() {
 
 		return (
 			<a
-				key={item.href}
-				href={item.href}
+					key={item.href}
+					data-tour={item.id === "commands" ? "commands-nav" : undefined}
+					href={item.href}
 				onClick={(e) => guardedNavigate(e, item.href)}
 				className={`group/link flex items-center gap-2.5 px-3 py-2 rounded-lg font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-98 cursor-pointer ${
 					active
@@ -881,11 +883,12 @@ export function Sidebar() {
 						</div>
 
 						{/* Base Controls Strip Footer Layer (Neutral Muted Gray Icons) */}
-						<div className="space-y-0.5 pt-2 border-t border-border-subtle/30">
-							{filteredSystemControls.map((node) =>
-								renderLink(node, "text-fg-muted/60"),
-							)}
-						</div>
+							<div className="space-y-0.5 pt-2 border-t border-border-subtle/30">
+								{filteredSystemControls.map((node) =>
+									renderLink(node, "text-fg-muted/60"),
+								)}
+							</div>
+							<ThemeSwitcher />
 					</>
 				) : (
 					<div className="p-4 border border-dashed border-border-subtle/50 rounded-xl text-center">
