@@ -1,5 +1,6 @@
 import { GuildConfigProvider } from "@/features/dashboard/config-provider";
 import { PageAccessGuard } from "@/components/shared/page-access-guard";
+import { SetupTour } from "@/components/onboarding/setup-tour";
 
 interface Props {
 	children: React.ReactNode;
@@ -12,6 +13,7 @@ export default async function GuildLayout({ children, params }: Props) {
 		<GuildConfigProvider guildSnowflake={guildId}>
 			<PageAccessGuard>
 				{children}
+				<SetupTour />
 			</PageAccessGuard>
 		</GuildConfigProvider>
 	);

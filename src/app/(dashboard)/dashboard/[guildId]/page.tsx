@@ -249,7 +249,7 @@ export default function Page() {
 			{!isPageLoading && (
 				<>
 					{/* Stat grid */}
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div data-tour="overview-stats" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 						{statCards.map((stat, i) => {
 							const Icon = stat.icon;
 							return (
@@ -312,7 +312,7 @@ export default function Page() {
 					{/* Bot Identity & Discord Profile Preview */}
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 						{/* Left: Configuration Form */}
-						<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm space-y-4">
+						<div data-tour="bot-identity" className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm space-y-4">
 							<div className="flex items-center justify-between border-b border-border-subtle/50 pb-2.5">
 								<div className="flex items-center gap-2">
 									<Palette className="size-4 text-violet-500" />

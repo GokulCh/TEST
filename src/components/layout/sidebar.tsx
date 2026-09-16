@@ -660,7 +660,7 @@ export function Sidebar() {
 	};
 
 	return (
-		<aside className="hidden lg:flex w-64 flex-col border-r border-border-subtle bg-panel-bg/40 backdrop-blur-md transition-colors duration-300 relative z-10 select-none">
+		<aside data-tour="sidebar" className="hidden lg:flex w-64 flex-col border-r border-border-subtle bg-panel-bg/40 backdrop-blur-md transition-colors duration-300 relative z-10 select-none">
 			{isLoggingOut && (
 				<div className="absolute inset-0 bg-bg-canvas/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center space-y-3">
 					<RefreshCw className="size-5 text-red-500 animate-spin" />

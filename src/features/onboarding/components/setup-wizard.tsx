@@ -185,7 +185,7 @@ export function SetupWizard() {
 		return { id: "custom", name: "Custom Matrix Node", primary: customPrimary, panelBg: customPanel, canvasBg: customCanvas };
 	}, [themeMode, selectedPreset, customPrimary, customPanel]);
 
-	// ── Step transitions ─────────────────────────────────────────────────────
+	// ── Step transitions ───��─────────────────────────────────────────────────
 	const handleStepTransition = (nextStep: VisualStep) => {
 		setIsSimulating(true);
 		setTimeout(() => {
@@ -788,7 +788,7 @@ export function SetupWizard() {
 						</div>
 
 						<button
-							onClick={() => router.push(`/dashboard/${activeGuild?.id}`)}
+							onClick={() => router.push(`/dashboard/${activeGuild?.id}?tour=1`)}
 							className="inline-flex items-center gap-3 bg-primary-500 hover:bg-primary-600 text-white font-mono font-bold text-sm uppercase tracking-wider h-14 px-10 rounded-control transition-all shadow-lg shadow-primary-500/20 active:scale-98 cursor-pointer"
 						>
 							Open Dashboard <ArrowRight className="size-4" />
