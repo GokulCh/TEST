@@ -600,7 +600,7 @@ export function Sidebar() {
 			return (
 			<a
 					key={item.href}
-					data-tour={item.id === "commands" ? "commands-nav" : undefined}
+					data-tour={item.id === "overview" ? "overview-nav" : item.id === "players" ? "players-nav" : item.id === "games" ? "games-nav" : item.id === "commands" ? "commands-nav" : undefined}
 					href={item.href}
 					onClick={(e) => {
 						if (!isAccessible) { e.preventDefault(); return; }
@@ -629,12 +629,14 @@ export function Sidebar() {
 		isOpen: boolean,
 		onToggle: () => void,
 		isSubCategory = false,
-		colorClass = "text-primary-500",
-	) => {
+			colorClass = "text-primary-500",
+			dataTour?: string,
+		) => {
 		const Icon = icon;
 		return (
-			<button
-				onClick={onToggle}
+				<button
+					data-tour={dataTour}
+					onClick={onToggle}
 				className={`w-full flex items-center justify-between px-3 py-2 rounded-lg font-mono font-bold uppercase tracking-wider transition-all active:scale-98 border border-transparent ${
 					isSubCategory
 						? "text-fg-muted/70 hover:text-fg-default hover:bg-panel-bg/20 text-[11px]"
@@ -745,8 +747,9 @@ export function Sidebar() {
 								modulesExpanded,
 								() => setModulesExpanded(!modulesExpanded),
 								false,
-								"text-primary-500",
-							)}
+																"text-primary-500",
+																"modules-nav",
+															)}
 							{modulesExpanded && (
 								<div className="pl-2 ml-1 border-l border-border-subtle/50 space-y-1.5 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
 										{/* 🌐 INFRASTRUCTURE NODES (Cyan / Light Blue Accent Vector) */}
@@ -757,8 +760,9 @@ export function Sidebar() {
 												categoryStates.infrastructure,
 												() => toggleCategory("infrastructure"),
 												true,
-												"text-cyan-500",
-											)}
+																"text-cyan-500",
+																"infrastructure-module",
+															)}
 											{categoryStates.infrastructure && (
 												<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 													{infrastructureNodes.map((item) =>
@@ -776,8 +780,9 @@ export function Sidebar() {
 												categoryStates.matchmaking,
 												() => toggleCategory("matchmaking"),
 												true,
-												"text-violet-500",
-											)}
+																"text-violet-500",
+																"matchmaking-module",
+															)}
 											{categoryStates.matchmaking && (
 												<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 													{matchmakingMatrix.map((item) =>
@@ -795,8 +800,9 @@ export function Sidebar() {
 											categoryStates.moderation,
 											() => toggleCategory("moderation"),
 											true,
-											"text-rose-500",
-										)}
+																"text-rose-500",
+																"moderation-module",
+															)}
 										{categoryStates.moderation && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{moderationNodes.map((item) =>
@@ -814,8 +820,9 @@ export function Sidebar() {
 											categoryStates.tickets,
 											() => toggleCategory("tickets"),
 											true,
-											"text-orange-500",
-										)}
+																"text-orange-500",
+																"tickets-module",
+															)}
 										{categoryStates.tickets && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{ticketNodes.map((item) =>
@@ -833,8 +840,9 @@ export function Sidebar() {
 											categoryStates.toolkits,
 											() => toggleCategory("toolkits"),
 											true,
-											"text-emerald-500",
-										)}
+																"text-emerald-500",
+																"toolkits-module",
+															)}
 										{categoryStates.toolkits && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{creatorTools.map((item) =>
@@ -852,8 +860,9 @@ export function Sidebar() {
 											categoryStates.capabilities,
 											() => toggleCategory("capabilities"),
 											true,
-											"text-indigo-500",
-										)}
+																"text-indigo-500",
+																"capabilities-module",
+															)}
 										{categoryStates.capabilities && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{platformFeatures.map((item) =>
@@ -871,8 +880,9 @@ export function Sidebar() {
 											categoryStates.simulations,
 											() => toggleCategory("simulations"),
 											true,
-											"text-sky-500",
-										)}
+																"text-sky-500",
+																"simulations-module",
+															)}
 										{categoryStates.simulations && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{simulationNodes.map((item) =>

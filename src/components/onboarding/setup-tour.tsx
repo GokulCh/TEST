@@ -15,41 +15,19 @@ type TourStep = {
 };
 
 const steps: TourStep[] = [
-  {
-    eyebrow: "01 // ORIENTATION",
-    title: "This is your command center",
-    body: "The overview keeps your guild health, registered players, active matches, and bot identity in one place.",
-    target: "[data-tour='overview-stats']",
-    side: "bottom",
-  },
-  {
-    eyebrow: "02 // MODULE MATRIX",
-    title: "Everything starts here",
-    body: "Use the sidebar to move between matchmaking, infrastructure, sanctions, tickets, and creator tools.",
-    target: "[data-tour='sidebar']",
-    side: "right",
-  },
-  {
-    eyebrow: "03 // BOT IDENTITY",
-    title: "Make the bot yours",
-    body: "Set the nickname, avatar, banner, and profile description your community will see in Discord.",
-    target: "[data-tour='bot-identity']",
-    side: "right",
-  },
-  {
-    eyebrow: "04 // COMMAND PROTOCOL",
-    title: "Commands are configurable",
-    body: "Open Commands from the sidebar to configure prefixes, slash commands, permissions, cooldowns, and routing rules.",
-    target: "[data-tour='commands-nav']",
-    side: "right",
-  },
-  {
-    eyebrow: "05 // READY TO CONFIGURE",
-    title: "You are ready to build",
-    body: "Configure queues, commands, roles, and portals at your own pace. You can restart this guide from the dashboard anytime.",
-    target: "[data-tour='sidebar']",
-    side: "right",
-  },
+  { eyebrow: "01 // OVERVIEW", title: "Start at the overview", body: "The Overview is your command center for guild health, players, live games, bot status, and runtime infrastructure.", target: "[data-tour='overview-nav']", side: "right" },
+  { eyebrow: "02 // PLAYERS", title: "Manage your players", body: "Players is where you can inspect registered members and manage the player records used by your game systems.", target: "[data-tour='players-nav']", side: "right" },
+  { eyebrow: "03 // GAMES", title: "Track your games", body: "Games gives you the live match and game activity view for the guild.", target: "[data-tour='games-nav']", side: "right" },
+  { eyebrow: "04 // COMMANDS", title: "Configure commands", body: "Commands controls prefixes, slash commands, permissions, cooldowns, and routing rules.", target: "[data-tour='commands-nav']", side: "right" },
+  { eyebrow: "05 // MODULES", title: "Extend the system with modules", body: "Open Modules to find each configurable subsystem. The categories below organize the rest of the dashboard.", target: "[data-tour='modules-nav']", side: "right" },
+  { eyebrow: "06 // MODULES / INFRASTRUCTURE", title: "Infrastructure", body: "Infrastructure contains bot nodes, server instances, maps, seasons, commands, and other runtime controls.", target: "[data-tour='infrastructure-module']", side: "right" },
+  { eyebrow: "07 // MODULES / MATCHMAKING", title: "Matchmaking", body: "Matchmaking contains queues, rank thresholds, stat weighting, leaderboards, and team formation.", target: "[data-tour='matchmaking-module']", side: "right" },
+  { eyebrow: "08 // MODULES / MODERATION", title: "Moderation", body: "Moderation contains enforcement rules, sanctions, strike ladders, punishment logs, and security controls.", target: "[data-tour='moderation-module']", side: "right" },
+  { eyebrow: "09 // MODULES / TICKETS", title: "Tickets", body: "Tickets organizes claims, blacklists, and support workflows for your guild.", target: "[data-tour='tickets-module']", side: "right" },
+  { eyebrow: "10 // MODULES / TOOLKITS", title: "Toolkits", body: "Toolkits provides builders for webhooks, panels, brackets, and other operational surfaces.", target: "[data-tour='toolkits-module']", side: "right" },
+  { eyebrow: "11 // MODULES / CAPABILITIES", title: "Capabilities", body: "Capabilities contains automations such as reaction roles, perks, loggers, giveaways, and streaks.", target: "[data-tour='capabilities-module']", side: "right" },
+  { eyebrow: "12 // MODULES / SIMULATIONS", title: "Simulations", body: "Simulations lets you test party, queue, progression, and strike behavior before enabling it for players.", target: "[data-tour='simulations-module']", side: "right" },
+  { eyebrow: "13 // READY", title: "You are ready to build", body: "Explore each area at your own pace. You can restart this guide from the dashboard whenever you need a refresher.", target: "[data-tour='overview-stats']", side: "bottom" },
 ];
 
 function hasTourCookie() {
@@ -70,14 +48,14 @@ export function SetupTour() {
   const step = steps[stepIndex];
 
   const shouldStart = useMemo(() => {
-    return pathname?.match(/^\/dashboard\/[^/]+\/?$/) && (searchParams.get("tour") === "1" || !hasTourCookie());
+    return pathname?.match(/^\/dashboard\/[^/]+(?:\/.*)?\/?$/) && (searchParams.get("tour") === "1" || !hasTourCookie());
   }, [pathname, searchParams]);
 
   useEffect(() => {
     if (!shouldStart) return;
-    const timer = window.setTimeout(() => setVisible(true), 450);
-    return () => window.clearTimeout(timer);
-  }, [shouldStart]);
+    if (searchParams.get("tour") !== "1") completeTour();
+    setVisible(true);
+  }, [searchParams, shouldStart]);
 
   useEffect(() => {
     if (!visible) return;
