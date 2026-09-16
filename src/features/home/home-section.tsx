@@ -1,35 +1,72 @@
-﻿import { ArrowRight, Gauge, ShieldCheck, Swords } from "lucide-react";
+﻿import { ArrowLeft, Check, ChevronRight, CircleDot, Command, Gauge, RefreshCw, ShieldCheck, Swords } from "lucide-react";
+
+const nodes = [
+  { name: "Wiggle&apos;s Server", detail: "Server Owner · Click to open dashboard", status: "active", icon: ShieldCheck },
+  { name: "Jartex Ranked Bedwars", detail: "Unconfigured. Click to deploy engine instance.", status: "pending", icon: Swords },
+  { name: "Pika Ranked Bedwars", detail: "Unconfigured. Click to deploy engine instance.", status: "pending", icon: Gauge },
+];
 
 export function HomeSection() {
   return (
-    <main className="relative isolate flex min-h-screen items-center overflow-hidden px-6 py-20 sm:px-10">
-      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 size-[42rem] -translate-x-1/2 rounded-full bg-primary-500/10 blur-3xl" />
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="max-w-3xl">
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-primary-500/25 bg-primary-500/10 px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-primary-500">
-            <span className="size-1.5 rounded-full bg-success shadow-[0_0_12px_var(--color-success)]" />
-            Control plane online
+    <main className="relative isolate min-h-screen overflow-hidden px-5 pb-24 pt-20 sm:px-8 lg:px-12">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_35%,color-mix(in_oklch,var(--color-primary-500)_10%,transparent),transparent_34rem)]" />
+      <div className="mx-auto flex w-full max-w-6xl flex-col">
+        <div className="mx-auto w-full max-w-3xl text-center">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-primary-500/25 bg-primary-500/10 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary-500">
+            <CircleDot className="size-3" /> Select workspace node
           </div>
-          <h1 className="text-hero max-w-3xl text-balance">The command center for ranked Bedwars.</h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-fg-muted">
-            Configure, manage, and monitor your Discord competition stack from one focused workspace built for fast decisions.
+          <h1 className="text-hero text-balance">Choose your command center.</h1>
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-fg-muted sm:text-base">
+            Jump into a configured guild or deploy a ranked Bedwars engine for a new community. Every node stays scoped, visible, and ready for action.
           </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <a href="/dashboard" className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary-500 px-5 font-semibold text-white shadow-lg shadow-primary-500/20 transition-all hover:-translate-y-0.5 hover:bg-primary-600">
-              Open dashboard <ArrowRight className="size-4" />
-            </a>
-            <span className="font-mono text-[11px] uppercase tracking-widest text-fg-muted">Guild scoped configuration</span>
-          </div>
+          <label className="mt-8 flex h-11 items-center gap-3 rounded-lg border border-border-subtle bg-panel-bg/60 px-4 text-left shadow-2xl shadow-black/20 focus-within:border-primary-500/60">
+            <Command className="size-4 shrink-0 text-fg-muted" />
+            <input aria-label="Search indexing nodes" placeholder="Search indexing nodes..." className="min-w-0 flex-1 bg-transparent font-mono text-xs text-fg-default outline-none placeholder:text-fg-muted" />
+            <RefreshCw className="size-3.5 shrink-0 text-fg-muted" />
+          </label>
         </div>
-        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-          {[{ icon: Swords, title: "Matchmaking", text: "Queues, ranks, parties" }, { icon: Gauge, title: "Live insight", text: "Health and audit signals" }, { icon: ShieldCheck, title: "Guarded changes", text: "Safe configuration flows" }].map(({ icon: Icon, title, text }) => (
-            <div key={title} className="panel-container flex items-center gap-4 border-white/10 bg-panel-bg/70 p-4 shadow-xl shadow-black/10 transition-transform hover:-translate-y-0.5">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary-500/20 bg-primary-500/10 text-primary-500"><Icon className="size-5" /></span>
-              <div><p className="font-semibold text-fg-default">{title}</p><p className="mt-0.5 text-sm text-fg-muted">{text}</p></div>
+
+        <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1fr]">
+          <section>
+            <div className="mb-3 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-fg-muted">
+              <span className="text-primary-500">#</span> Configured workspaces <span className="rounded border border-border-subtle px-1.5 py-0.5 text-[9px] text-fg-muted">1 active</span>
             </div>
-          ))}
+            <NodeCard node={nodes[0]} />
+            <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+              {[{ icon: Swords, title: "Matchmaking", text: "Queues, ranks, parties" }, { icon: Gauge, title: "Live insight", text: "Health and audit signals" }, { icon: ShieldCheck, title: "Guarded changes", text: "Safe configuration flows" }].map(({ icon: Icon, title, text }) => (
+                <div key={title} className="flex items-center gap-3 rounded-lg border border-border-subtle/70 bg-panel-bg/35 px-3 py-3">
+                  <Icon className="size-4 text-primary-500" /><div><p className="font-mono text-[10px] font-bold uppercase tracking-wider text-fg-default">{title}</p><p className="mt-0.5 text-xs text-fg-muted">{text}</p></div>
+                </div>
+              ))}
+            </div>
+          </section>
+          <section>
+            <div className="mb-3 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-fg-muted">
+              <span className="text-fg-muted">⊙</span> Available guilds <span className="rounded border border-border-subtle px-1.5 py-0.5 text-[9px] text-fg-muted">2 pending</span>
+            </div>
+            <div className="flex flex-col gap-3">
+              {nodes.slice(1).map((node) => <NodeCard key={node.name} node={node} />)}
+            </div>
+          </section>
+        </div>
+
+        <div className="mt-10 flex items-center justify-between border-t border-border-subtle/60 pt-5">
+          <a href="#" className="inline-flex items-center gap-2 rounded-lg border border-border-subtle px-4 py-2.5 font-mono text-[11px] font-bold text-fg-default transition-colors hover:border-primary-500/60 hover:text-primary-500"><ArrowLeft className="size-3.5" /> Back to verification</a>
+          <span className="hidden font-mono text-[10px] uppercase tracking-widest text-fg-muted sm:block">Platform orchestration node stable</span>
         </div>
       </div>
     </main>
   )
+}
+
+function NodeCard({ node }: { node: (typeof nodes)[number] }) {
+  const Icon = node.icon;
+  const pending = node.status === "pending";
+  return (
+    <a href={pending ? "/dashboard" : "/dashboard"} className={`group flex items-center gap-4 rounded-xl border px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-primary-500/50 hover:bg-panel-bg/70 ${pending ? "border-dashed border-border-subtle/80 bg-panel-bg/20" : "border-border-subtle bg-panel-bg/45 shadow-xl shadow-black/10"}`}>
+      <span className={`flex size-10 shrink-0 items-center justify-center rounded-xl border ${pending ? "border-secondary-500/30 bg-secondary-500/10 text-secondary-500" : "border-primary-500/25 bg-primary-500/10 text-primary-500"}`}><Icon className="size-4" /></span>
+      <span className="min-w-0 flex-1"><span className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-fg-default"><span className="truncate">{node.name}</span>{!pending && <Check className="size-3 text-success" />}</span><span className="mt-1 block truncate text-xs text-fg-muted">{node.detail}</span></span>
+      <ChevronRight className="size-4 shrink-0 text-fg-muted transition-transform group-hover:translate-x-1 group-hover:text-primary-500" />
+    </a>
+  );
 }
