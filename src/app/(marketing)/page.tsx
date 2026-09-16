@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Terminal,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { dbApi } from "@/lib/api-client";
 
@@ -32,8 +33,16 @@ export default async function LandingPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="mx-auto grid max-w-[95rem] gap-12 px-4 pb-20 pt-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20 lg:pb-28 lg:pt-24">
-        <div className="max-w-2xl">
+      <section className="relative mx-auto grid max-w-[95rem] gap-12 overflow-hidden px-4 pb-20 pt-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20 lg:pb-28 lg:pt-24">
+        <div className="pointer-events-none absolute inset-y-0 right-[-6rem] z-0 w-[min(72vw,64rem)] opacity-[0.3] mix-blend-screen sm:right-[-4rem] lg:right-[-2rem] lg:w-[58rem]">
+          <Image src="/minecraft-hero-player.png" alt="" fill priority sizes="(min-width: 1024px) 58rem, 68vw" className="object-contain object-right" />
+          <div className="absolute inset-0 bg-gradient-to-r from-bg-canvas via-bg-canvas/35 to-transparent" />
+        </div>
+        <div className="pointer-events-none absolute bottom-0 right-[-1rem] z-20 hidden h-[22rem] w-[19rem] opacity-75 mix-blend-screen lg:block">
+          <Image src="/minecraft-hero-player.png" alt="" fill sizes="19rem" className="object-contain object-right-bottom" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-bg-canvas/70" />
+        </div>
+        <div className="relative z-10 max-w-2xl">
           <div className="eyebrow"><CircleDot className="size-3 text-success" /> competitive infrastructure / online</div>
           <h1 className="mt-6 text-hero max-w-3xl">The command center for competitive communities.</h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-fg-muted">Operate Discord, matchmaking, game servers, moderation, and player progression from a single focused workspace built for teams that move fast.</p>
@@ -48,7 +57,7 @@ export default async function LandingPage() {
           </div>
         </div>
 
-        <div className="command-preview panel-container relative overflow-hidden p-0">
+        <div className="command-preview panel-container relative z-10 overflow-hidden p-0">
           <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
             <div className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded-lg bg-primary-50 text-primary-500"><Terminal className="size-4" /></span><div><p className="font-mono text-[10px] uppercase tracking-widest text-fg-muted">workspace / operations</p><p className="text-sm font-semibold">Ranked Bedwars</p></div></div>
             <span className={`status-pill ${telemetryAvailable ? "status-success" : "status-warning"}`}><span className={`size-1.5 rounded-full ${telemetryAvailable ? "bg-success" : "bg-warning"}`} /> {telemetryAvailable ? "live data connected" : "data unavailable"}</span>
