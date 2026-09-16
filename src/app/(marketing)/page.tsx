@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   Terminal,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { dbApi } from "@/lib/api-client";
 
@@ -34,14 +33,6 @@ export default async function LandingPage() {
   return (
     <div className="relative overflow-hidden">
       <section className="relative mx-auto grid max-w-[95rem] gap-12 overflow-hidden px-4 pb-20 pt-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20 lg:pb-28 lg:pt-24">
-        <div className="pointer-events-none absolute inset-y-0 right-[-6rem] z-0 w-[min(72vw,64rem)] opacity-[0.3] mix-blend-screen sm:right-[-4rem] lg:right-[-2rem] lg:w-[58rem]">
-          <Image src="/minecraft-hero-player.png" alt="" fill priority sizes="(min-width: 1024px) 58rem, 68vw" className="object-contain object-right" />
-          <div className="absolute inset-0 bg-gradient-to-r from-bg-canvas via-bg-canvas/35 to-transparent" />
-        </div>
-        <div className="pointer-events-none absolute bottom-0 right-[-1rem] z-20 hidden h-[22rem] w-[19rem] opacity-75 mix-blend-screen lg:block">
-          <Image src="/minecraft-hero-player.png" alt="" fill sizes="19rem" className="object-contain object-right-bottom" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-bg-canvas/70" />
-        </div>
         <div className="relative z-10 max-w-2xl">
           <div className="eyebrow"><CircleDot className="size-3 text-success" /> competitive infrastructure / online</div>
           <h1 className="mt-6 text-hero max-w-3xl">The command center for competitive communities.</h1>
