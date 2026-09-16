@@ -14,16 +14,18 @@ import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 export default function Page({ params }: { params: Promise<{ guildId: string }> }) {
 	const { guildId } = use(params);
 	const [isSaving, setIsSaving] = useState(false);
-	const [domain, setDomain] = useState("");
+	const rootDomain = "myrbw.dev";
+	const [subdomain, setSubdomain] = useState("prbw");
 	const [sslStatus, setSslStatus] = useState("VALID");
-	const [savedSnapshot, setSavedSnapshot] = useState(() => ({ domain: "", sslStatus: "VALID" }));
+	const [savedSnapshot, setSavedSnapshot] = useState(() => ({ subdomain: "prbw", sslStatus: "VALID" }));
+	const domain = `${subdomain}.${rootDomain}`;
 
-	const globalLocal = useMemo(() => ({ domain, sslStatus }), [domain, sslStatus]);
+	const globalLocal = useMemo(() => ({ subdomain, sslStatus }), [subdomain, sslStatus]);
 	const globalSaved = useMemo(() => savedSnapshot, [savedSnapshot]);
 	useUnsavedChanges(globalLocal, globalSaved);
 
 	const handleSaveChanges = () => {
-		setSavedSnapshot({ domain, sslStatus });
+		setSavedSnapshot({ subdomain, sslStatus });
 		setIsSaving(true);
 		setTimeout(() => setIsSaving(false), 900);
 	};
@@ -70,14 +72,19 @@ export default function Page({ params }: { params: Promise<{ guildId: string }> 
 
 						<div className="space-y-1.5 font-mono text-xs text-left">
 							<label className="block font-bold text-fg-default uppercase tracking-wider">
-								Gateway Domain Address
+								Public Portal Subdomain
 							</label>
-							<input
-								type="text"
-								value={domain}
-								onChange={(e) => setDomain(e.target.value)}
-								className="w-full h-10 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg text-fg-default focus:outline-none"
-							/>
+							<div className="flex h-10 overflow-hidden rounded-lg border border-border-subtle bg-bg-canvas/40 focus-within:border-primary-500/50">
+								<input
+									type="text"
+									value={subdomain}
+									onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+									className="min-w-0 flex-1 bg-transparent px-3 text-fg-default focus:outline-none"
+									aria-label="Portal subdomain"
+								/>
+								<span className="flex items-center border-l border-border-subtle px-3 text-fg-muted">.{rootDomain}</span>
+							</div>
+							<p className="text-[10px] normal-case tracking-normal text-fg-muted">The myrbw.dev domain is managed by the platform. Only this guild subdomain can be changed.</p>
 						</div>
 					</div>
 
@@ -102,7 +109,7 @@ export default function Page({ params }: { params: Promise<{ guildId: string }> 
 										<>
 											<tr className="hover:bg-panel-bg/5">
 												<td className="p-3 font-bold text-fg-default">CNAME</td>
-												<td className="p-3">portal</td>
+												<td className="p-3">{subdomain}</td>
 												<td className="p-3 text-fg-muted">{domain}</td>
 												<td className="p-3 text-right text-fg-muted font-bold">Pending</td>
 											</tr>

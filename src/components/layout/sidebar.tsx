@@ -590,32 +590,32 @@ export function Sidebar() {
 		const pattern = item.href.replace(guildId || "", "[guildId]");
 		const pageId = PATH_TO_PAGE_ID[pattern];
 		const isAccessible = session?.userId === DEVELOPER_USER_ID || accessiblePages.has(pageId || "");
-		const isRestricted = pageId && session?.userId !== DEVELOPER_USER_ID && !accessiblePages.has(pageId);
 
-		// Hide restricted pages from normal users
-		if (!isAccessible && session?.userId !== DEVELOPER_USER_ID) {
-			return null;
-		}
 
-		return (
+			// Keep unavailable pages visible so everyone can understand what is locked.
+			// Developers retain normal navigation access to inspect the locked surface.
+			return (
 			<a
 					key={item.href}
 					data-tour={item.id === "commands" ? "commands-nav" : undefined}
 					href={item.href}
-				onClick={(e) => guardedNavigate(e, item.href)}
-				className={`group/link flex items-center gap-2.5 px-3 py-2 rounded-lg font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-98 cursor-pointer ${
+					onClick={(e) => {
+						if (!isAccessible) { e.preventDefault(); return; }
+						guardedNavigate(e, item.href);
+					}}
+					className={`group/link flex items-center gap-2.5 px-3 py-2 rounded-lg font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-98 ${isAccessible ? "cursor-pointer" : "cursor-not-allowed"} ${
 					active
 						? "bg-primary-500/10 text-primary-500 border border-primary-500/20 shadow-sm"
 						: "text-fg-muted hover:text-fg-default hover:bg-panel-bg/40 border border-transparent"
-				} ${isRestricted ? "opacity-50" : ""}`}
+				} ${!isAccessible ? "opacity-60" : ""}`}
 			>
 				<Icon
 					className={`size-4 shrink-0 ${active ? "text-primary-500" : colorClass}`}
 				/>
 				<span className="truncate">{item.label}</span>
-				{isRestricted && session?.userId === DEVELOPER_USER_ID && (
-					<Lock className="size-3.5 text-amber-500 shrink-0" />
-				)}
+					{!isAccessible && (
+						<Lock className="ml-auto size-3.5 shrink-0 text-amber-500" aria-label="Locked" />
+					)}
 			</a>
 		);
 	};

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Lock, AlertTriangle } from "lucide-react";
 
 const DEVELOPER_USER_ID = "716417561008275497";
@@ -171,7 +171,6 @@ async function checkPageAccess(pathname: string, guildId: string): Promise<{ all
 }
 
 export function PageAccessGuard({ children }: { children: React.ReactNode }) {
-	const router = useRouter();
 	const pathname = usePathname();
 	const [accessCheck, setAccessCheck] = useState<{ allowed: boolean; reason?: string } | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
@@ -189,14 +188,13 @@ export function PageAccessGuard({ children }: { children: React.ReactNode }) {
 			setAccessCheck(result);
 			setIsLoading(false);
 
-			if (!result.allowed) {
-				// Redirect to overview if access is denied
-				router.replace(`/dashboard/${guildId}`);
-			}
+				// Keep the locked state visible on the requested route so the restriction is
+				// clear instead of silently sending users somewhere else.
+
 		};
 
 		checkAccess();
-	}, [pathname, router]);
+		}, [pathname]);
 
 	if (isLoading) {
 		return (
