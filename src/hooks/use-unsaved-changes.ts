@@ -78,7 +78,15 @@ export function useUnsavedChanges(
 	// When the component unmounts (page navigation), clean up dirty state so
 	// the next page doesn't inherit a stale dirty flag.
 	useEffect(() => {
+		const handleDiscard = () => {
+			// Local editor state is owned by each page. Reloading the current route
+			// restores every editor from its persisted server snapshot, including
+			// controlled inputs that do not expose a shared reset action.
+			window.location.reload();
+		};
+		window.addEventListener("dashboard:discard-changes", handleDiscard);
 		return () => {
+			window.removeEventListener("dashboard:discard-changes", handleDiscard);
 			markClean(sourceId);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
