@@ -29,13 +29,13 @@ function NavigationGuardDialog() {
 		<>
 			{/* Backdrop */}
 			<div
-				className="fixed inset-0 z-[9998] bg-bg-canvas/70 backdrop-blur-sm animate-in fade-in duration-150"
+				className="fixed inset-0 z-[9998] bg-bg-canvas/70 backdrop-blur-sm motion-fade"
 				onClick={cancelNavigation}
 			/>
 
 			{/* Dialog panel */}
 			<div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
-				<div className="pointer-events-auto w-full max-w-sm border border-border-subtle bg-panel-bg backdrop-blur-md rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+				<div className="pointer-events-auto w-full max-w-sm border border-border-subtle bg-panel-bg backdrop-blur-md rounded-2xl shadow-2xl motion-modal overflow-hidden">
 					{/* Header stripe */}
 					<div className="flex items-start justify-between gap-3 px-5 pt-5 pb-4 border-b border-border-subtle/50">
 						<div className="flex items-center gap-3">

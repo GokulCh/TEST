@@ -12,7 +12,7 @@ export default async function GuildLayout({ children, params }: Props) {
 	return (
 		<GuildConfigProvider guildSnowflake={guildId}>
 			<PageAccessGuard>
-				{children}
+				<div className="motion-page min-h-full">{children}</div>
 				<SetupTour />
 			</PageAccessGuard>
 		</GuildConfigProvider>

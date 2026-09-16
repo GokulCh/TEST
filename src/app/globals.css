@@ -206,8 +206,25 @@ html.dark {
    4. APPLIED PRODUCTION CORE ABSTRACTION UTILITIES
    ========================================================================== */
 @keyframes public-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes page-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-enter { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-enter { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-.public-enter { animation: public-enter 500ms cubic-bezier(.22,1,.36,1) both; }
+.public-enter, .motion-page { animation: page-enter 420ms cubic-bezier(.22,1,.36,1) both; }
+.motion-fade { animation: fade-enter 300ms ease-out both; }
+.motion-modal { animation: modal-enter 240ms cubic-bezier(.22,1,.36,1) both; }
+.motion-stagger > * { animation: page-enter 420ms cubic-bezier(.22,1,.36,1) both; }
+.motion-stagger > *:nth-child(2) { animation-delay: 50ms; }
+.motion-stagger > *:nth-child(3) { animation-delay: 100ms; }
+.motion-stagger > *:nth-child(4) { animation-delay: 150ms; }
+.motion-interactive { transition: transform 180ms ease, opacity 180ms ease, border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease; }
+.motion-interactive:hover { transform: translateY(-2px); }
+.motion-interactive:active { transform: translateY(0) scale(.99); }
+
+@media (prefers-reduced-motion: reduce) {
+  .public-enter, .motion-page, .motion-fade, .motion-modal, .motion-stagger > * { animation: none !important; }
+  .motion-interactive, .motion-interactive:hover, .motion-interactive:active { transition: none !important; transform: none !important; }
+}
 
 @layer base {
 	select {
