@@ -29,8 +29,8 @@ import { useRouter } from "next/navigation";
 
 interface UnsavedChangesContextValue {
 	isDirty: boolean;
-	markDirty: () => void;
-	markClean: () => void;
+	markDirty: (sourceId?: string) => void;
+	markClean: (sourceId?: string) => void;
 	/** Discard the current unsaved state and clear the global dirty indicator. */
 	discardChanges: () => void;
 	/** href the user attempted to navigate to while dirty; null = no pending nav */
@@ -63,6 +63,7 @@ interface Props {
 export function UnsavedChangesProvider({ children }: Props) {
 	const router = useRouter();
 	const [isDirty, setIsDirty] = useState(false);
+	const dirtySourcesRef = useRef(new Set<string>());
 	const [pendingHref, setPendingHref] = useState<string | null>(null);
 
 	// Keep a ref so the beforeunload handler is always current
@@ -83,12 +84,18 @@ export function UnsavedChangesProvider({ children }: Props) {
 		return () => window.removeEventListener("beforeunload", handler);
 	}, []);
 
-	const markDirty = useCallback(() => setIsDirty(true), []);
-	const markClean = useCallback(() => {
-		setIsDirty(false);
-		setPendingHref(null);
+	const markDirty = useCallback((sourceId = "legacy") => {
+		dirtySourcesRef.current.add(sourceId);
+		setIsDirty(true);
+	}, []);
+	const markClean = useCallback((sourceId?: string) => {
+		if (sourceId) dirtySourcesRef.current.delete(sourceId);
+		else dirtySourcesRef.current.clear();
+		setIsDirty(dirtySourcesRef.current.size > 0);
+		if (dirtySourcesRef.current.size === 0) setPendingHref(null);
 	}, []);
 	const discardChanges = useCallback(() => {
+		dirtySourcesRef.current.clear();
 		setIsDirty(false);
 		setPendingHref(null);
 		window.dispatchEvent(new CustomEvent("dashboard:discard-changes"));

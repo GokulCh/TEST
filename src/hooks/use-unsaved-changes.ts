@@ -27,7 +27,7 @@
  * a proper deep-equal library.
  */
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { useUnsavedChangesContext } from "@/lib/contexts/changes-context";
 
 function deepEqual(a: unknown, b: unknown): boolean {
@@ -57,6 +57,7 @@ export function useUnsavedChanges(
 	savedState: unknown,
 ): UseUnsavedChangesResult {
 	const { isDirty, markDirty, markClean } = useUnsavedChangesContext();
+	const sourceId = useId();
 
 	useEffect(() => {
 		// Don't fire dirty detection until the saved state is loaded from DB.
@@ -68,23 +69,23 @@ export function useUnsavedChanges(
 		}
 
 		if (deepEqual(localState, savedState)) {
-			markClean();
+			markClean(sourceId);
 		} else {
-			markDirty();
+			markDirty(sourceId);
 		}
-	}, [localState, savedState, markDirty, markClean]);
+	}, [localState, savedState, sourceId, markDirty, markClean]);
 
 	// When the component unmounts (page navigation), clean up dirty state so
 	// the next page doesn't inherit a stale dirty flag.
 	useEffect(() => {
 		return () => {
-			markClean();
+			markClean(sourceId);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return {
 		isDirty,
-		resetDirty: markClean,
+		resetDirty: () => markClean(sourceId),
 	};
 }
