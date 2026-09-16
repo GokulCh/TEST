@@ -335,22 +335,20 @@ export default function Page() {
 									<span>{isSavingAppearance ? "Saving..." : "Save"}</span>
 								</button>
 							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 								<div className="space-y-1.5 text-left">
 									<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Bot Instance Nickname</label>
 									<input type="text" value={appearance.nickname ?? ""} onChange={(e) => setAppearance({ ...appearance, nickname: e.target.value || null })} className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
 								</div>
-								<div className="space-y-1.5 text-left">
-									<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Avatar URL</label>
-									<input type="text" value={appearance.avatar ?? ""} onChange={(e) => setAppearance({ ...appearance, avatar: e.target.value || null })} placeholder="https://cdn.example.com/avatar.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+									<div className="space-y-1.5 text-left">
+										<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Avatar URL</label>
+										<input type="text" value={appearance.avatar ?? ""} onChange={(e) => setAppearance({ ...appearance, avatar: e.target.value || null })} placeholder="https://cdn.example.com/avatar.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
+									</div>
+									<div className="space-y-1.5 text-left">
+										<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Banner URL</label>
+										<input type="text" value={appearance.banner ?? ""} onChange={(e) => setAppearance({ ...appearance, banner: e.target.value || null })} placeholder="https://cdn.example.com/banner.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
+									</div>
 								</div>
-							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-								<div className="space-y-1.5 text-left">
-									<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Banner URL</label>
-									<input type="text" value={appearance.banner ?? ""} onChange={(e) => setAppearance({ ...appearance, banner: e.target.value || null })} placeholder="https://cdn.example.com/banner.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
-								</div>
-							</div>
 							<div className="space-y-1.5 text-left">
 								<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">About Me Description</label>
 								<textarea rows={3} value={appearance.bio ?? ""} onChange={(e) => setAppearance({ ...appearance, bio: e.target.value || null })} className="w-full p-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50 resize-none leading-relaxed" placeholder="Supports basic markdown formatting" />
