@@ -324,13 +324,19 @@ export function Sidebar() {
 		},
 	];
 
-	const infrastructureNodes: NavItem[] = [
-		{
-			id: "hosting",
-			href: `${baseHref}/infrastructure/hosting`,
-			label: "Bot Nodes",
-			icon: Server,
-		},
+		const infrastructureNodes: NavItem[] = [
+			{
+				id: "proxies",
+				href: `${baseHref}/infrastructure/auto-proxy`,
+				label: "Server Instance",
+				icon: Cpu,
+			},
+			{
+				id: "hosting",
+				href: `${baseHref}/infrastructure/hosting`,
+				label: "Bot Nodes",
+				icon: Server,
+			},
 		{
 			id: "maps",
 			href: `${baseHref}/infrastructure/maps`,
@@ -343,12 +349,7 @@ export function Sidebar() {
 			label: "Season Breaks",
 			icon: CalendarDays,
 		},
-		{
-			id: "proxies",
-			href: `${baseHref}/infrastructure/auto-proxy`,
-			label: "Instance Proxies",
-			icon: Cpu,
-		},
+
 	];
 
 	const moderationNodes: NavItem[] = [
