@@ -18,7 +18,9 @@ export const publicPlayers: PublicPlayer[] = [
   { id: "orbit", name: "ORBIT", rank: "GOLD", elo: 1362, wins: 70, games: 142, streak: 1, avatar: "O" },
 ]
 
-export const publicGames = [
+export type PublicGame = { id: string; mode: string; map: string; winner: string; score: string; time: string }
+
+export const publicGames: PublicGame[] = [
   { id: "#8842", mode: "SOLOS", map: "Rooftop", winner: "WIGGLES", score: "5 — 3", time: "12 min ago" },
   { id: "#8841", mode: "DOUBLES", map: "Lighthouse", winner: "PRBW", score: "5 — 1", time: "28 min ago" },
   { id: "#8840", mode: "SOLOS", map: "Ashfire", winner: "MAVEN", score: "5 — 4", time: "41 min ago" },
