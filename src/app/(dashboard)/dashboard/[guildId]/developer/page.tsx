@@ -698,88 +698,7 @@ export default function Page() {
 						</div>
 						<input value={navigationQuery} onChange={(event) => setNavigationQuery(event.target.value)} placeholder="Filter pages or categories..." className="h-9 w-full rounded-lg border border-border-subtle bg-bg-canvas/40 px-3 font-mono text-xs text-fg-default outline-none focus:border-primary-500/50 sm:max-w-xs" />
 					</div>
-					<div className="space-y-4">
-					<div className="p-5 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-4">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Eye className="size-4 text-cyan-500" />
-							<h3 className="font-mono text-[11px] font-bold text-fg-default uppercase tracking-widest">
-								Page Visibility Control
-							</h3>
-						</div>
-						<p className="font-mono text-[10px] text-fg-muted leading-relaxed">
-							Enable or disable specific pages across the configuration panel. Disabled pages will not be accessible to users. Restricted pages are locked to developers only.
-						</p>
-					</div>
-
-					{pageConfigs.length === 0 ? (
-						<div className="p-8 border border-dashed border-border-subtle/60 rounded-xl text-center">
-							<p className="font-mono text-[10px] text-fg-muted uppercase tracking-wider">
-								No pages configured yet
-							</p>
-						</div>
-					) : (
-						pageConfigs.map((page) => (
-							<div
-								key={page.id}
-								className={`p-4 border ${isPreviewMode && !page.is_enabled ? 'border-dashed border-border-subtle/30 opacity-50' : 'border-border-subtle'} bg-panel-bg/20 rounded-xl space-y-3`}
-							>
-								<div className="flex items-start justify-between gap-3">
-									<div className="flex-1">
-										<div className="flex items-center gap-2">
-											{page.is_restricted && <Lock className="size-3.5 text-amber-500" />}
-											<p className="font-mono text-sm font-bold text-fg-default uppercase tracking-wider">
-												{page.name}
-											</p>
-											{page.is_restricted && (
-												<span className="font-mono text-[8px] font-black uppercase tracking-widest text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">
-													Developer Only
-												</span>
-											)}
-											{!page.is_enabled && (
-												<span className="font-mono text-[8px] font-black uppercase tracking-widest text-danger bg-danger/10 px-1.5 py-0.5 rounded">
-													Hidden
-												</span>
-											)}
-										</div>
-										<p className="font-mono text-[9px] text-fg-muted mt-0.5">{page.path}</p>
-									</div>
-								</div>
-								{!isPreviewMode && (
-									<div className="flex items-center gap-2">
-										<button
-											onClick={() => togglePageEnabled(page.id)}
-											className={`h-8 px-3 border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
-												page.is_enabled
-													? "bg-success/10 border-success/30 text-success"
-													: "bg-panel-bg border-border-subtle text-fg-muted"
-											}`}
-										>
-											{page.is_enabled ? (
-												<ToggleRight className="size-4" />
-											) : (
-												<ToggleLeft className="size-4" />
-											)}
-											<span>{page.is_enabled ? "Visible" : "Hidden"}</span>
-										</button>
-										<button
-											onClick={() => togglePageRestricted(page.id)}
-											className={`h-8 px-3 border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
-												page.is_restricted
-													? "bg-amber-500/10 border-amber-500/30 text-amber-500"
-													: "bg-panel-bg border-border-subtle text-fg-muted"
-											}`}
-										>
-											<Lock className="size-3.5" />
-											<span>{page.is_restricted ? "Locked" : "Public"}</span>
-										</button>
-									</div>
-								)}
-							</div>
-						))
-					)}
-					</div>
-
-					<div className="space-y-4">
+						<div className="space-y-4">
 						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
 							<Code className="size-4 text-violet-500" />
 							<h3 className="font-mono text-[11px] font-bold uppercase tracking-widest text-fg-default">Categories &amp; Groups</h3>
@@ -791,9 +710,9 @@ export default function Page() {
 								Category Control
 							</h3>
 						</div>
-						<p className="font-mono text-[10px] text-fg-muted leading-relaxed">
-							Manage entire navigation categories and their constituent pages. Restricted categories are locked to developers only.
-						</p>
+							<p className="font-mono text-[10px] text-fg-muted leading-relaxed">
+								Disable an entire category or fine-tune the individual pages inside it. Category locks apply to every page in the group, so you only configure each visibility rule once.
+							</p>
 					</div>
 
 					{categoryConfigs.length === 0 ? (
@@ -803,8 +722,8 @@ export default function Page() {
 							</p>
 						</div>
 					) : (
-						categoryConfigs.map((category) => (
-							<div
+							categoryConfigs.filter((category) => !navigationQuery || `${category.name} ${category.pages.map((id) => pageConfigs.find((page) => page.id === id)?.name ?? "")}`.toLowerCase().includes(navigationQuery.toLowerCase())).map((category) => (
+								<div
 								key={category.id}
 								className={`p-4 border ${isPreviewMode && !category.is_enabled ? 'border-dashed border-border-subtle/30 opacity-50' : 'border-border-subtle'} bg-panel-bg/20 rounded-xl space-y-3`}
 							>
@@ -853,17 +772,33 @@ export default function Page() {
 								</div>
 								{category.pages.length > 0 && (
 									<div className="pl-3 border-l border-border-subtle/30 space-y-1">
-										{category.pages.map((pageId) => {
-											const page = pageConfigs.find((p) => p.id === pageId);
-											return page ? (
-												<div key={pageId} className="flex items-center gap-2">
-													<div className="size-1.5 rounded-full bg-fg-muted/40" />
-													<p className="font-mono text-[9px] text-fg-muted">
-														{page.name}
-													</p>
+									{category.pages.map((pageId) => {
+										const page = pageConfigs.find((p) => p.id === pageId);
+										if (!page || (navigationQuery && !`${page.name} ${page.path}`.toLowerCase().includes(navigationQuery.toLowerCase()))) return null;
+										return (
+											<div key={pageId} className="flex items-center justify-between gap-3 rounded-lg border border-border-subtle/30 bg-bg-canvas/20 px-3 py-2">
+												<div className="min-w-0">
+													<div className="flex items-center gap-2">
+														{page.is_restricted && <Lock className="size-3 text-amber-500" />}
+														<p className="truncate font-mono text-[10px] font-bold uppercase tracking-wider text-fg-default">{page.name}</p>
+														{!page.is_enabled && <span className="font-mono text-[8px] uppercase tracking-wider text-danger">Disabled</span>}
+													</div>
+													<p className="font-mono text-[9px] text-fg-muted">{page.path}</p>
 												</div>
-											) : null;
-										})}
+												{!isPreviewMode && (
+													<div className="flex shrink-0 items-center gap-2">
+														<button onClick={() => togglePageEnabled(page.id)} className={`h-7 px-2.5 border rounded-md font-mono text-[8px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer ${page.is_enabled ? "bg-success/10 border-success/30 text-success" : "bg-panel-bg border-border-subtle text-fg-muted"}`}>
+															{page.is_enabled ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
+															{page.is_enabled ? "On" : "Off"}
+														</button>
+														<button onClick={() => togglePageRestricted(page.id)} className={`h-7 px-2.5 border rounded-md font-mono text-[8px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer ${page.is_restricted ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-panel-bg border-border-subtle text-fg-muted"}`}>
+															<Lock className="size-3" /> {page.is_restricted ? "Locked" : "Public"}
+														</button>
+													</div>
+												)}
+											</div>
+										);
+									})}
 									</div>
 								)}
 							</div>
