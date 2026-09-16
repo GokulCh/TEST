@@ -247,11 +247,6 @@ export default function Page() {
 							<span>ELO · W/L</span>
 						</div>
 
-						{processed.length === 0 && (
-							<div className="p-8 border border-dashed border-border-subtle/40 rounded-xl text-center font-mono text-xs text-fg-muted uppercase tracking-wider">
-								No players registered yet.
-							</div>
-						)}
 
 						{processed.map((player, idx) => (
 							<div
