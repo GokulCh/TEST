@@ -13,6 +13,7 @@ const links = [
   ["Players", "/players", "Competitors"],
   ["Games", "/games", "Match history"],
   ["Leaderboard", "/leaderboard", "Season rankings"],
+  ["Tier Lists", "/tier-lists", "Community rankings"],
   ["Creators", "#creators", "Featured voices"],
   ["Partners", "#partners", "Community partners"],
   ["Store", "/store", "Rewards"],
