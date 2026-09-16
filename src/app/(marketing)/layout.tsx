@@ -32,7 +32,7 @@ export default function MarketingLayout({
 			</header>
 
 			{/* FULL RESPONSIVE CONTENT AREA */}
-			<main className="flex-1 w-full flex flex-col justify-center">
+			<main className="motion-page flex-1 w-full flex flex-col justify-center">
 				{children}
 			</main>
 

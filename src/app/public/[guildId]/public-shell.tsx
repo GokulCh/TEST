@@ -34,7 +34,7 @@ export function PublicShell({ guildId, children }: { guildId: string; children: 
       </div>
       {open && <nav className="flex flex-col gap-1 border-t border-white/[0.08] px-5 py-4 md:hidden">{links.map(([label, suffix, description]) => <Link key={label} href={`${base}${suffix}`} onClick={() => setOpen(false)} className="flex items-center justify-between rounded-lg border border-transparent px-3 py-3 text-sm text-white/70 hover:border-white/[0.08] hover:bg-white/[0.06] hover:text-white"><span>{label}</span><span className="font-mono text-[10px] text-white/30">{description}</span></Link>)}</nav>}
     </header>
-    <main className="flex-1">{children}</main>
+    <main className="motion-page flex-1">{children}</main>
     <footer className="border-t border-white/[0.08] px-5 py-8 sm:px-8"><div className="mx-auto flex max-w-[95rem] flex-col justify-between gap-4 text-xs text-white/40 sm:flex-row"><span>{guildDisplayName(guildId)} · Competitive community portal</span><span className="font-mono">POWERED BY MYRBW.DEV</span></div></footer>
   </div></ThemeScope>
 }
