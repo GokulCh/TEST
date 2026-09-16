@@ -256,20 +256,32 @@ export function Sidebar() {
 
 	// ================= SUB-SYSTEM REGISTRIES =================
 
-	const coreNodes = [
-		{
-			id: "overview",
-			href: `${baseHref}`,
-			label: "Overview",
-			icon: LayoutDashboard,
-		},
-		{
-			id: "commands",
-			href: `${baseHref}/infrastructure/commands`,
-			label: "Commands",
-			icon: Terminal,
-		},
-	];
+		const coreNodes = [
+			{
+				id: "overview",
+				href: `${baseHref}`,
+				label: "Overview",
+				icon: LayoutDashboard,
+			},
+			{
+				id: "players",
+				href: `${baseHref}/matchmaking/players`,
+				label: "Players",
+				icon: Users,
+			},
+			{
+				id: "games",
+				href: `${baseHref}/matchmaking/matches`,
+				label: "Games",
+				icon: Swords,
+			},
+			{
+				id: "commands",
+				href: `${baseHref}/infrastructure/commands`,
+				label: "Commands",
+				icon: Terminal,
+			},
+		];
 
 	const matchmakingMatrix: NavItem[] = [
 		{
@@ -278,18 +290,8 @@ export function Sidebar() {
 			label: "Queue Systems",
 			icon: ListOrdered,
 		},
-		{
-			id: "players",
-			href: `${baseHref}/matchmaking/players`,
-			label: "Player Profiles",
-			icon: Users,
-		},
-		{
-			id: "matches",
-			href: `${baseHref}/matchmaking/matches`,
-			label: "Live Matches",
-			icon: Swords,
-		},
+
+
 		{
 			id: "ranks",
 			href: `${baseHref}/matchmaking/ranks`,
