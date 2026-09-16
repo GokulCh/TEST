@@ -752,7 +752,7 @@ export function Sidebar() {
 															)}
 							{modulesExpanded && (
 								<div className="pl-2 ml-1 border-l border-border-subtle/50 space-y-1.5 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
-										{/* 🌐 INFRASTRUCTURE NODES (Cyan / Light Blue Accent Vector) */}
+										{/* Infrastructure pages */}
 										<div className="space-y-0.5">
 											{renderDropdownTrigger(
 												"Infrastructure",
@@ -815,7 +815,7 @@ export function Sidebar() {
 									{/* 🎫 TICKET SUBSYSTEM (Orange / Bronze Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Ticket Subsystem",
+											"Tickets",
 											LifeBuoy,
 											categoryStates.tickets,
 											() => toggleCategory("tickets"),
@@ -835,7 +835,7 @@ export function Sidebar() {
 									{/* 🎨 CREATOR TOOLKITS (Emerald / Green Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Creator Toolkits",
+											"Toolkits",
 											Image,
 											categoryStates.toolkits,
 											() => toggleCategory("toolkits"),
@@ -875,7 +875,7 @@ export function Sidebar() {
 									{/* 📊 SIMULATION MODELS (Sky Blue Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Simulation Models",
+											"Simulations",
 											Calculator,
 											categoryStates.simulations,
 											() => toggleCategory("simulations"),

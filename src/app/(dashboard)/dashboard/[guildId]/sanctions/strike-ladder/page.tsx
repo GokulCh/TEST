@@ -81,7 +81,7 @@ export default function Page() {
 		<div className="w-full p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto text-left">
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-subtle pb-6">
 				<div>
-					<h1 className="font-mono text-[10px] font-bold uppercase tracking-widest text-fg-muted">// Sanctions Escalation Pipeline</h1>
+					<h1 className="font-mono text-[10px] font-bold uppercase tracking-widest text-fg-muted">// Strike escalation rules</h1>
 					<h2 className="text-2xl font-black tracking-tight text-fg-default mt-1">Strike Auto-Ladder</h2>
 				</div>
 				<div className="flex items-center gap-2 self-start sm:self-auto">
@@ -108,7 +108,7 @@ export default function Page() {
 			</div>
 
 			<div className="flex justify-between items-center bg-panel-bg/10 p-4 border border-border-subtle rounded-xl">
-				<div><h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Ladder Level Registry</h3><p className="font-mono text-[9px] text-fg-muted uppercase mt-0.5">Each offence category owns an escalation vector of strike thresholds</p></div>
+				<div><h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Strike levels</h3><p className="font-mono text-[9px] text-fg-muted uppercase mt-0.5">Each offence category owns an escalation vector of strike thresholds</p></div>
 				<button onClick={addLevel} className="h-8 px-3 flex items-center gap-1.5 border border-dashed border-primary-500/30 text-primary-500 bg-primary-500/5 hover:bg-primary-500/10 rounded-lg font-mono font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer"><Plus className="size-3.5" /> Append Ladder Level</button>
 			</div>
 

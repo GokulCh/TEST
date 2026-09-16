@@ -195,7 +195,7 @@ export default function Page() {
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-subtle pb-6">
 				<div>
 					<h1 className="font-mono text-[11px] font-bold uppercase tracking-widest text-fg-muted">
-						// Primary Operations Core Layer
+						// Community overview
 					</h1>
 					<h2 className="text-2xl font-black tracking-tight text-fg-default mt-1">
 						Overview
@@ -285,12 +285,12 @@ export default function Page() {
 						})}
 					</div>
 
-					{/* Runtime Infrastructure */}
+					{/* Connected services */}
 					<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm text-left space-y-4">
 						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
 							<Cpu className="size-4 text-cyan-500" />
 							<h3 className="font-mono text-[12px] font-bold text-fg-default uppercase tracking-widest">
-								Runtime Infrastructure
+Connected services
 							</h3>
 						</div>
 						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

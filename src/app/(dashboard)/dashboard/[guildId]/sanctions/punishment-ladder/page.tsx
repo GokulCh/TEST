@@ -95,7 +95,7 @@ export default function Page() {
 			</div>
 
 			<div className="flex justify-between items-center bg-panel-bg/10 p-4 border border-border-subtle rounded-xl">
-				<div><h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Punishment Ladder Registry</h3><p className="font-mono text-[9px] text-fg-muted uppercase mt-0.5">Each offence category escalates through ordered enforcement steps</p></div>
+				<div><h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Punishment levels</h3><p className="font-mono text-[9px] text-fg-muted uppercase mt-0.5">Each offence category escalates through ordered enforcement steps</p></div>
 				<button onClick={addLevel} className="h-8 px-3 flex items-center gap-1.5 border border-dashed border-primary-500/30 text-primary-500 bg-primary-500/5 hover:bg-primary-500/10 rounded-lg font-mono font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer"><Plus className="size-3.5" /> Append Ladder Level</button>
 			</div>
 

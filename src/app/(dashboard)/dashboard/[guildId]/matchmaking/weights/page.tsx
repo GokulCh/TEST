@@ -83,7 +83,7 @@ export default function Page() {
 			<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
 				<div className="space-y-1 text-left">
 					<h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">
-						Performance-Based ELO Engine
+						Performance-based rating
 					</h3>
 					<p className="font-mono text-[9px] text-fg-muted uppercase max-w-xl leading-relaxed">
 						When activated, the matchmaking engine hooks into deep in-game
@@ -120,7 +120,7 @@ export default function Page() {
 							<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
 								<Crosshair className="size-4 text-primary-500" />
 								<h3 className="font-mono text-[11px] font-bold text-fg-default uppercase tracking-widest">
-									Combat Scalar Vectors
+									Gameplay adjustments
 								</h3>
 							</div>
 
