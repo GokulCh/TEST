@@ -2,6 +2,7 @@
 
 import { Check, ChevronDown, Search } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
 
 export interface DropdownOption {
@@ -36,7 +37,9 @@ export default function OptionDropdown({
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [openUpward, setOpenUpward] = useState(false);
+	const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0, bottom: 0, width: 0 });
 	const rootRef = useRef<HTMLDivElement>(null);
+	const menuRef = useRef<HTMLDivElement>(null);
 	const searchId = useId();
 	const selected = options.find((option) => option.value === value);
 	const filteredOptions = options.filter((option) =>
@@ -47,13 +50,16 @@ export default function OptionDropdown({
 		if (!isOpen) return;
 		const updatePlacement = () => {
 			const rect = rootRef.current?.getBoundingClientRect();
-			if (rect) setOpenUpward(rect.bottom + 330 > window.innerHeight && rect.top > 330);
+			if (rect) {
+				setOpenUpward(rect.bottom + 330 > window.innerHeight && rect.top > 330);
+				setMenuPosition({ left: rect.left, top: rect.bottom + 4, bottom: window.innerHeight - rect.top + 4, width: rect.width });
+			}
 		};
 		updatePlacement();
 		window.addEventListener("resize", updatePlacement);
 		window.addEventListener("scroll", updatePlacement, true);
 		const handlePointerDown = (event: MouseEvent) => {
-			if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false);
+			if (!rootRef.current?.contains(event.target as Node) && !menuRef.current?.contains(event.target as Node)) setIsOpen(false);
 		};
 		document.addEventListener("mousedown", handlePointerDown);
 		return () => {
@@ -87,8 +93,8 @@ export default function OptionDropdown({
 				<ChevronDown className={`size-3.5 shrink-0 text-fg-muted transition-transform ${isOpen ? "rotate-180" : ""}`} />
 			</button>
 
-			{isOpen && (
-				<div className={`absolute inset-x-0 z-[100] overflow-hidden rounded-lg border border-border-subtle bg-panel-bg shadow-xl shadow-black/30 ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}>
+			{isOpen && typeof document !== "undefined" && createPortal(
+				<div ref={menuRef} style={{ position: "fixed", left: menuPosition.left, width: menuPosition.width, ...(openUpward ? { bottom: menuPosition.bottom } : { top: menuPosition.top }) }} className="z-[1000] overflow-hidden rounded-lg border border-border-subtle bg-panel-bg shadow-xl shadow-black/30">
 					<div className="border-b border-border-subtle/60 p-2">
 						<div className="relative">
 							<Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-fg-muted" />
@@ -120,7 +126,8 @@ export default function OptionDropdown({
 							</button>
 						)) : <div className="px-3 py-4 text-center font-mono text-[10px] text-fg-muted">{emptyLabel}</div>}
 					</div>
-				</div>
+				</div>,
+				document.body,
 			)}
 		</div>
 	);
