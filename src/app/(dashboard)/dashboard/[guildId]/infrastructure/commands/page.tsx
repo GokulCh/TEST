@@ -8,7 +8,6 @@ import {
 	Save,
 	Search,
 	Settings2,
-	Shield,
 	Terminal,
 	ToggleLeft,
 	ToggleRight,
@@ -952,8 +951,8 @@ export default function Page() {
 			</div>
 
 			{/* COMMAND SECTIONS */}
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-visible">
-				<div className="lg:col-span-2 space-y-8 overflow-visible">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-5 overflow-visible">
+					<div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 items-start overflow-visible">
 					{/* COMMANDS THAT STILL NEED CONFIGURATION — PULLED TO THE TOP */}
 					{commandsNeedingConfig.length > 0 && (
 						<div className="space-y-3 overflow-visible">
@@ -966,8 +965,10 @@ export default function Page() {
 									{commandsNeedingConfig.length} {commandsNeedingConfig.length === 1 ? "command" : "commands"}
 								</span>
 							</div>
-							{commandsNeedingConfig.map((cmd) => renderCommandCard(cmd))}
-						</div>
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+									{commandsNeedingConfig.map((cmd) => renderCommandCard(cmd))}
+								</div>
+							</div>
 					)}
 
 					{CATEGORIES.map((category) => {
@@ -992,41 +993,15 @@ export default function Page() {
 								</span>
 							</div>
 
-							{categoryCommands.map((cmd) => renderCommandCard(cmd))}
-						</div>
-						);
-					})}
-				</div>
-
-				<div className="space-y-6">
-					<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl space-y-4 h-fit">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Shield className="size-4 text-cyan-500" />
-							<h3 className="font-mono text-[11px] font-bold text-fg-default uppercase tracking-widest">
-								Security Guardrails
-							</h3>
-						</div>
-						<p className="font-mono text-[9px] text-fg-muted uppercase tracking-wide leading-relaxed text-left">
-							Slash command permissions are pushed directly to the Discord
-							gateway on boot. Allowed and denied role vectors gate execution
-							server-side for both slash and prefix interpreters.
-						</p>
-					</div>
-
-					<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl space-y-4 h-fit">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Terminal className="size-4 text-violet-500" />
-							<h3 className="font-mono text-[11px] font-bold text-fg-default uppercase tracking-widest">
-								Click to Expand
-							</h3>
-						</div>
-						<p className="font-mono text-[9px] text-fg-muted uppercase tracking-wide leading-relaxed text-left">
-							Click on any command to expand its configuration panel and view
-							all available settings for that specific command.
-						</p>
-					</div>
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+									{categoryCommands.map((cmd) => renderCommandCard(cmd))}
+								</div>
+							</div>
+							);
+						})}
 				</div>
 			</div>
 		</div>
-	);
-}
+		);
+	}
+
