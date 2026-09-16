@@ -1,10 +1,10 @@
 ﻿"use client";
 
 import { useUnsavedChangesContext } from "@/lib/contexts/changes-context";
-import { AlertTriangle, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, RotateCcw } from "lucide-react";
 
 export function SaveBar() {
-	const { isDirty } = useUnsavedChangesContext();
+	const { isDirty, discardChanges } = useUnsavedChangesContext();
 
 	return (
 		<div
@@ -29,7 +29,15 @@ export function SaveBar() {
 						</div>
 
 						{/* RIGHT: prominent warning badge */}
-						<div className="flex items-center gap-4">
+						<div className="flex items-center gap-3">
+							<button
+								type="button"
+								onClick={discardChanges}
+								className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-panel-bg px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-fg-muted transition-colors hover:border-danger/50 hover:text-danger"
+							>
+								<RotateCcw className="size-3.5" />
+								Discard Changes
+							</button>
 							<div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-warning/15 border border-warning/40 text-warning text-[10px] font-mono font-bold uppercase tracking-widest">
 								<AlertTriangle className="size-3.5 shrink-0" />
 								Changes Not Saved

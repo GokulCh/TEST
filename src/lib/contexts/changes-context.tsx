@@ -31,6 +31,8 @@ interface UnsavedChangesContextValue {
 	isDirty: boolean;
 	markDirty: () => void;
 	markClean: () => void;
+	/** Discard the current unsaved state and clear the global dirty indicator. */
+	discardChanges: () => void;
 	/** href the user attempted to navigate to while dirty; null = no pending nav */
 	pendingHref: string | null;
 	/** Call from link onClick — returns true if navigation is allowed immediately */
@@ -86,6 +88,11 @@ export function UnsavedChangesProvider({ children }: Props) {
 		setIsDirty(false);
 		setPendingHref(null);
 	}, []);
+	const discardChanges = useCallback(() => {
+		setIsDirty(false);
+		setPendingHref(null);
+		window.dispatchEvent(new CustomEvent("dashboard:discard-changes"));
+	}, []);
 
 	/**
 	 * Returns true if navigation can proceed immediately (not dirty).
@@ -117,6 +124,7 @@ export function UnsavedChangesProvider({ children }: Props) {
 				isDirty,
 				markDirty,
 				markClean,
+				discardChanges,
 				pendingHref,
 				requestNavigation,
 				confirmNavigation,
