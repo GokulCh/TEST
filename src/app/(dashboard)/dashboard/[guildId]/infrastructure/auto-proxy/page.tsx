@@ -13,6 +13,7 @@ import {
 	ShieldCheck,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import OptionDropdown from "@/components/ui/OptionDropdown";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import type { GameServerConfig, BotStoredConfig } from "@/lib/db-types";
@@ -156,18 +157,11 @@ const serverData = meta.server as GameServerConfig;
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 							<div className="space-y-1">
 								<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Auth Strategy</label>
-								<select value={server.auth?.type ?? "none"} onChange={(e) => setServer((s) => ({ ...s, auth: { type: e.target.value as "none" | "per_bot" } }))} className="w-full h-8 px-2 bg-bg-canvas/40 border border-border-subtle rounded-md font-mono text-xs text-fg-default focus:outline-none">
-									<option value="none">None</option>
-									<option value="per_bot">Per Bot Credentials</option>
-								</select>
+<OptionDropdown value={server.auth?.type ?? "none"} onChange={(value) => setServer((s) => ({ ...s, auth: { type: value as "none" | "per_bot" } }))} options={[{ value: "none", label: "None" }, { value: "per_bot", label: "Per Bot Credentials" }]} ariaLabel="Auth strategy" />
 							</div>
 							<div className="space-y-1">
 								<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Verification Provider</label>
-								<select value={server.verification?.provider ?? "none"} onChange={(e) => setServer((s) => ({ ...s, verification: { provider: e.target.value as "none" | "jartex_stats" | "mojang" } }))} className="w-full h-8 px-2 bg-bg-canvas/40 border border-border-subtle rounded-md font-mono text-xs text-fg-default focus:outline-none">
-									<option value="none">None</option>
-									<option value="jartex_stats">Jartex Stats</option>
-									<option value="mojang">Mojang</option>
-								</select>
+<OptionDropdown value={server.verification?.provider ?? "none"} onChange={(value) => setServer((s) => ({ ...s, verification: { provider: value as "none" | "jartex_stats" | "mojang" } }))} options={[{ value: "none", label: "None" }, { value: "jartex_stats", label: "Jartex Stats" }, { value: "mojang", label: "Mojang" }]} ariaLabel="Verification provider" />
 							</div>
 						</div>
 
