@@ -10,8 +10,8 @@ export default function MarketingLayout({
 	return (
 		<div className="min-h-screen bg-bg-canvas text-fg-default font-sans antialiased flex flex-col justify-between overflow-x-hidden">
 			{/* PERSISTENT HEADER FRAME - Extends to 1520px wide layout grid constraints */}
-			<header className="sticky top-0 z-sticky border-b border-border-subtle bg-bg-canvas/50 backdrop-blur-md">
-				<div className="mx-auto flex h-14 max-w-[95rem] items-center justify-between px-8">
+			<header className="sticky top-0 z-sticky border-b border-border-subtle/70 bg-bg-canvas/80 backdrop-blur-xl">
+				<div className="mx-auto flex h-16 max-w-[95rem] items-center justify-between px-4 sm:px-8">
 					<Link
 						href="/"
 						className="flex items-center gap-2.5 font-bold hover:opacity-90 transition-opacity"

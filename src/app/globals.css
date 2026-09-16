@@ -14,7 +14,13 @@
 	--color-fg-default: var(--fg-default);
 	--color-fg-muted: var(--fg-muted);
 	--color-border-subtle: var(--border-subtle);
-	--color-panel-bg: var(--panel-bg);
+		--color-panel-bg: var(--panel-bg);
+		--color-surface-raised: var(--surface-raised);
+		--color-surface-inset: var(--surface-inset);
+		--color-accent-purple: var(--accent-purple);
+		--color-accent-cyan: var(--accent-cyan);
+		--color-focus-ring: var(--focus-ring);
+
 
 	/* --- Absolute Structural Naming Scales --- */
 	--color-primary-50: var(--primary-50);
@@ -65,8 +71,14 @@
 	--fg-default: oklch(0.15 0.01 260);
 	--fg-muted: oklch(0.45 0.01 260);
 	--border-subtle: oklch(0.872 0.012 260);
-	--panel-bg: oklch(0.95 0.008 260);
-	--glow-intensity: 0.06;
+		--panel-bg: oklch(0.97 0.006 260);
+		--surface-raised: oklch(0.99 0.004 260);
+		--surface-inset: oklch(0.93 0.008 260);
+		--accent-purple: oklch(0.58 0.2 295);
+		--accent-cyan: oklch(0.72 0.15 205);
+		--focus-ring: oklch(0.62 0.18 250);
+		--glow-intensity: 0.06;
+
 
 	/* Naming Standard Scales Bound To Light Coordinates */
 	--primary-50: oklch(0.96 0.03 250);
@@ -112,8 +124,13 @@ html.dark {
 		--fg-default: oklch(0.95 0 0);
 		--fg-muted: oklch(0.65 0 0);
 		--border-subtle: oklch(0.23 0.012 260);
-		--panel-bg: oklch(0.08 0.01 260);
-		--glow-intensity: 0.25;
+		--panel-bg: oklch(0.16 0.014 260);
+		--surface-raised: oklch(0.19 0.018 260);
+		--surface-inset: oklch(0.105 0.012 260);
+		--accent-purple: oklch(0.68 0.22 295);
+		--accent-cyan: oklch(0.76 0.16 205);
+		--focus-ring: oklch(0.72 0.18 250);
+		--glow-intensity: 0.18;
 
 		--primary-50: oklch(0.25 0.05 250);
 		--primary-500: oklch(0.62 0.18 250);
@@ -127,7 +144,6 @@ html.dark {
 		--tertiary-500: oklch(0.63 0.22 20);
 		--tertiary-600: oklch(0.53 0.21 20);
 	}
-}
 
 /* ==========================================================================
    3. GLOBAL BASE LAYER STANDARDIZATIONS
@@ -265,9 +281,77 @@ html.dark {
 		gap: 1.5rem;
 	}
 
-	.flex-center {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		.flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-family: var(--font-mono);
+			font-size: 0.65rem;
+			font-weight: 700;
+			letter-spacing: 0.14em;
+			line-height: 1.2;
+			text-transform: uppercase;
+			color: var(--color-fg-muted);
+		}
+
+		.surface-inset {
+			background: var(--color-surface-inset);
+			border: 1px solid color-mix(in oklch, var(--color-border-subtle) 78%, transparent);
+		}
+
+		.button-primary,
+		.button-secondary {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5rem;
+			min-height: 2.75rem;
+			border-radius: var(--radius-control);
+			padding: 0.7rem 1rem;
+			font-family: var(--font-mono);
+			font-size: 0.7rem;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
+		}
+
+		.button-primary {
+			background: var(--color-primary-500);
+			color: white;
+			box-shadow: 0 12px 30px color-mix(in oklch, var(--color-primary-500) 18%, transparent);
+		}
+
+		.button-primary:hover { background: var(--color-primary-600); transform: translateY(-1px); }
+		.button-secondary { border: 1px solid var(--color-border-subtle); background: var(--color-surface-raised); color: var(--color-fg-default); }
+		.button-secondary:hover { border-color: var(--color-primary-500); background: var(--color-panel-bg); }
+
+		.status-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			border-radius: 999px;
+			padding: 0.3rem 0.55rem;
+			font-family: var(--font-mono);
+			font-size: 0.58rem;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+
+		.status-success { border: 1px solid color-mix(in oklch, var(--color-success) 28%, transparent); background: color-mix(in oklch, var(--color-success) 9%, transparent); color: var(--color-success); }
+
+		.command-preview { box-shadow: 0 24px 80px color-mix(in oklch, var(--color-primary-500) 10%, transparent); }
 	}
-}
+
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+		}
+	}
+
