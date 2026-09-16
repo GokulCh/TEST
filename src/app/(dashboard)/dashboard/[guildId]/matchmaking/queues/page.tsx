@@ -550,36 +550,6 @@ export default function Page() {
 								</div>
 							</div>
 
-							{/* Voice Channel Name Templates */}
-							<div className="pt-4 border-t border-border-subtle/30 space-y-3">
-								<div className="flex justify-between items-center px-1">
-									<span className="font-mono text-[10px] font-bold text-fg-muted uppercase tracking-widest">// Voice Channel Name Templates</span>
-								</div>
-								<div className="space-y-2">
-									<div className="space-y-1">
-										<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Team Voice Channel Template</label>
-										<input 
-											type="text" 
-											value={(group as any).voice_team_template ?? "Match #{match_id} - Team {team_color}"} 
-											onChange={(e) => updateGroup(gi, { voice_team_template: e.target.value || null } as any)} 
-											placeholder="Match #{match_id} - Team {team_color}"
-											className="w-full h-8 px-2.5 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" 
-										/>
-										<span className="block font-mono text-[8px] text-fg-muted uppercase tracking-wide">Variables: {'{match_id}'}, {'{team_color}'}, {'{mode_name}'}</span>
-									</div>
-									<div className="space-y-1">
-										<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Waiting Room Template</label>
-										<input 
-											type="text" 
-											value={(group as any).voice_waiting_template ?? "Waiting - {mode_name}"} 
-											onChange={(e) => updateGroup(gi, { voice_waiting_template: e.target.value || null } as any)} 
-											placeholder="Waiting - {mode_name}"
-											className="w-full h-8 px-2.5 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" 
-										/>
-										<span className="block font-mono text-[8px] text-fg-muted uppercase tracking-wide">Variables: {"{mode_name}"}, {"{queue_name}"}</span>
-									</div>
-								</div>
-							</div>
 						</div>
 					))}
 				</div>
