@@ -108,12 +108,12 @@ html.dark {
 @media (prefers-color-scheme: dark) {
 	:root:not(.light) {
 		/* Automatic System Mode Fallback Hooks */
-		--bg-canvas: oklch(0.115 0.018 264);
-		--fg-default: oklch(0.96 0.008 250);
-		--fg-muted: oklch(0.68 0.018 255);
-		--border-subtle: oklch(0.255 0.035 264);
-		--panel-bg: oklch(0.155 0.022 264);
-		--glow-intensity: 0.22;
+		--bg-canvas: oklch(0.13 0.008 260);
+		--fg-default: oklch(0.95 0 0);
+		--fg-muted: oklch(0.65 0 0);
+		--border-subtle: oklch(0.23 0.012 260);
+		--panel-bg: oklch(0.08 0.01 260);
+		--glow-intensity: 0.25;
 
 		--primary-50: oklch(0.25 0.05 250);
 		--primary-500: oklch(0.62 0.18 250);
@@ -180,35 +180,13 @@ html.dark {
 		background: var(--color-border-subtle);
 		border-radius: 4px;
 	}
-		::-webkit-scrollbar-thumb:hover {
-			background: var(--color-primary-500);
-		}
-
-		::selection {
-			background: color-mix(in oklch, var(--color-primary-500) 32%, transparent);
-			color: var(--color-fg-default);
-		}
-
-		button, a, input, textarea, select {
-			-webkit-tap-highlight-color: transparent;
-		}
-
-		:focus-visible {
-			outline: 2px solid var(--color-primary-500);
-			outline-offset: 3px;
-		}
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--color-primary-500);
 	}
+}
 
-		@media (prefers-reduced-motion: reduce) {
-			*, *::before, *::after {
-				animation-duration: 0.01ms !important;
-				animation-iteration-count: 1 !important;
-				scroll-behavior: auto !important;
-				transition-duration: 0.01ms !important;
-			}
-		}
-
-/* ==========================================================================\n   4. APPLIED PRODUCTION CORE ABSTRACTION UTILITIES
+/* ==========================================================================
+   4. APPLIED PRODUCTION CORE ABSTRACTION UTILITIES
    ========================================================================== */
 @layer utilities {
 	/* --- Advanced Typographic Layout Shortcuts --- */
