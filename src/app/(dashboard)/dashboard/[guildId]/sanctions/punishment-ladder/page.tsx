@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import type { PunishmentLadderConfig, PunishmentLadderLevel } from "@/lib/db-types";
+import OptionDropdown from "@/components/ui/OptionDropdown";
 
 type DurationUnit = "minutes" | "hours" | "days";
 const PUNISHMENT_TYPES = ["warning", "chat_mute", "vc_mute", "queue_ban", "server_ban", "strike_tag"];
@@ -90,15 +91,11 @@ export default function Page() {
 
 			<div className="p-4 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl space-y-1.5 shadow-xs">
 				<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Offence Accounting Mode</label>
-				<select value={offenceMode} onChange={(e) => setOffenceMode(e.target.value as typeof offenceMode)} className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50">
-					<option value="persistent">Persistent (Lifetime)</option>
-					<option value="active_only">Active Only</option>
-					<option value="season_reset">Season Reset</option>
-				</select>
+<OptionDropdown value={offenceMode} onChange={(value) => setOffenceMode(value as typeof offenceMode)} options={[{ value: "persistent", label: "Persistent (Lifetime)" }, { value: "active_only", label: "Active Only" }, { value: "season_reset", label: "Season Reset" }]} />
 			</div>
 
 			<div className="flex justify-between items-center bg-panel-bg/10 p-4 border border-border-subtle rounded-xl">
-				<div><h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Punishment Ladder Registry</h3><p className="font-mono text-[9px] text-fg-muted uppercase mt-0.5">Each offence category escalates through ordered enforcement steps</p></div>
+				<div><h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Punishment levels</h3><p className="font-mono text-[9px] text-fg-muted uppercase mt-0.5">Each offence category escalates through ordered enforcement steps</p></div>
 				<button onClick={addLevel} className="h-8 px-3 flex items-center gap-1.5 border border-dashed border-primary-500/30 text-primary-500 bg-primary-500/5 hover:bg-primary-500/10 rounded-lg font-mono font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer"><Plus className="size-3.5" /> Append Ladder Level</button>
 			</div>
 

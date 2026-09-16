@@ -17,7 +17,7 @@ export default function DashboardLayout({
 					<MobileHeader />
 					<GuildContextBar />
 					<Breadcrumbs />
-					<main className="flex-1 p-6">{children}</main>
+					<main className="motion-page flex-1 overflow-x-hidden bg-bg-canvas/80 px-4 py-5 sm:px-6 lg:px-8">{children}</main>
 				</div>
 				{/* <HelpDrawer /> */}
 			</div>

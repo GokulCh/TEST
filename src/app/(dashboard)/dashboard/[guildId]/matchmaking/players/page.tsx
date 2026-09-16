@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
+import OptionDropdown from "@/components/ui/OptionDropdown";
 import type { PlayerConfigModel, PlayerStatsModel, PlayerStrikeModel } from "@/lib/db-types";
 
 type SortOption = "ELO_HIGH" | "ELO_LOW" | "ALPHA_ASC" | "ALPHA_DESC" | "WIN_STREAK" | "GAMES_PLAYED";
@@ -191,24 +192,33 @@ export default function Page() {
 							className="w-full h-9 pl-9 pr-4 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50"
 						/>
 					</div>
-					<div className="flex items-center gap-2 lg:col-span-3">
-						<ArrowUpDown className="size-3.5 text-fg-muted shrink-0" />
-						<select value={currentSort} onChange={(e) => setCurrentSort(e.target.value as SortOption)} className="w-full h-9 px-2 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50">
-							<option value="ELO_HIGH">Sort: ELO (High)</option>
-							<option value="ELO_LOW">Sort: ELO (Low)</option>
-							<option value="ALPHA_ASC">Sort: A–Z</option>
-							<option value="ALPHA_DESC">Sort: Z–A</option>
-							<option value="WIN_STREAK">Sort: Win Streak</option>
-							<option value="GAMES_PLAYED">Sort: Games Played</option>
-						</select>
-					</div>
-					<div className="flex items-center gap-2 lg:col-span-3">
-						<Filter className="size-3.5 text-fg-muted shrink-0" />
-						<select value={rankFilter} onChange={(e) => setRankFilter(e.target.value)} className="w-full h-9 px-2 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50">
-							<option value="ALL">All Ranks</option>
-							{allRanks.map((r) => <option key={r} value={r}>{r}</option>)}
-						</select>
-					</div>
+						<div className="flex items-center gap-2 lg:col-span-3">
+							<ArrowUpDown className="size-3.5 shrink-0 text-fg-muted" />
+							<OptionDropdown
+								value={currentSort}
+								onChange={(value) => setCurrentSort(value as SortOption)}
+								ariaLabel="Sort players"
+								className="min-w-0 flex-1"
+								options={[
+									{ value: "ELO_HIGH", label: "Sort: ELO (High)" },
+									{ value: "ELO_LOW", label: "Sort: ELO (Low)" },
+									{ value: "ALPHA_ASC", label: "Sort: A–Z" },
+									{ value: "ALPHA_DESC", label: "Sort: Z–A" },
+									{ value: "WIN_STREAK", label: "Sort: Win Streak" },
+									{ value: "GAMES_PLAYED", label: "Sort: Games Played" },
+								]}
+							/>
+						</div>
+						<div className="flex items-center gap-2 lg:col-span-3">
+							<Filter className="size-3.5 shrink-0 text-fg-muted" />
+							<OptionDropdown
+								value={rankFilter}
+								onChange={setRankFilter}
+								ariaLabel="Filter by rank"
+								className="min-w-0 flex-1"
+								options={[{ value: "ALL", label: "All Ranks" }, ...allRanks.map((rank) => ({ value: rank, label: rank }))]}
+							/>
+						</div>
 				</div>
 			</div>
 
@@ -222,8 +232,14 @@ export default function Page() {
 				<div className="p-4 rounded-xl border border-danger/30 bg-danger/10 text-danger font-mono text-xs uppercase">{error}</div>
 			)}
 
-			{!loading && !error && (
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				{!loading && !error && processed.length === 0 && (
+					<div className="p-8 border border-dashed border-border-subtle/40 rounded-xl text-center font-mono text-xs text-fg-muted uppercase tracking-wider">
+						No players registered yet.
+					</div>
+				)}
+
+				{!loading && !error && processed.length > 0 && (
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 					{/* Player list */}
 					<div className="lg:col-span-2 space-y-2 max-h-[580px] overflow-y-auto pr-1">
 						<div className="px-1 flex justify-between font-mono text-[9px] font-bold text-fg-muted uppercase tracking-widest">
@@ -231,11 +247,6 @@ export default function Page() {
 							<span>ELO · W/L</span>
 						</div>
 
-						{processed.length === 0 && (
-							<div className="p-8 border border-dashed border-border-subtle/40 rounded-xl text-center font-mono text-xs text-fg-muted uppercase tracking-wider">
-								No players registered yet.
-							</div>
-						)}
 
 						{processed.map((player, idx) => (
 							<div

@@ -1,14 +1,14 @@
 ﻿"use client";
 
 import { useUnsavedChangesContext } from "@/lib/contexts/changes-context";
-import { AlertTriangle, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, RotateCcw } from "lucide-react";
 
 export function SaveBar() {
-	const { isDirty } = useUnsavedChangesContext();
+	const { isDirty, discardChanges } = useUnsavedChangesContext();
 
 	return (
 		<div
-			className={`fixed bottom-0 left-0 right-0 z-sticky border-t backdrop-blur-md px-6 py-3 select-none transition-all duration-300 ${
+			className={`fixed bottom-0 left-0 right-0 z-sticky border-t backdrop-blur-md px-6 py-3 select-none ${
 				isDirty
 					? "bg-warning/10 border-warning/30"
 					: "bg-panel-bg/40 border-border-subtle"
@@ -29,8 +29,16 @@ export function SaveBar() {
 						</div>
 
 						{/* RIGHT: prominent warning badge */}
-						<div className="flex items-center gap-4">
-							<div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-warning/15 border border-warning/40 text-warning text-[10px] font-mono font-bold uppercase tracking-widest animate-in fade-in duration-200">
+						<div className="flex items-center gap-3">
+							<button
+								type="button"
+								onClick={discardChanges}
+								className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-panel-bg px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-fg-muted transition-colors hover:border-danger/50 hover:text-danger"
+							>
+								<RotateCcw className="size-3.5" />
+								Discard Changes
+							</button>
+							<div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-warning/15 border border-warning/40 text-warning text-[10px] font-mono font-bold uppercase tracking-widest">
 								<AlertTriangle className="size-3.5 shrink-0" />
 								Changes Not Saved
 							</div>
@@ -54,7 +62,7 @@ export function SaveBar() {
 
 						{/* RIGHT: synced badge */}
 						<div className="flex items-center gap-4">
-							<div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-success/10 border border-success/20 text-success text-[10px] font-mono font-bold uppercase tracking-widest animate-in fade-in duration-300">
+							<div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-success/10 border border-success/20 text-success text-[10px] font-mono font-bold uppercase tracking-widest">
 								<CheckCircle2 className="size-3.5" />
 								Matrix Synchronized
 							</div>

@@ -1,10 +1,11 @@
 import { Swords } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { ThemeScope } from "@/components/shared/theme-scope";
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-bg-canvas text-fg-default font-sans antialiased flex flex-col justify-between overflow-x-hidden">
+    <ThemeScope><div className="min-h-screen bg-bg-canvas text-fg-default font-sans antialiased flex flex-col justify-between overflow-x-hidden">
       
       {/* PERSISTENT HEADER FRAME - Extends to 1520px wide layout grid constraints */}
       <header className="sticky top-0 z-sticky border-b border-border-subtle bg-bg-canvas/50 backdrop-blur-md">
@@ -20,14 +21,14 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           </Link>
 
           <div className="flex items-center gap-6 text-[10px] font-mono font-bold text-fg-muted tracking-widest select-none uppercase">
-            // cluster.v2.engine
+            // community setup
           </div>
 
         </div>
       </header>
 
       {/* FULL RESPONSIVE CONTENT AREA */}
-      <main className="flex-1 w-full flex flex-col justify-center">
+      <main className="motion-page flex-1 w-full flex flex-col justify-center">
         {children}
       </main>
 
@@ -36,12 +37,12 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         <div className="mx-auto max-w-[95rem] px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono text-fg-muted">
           <span className="flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-success animate-pulse" /> 
-            Platform Orchestrator Node Stable
+            Platform services online
           </span>
-          <span>&copy; {new Date().getFullYear()} myrbw.dev. Engineered for competitive Minecraft clusters.</span>
+          <span>&copy; {new Date().getFullYear()} myrbw.dev. Engineered for competitive Minecraft communities.</span>
         </div>
       </footer>
 
-    </div>
+    </div></ThemeScope>
   );
 }

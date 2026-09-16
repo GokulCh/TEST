@@ -190,12 +190,12 @@ export default function Page() {
 	const isPageLoading = configLoading || (statsLoading && !stats);
 
 	return (
-		<div className="w-full p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto">
+		<div className="relative w-full overflow-hidden p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto"><div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-primary-500/[0.06] blur-3xl" /><div className="pointer-events-none absolute right-12 top-20 hidden size-24 rotate-12 rounded-2xl border border-primary-500/10 lg:block" />
 			{/* Header */}
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-subtle pb-6">
 				<div>
 					<h1 className="font-mono text-[11px] font-bold uppercase tracking-widest text-fg-muted">
-						// Primary Operations Core Layer
+						// Community overview
 					</h1>
 					<h2 className="text-2xl font-black tracking-tight text-fg-default mt-1">
 						Overview
@@ -249,7 +249,7 @@ export default function Page() {
 			{!isPageLoading && (
 				<>
 					{/* Stat grid */}
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div data-tour="overview-stats" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 						{statCards.map((stat, i) => {
 							const Icon = stat.icon;
 							return (
@@ -285,12 +285,12 @@ export default function Page() {
 						})}
 					</div>
 
-					{/* Runtime Infrastructure */}
+					{/* Connected services */}
 					<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm text-left space-y-4">
 						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
 							<Cpu className="size-4 text-cyan-500" />
 							<h3 className="font-mono text-[12px] font-bold text-fg-default uppercase tracking-widest">
-								Runtime Infrastructure
+Connected services
 							</h3>
 						</div>
 						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -312,7 +312,7 @@ export default function Page() {
 					{/* Bot Identity & Discord Profile Preview */}
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 						{/* Left: Configuration Form */}
-						<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm space-y-4">
+						<div data-tour="bot-identity" className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm space-y-4">
 							<div className="flex items-center justify-between border-b border-border-subtle/50 pb-2.5">
 								<div className="flex items-center gap-2">
 									<Palette className="size-4 text-violet-500" />
@@ -335,22 +335,20 @@ export default function Page() {
 									<span>{isSavingAppearance ? "Saving..." : "Save"}</span>
 								</button>
 							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 								<div className="space-y-1.5 text-left">
 									<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Bot Instance Nickname</label>
 									<input type="text" value={appearance.nickname ?? ""} onChange={(e) => setAppearance({ ...appearance, nickname: e.target.value || null })} className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
 								</div>
-								<div className="space-y-1.5 text-left">
-									<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Avatar URL</label>
-									<input type="text" value={appearance.avatar ?? ""} onChange={(e) => setAppearance({ ...appearance, avatar: e.target.value || null })} placeholder="https://cdn.example.com/avatar.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+									<div className="space-y-1.5 text-left">
+										<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Avatar URL</label>
+										<input type="text" value={appearance.avatar ?? ""} onChange={(e) => setAppearance({ ...appearance, avatar: e.target.value || null })} placeholder="https://cdn.example.com/avatar.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
+									</div>
+									<div className="space-y-1.5 text-left">
+										<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Banner URL</label>
+										<input type="text" value={appearance.banner ?? ""} onChange={(e) => setAppearance({ ...appearance, banner: e.target.value || null })} placeholder="https://cdn.example.com/banner.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
+									</div>
 								</div>
-							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-								<div className="space-y-1.5 text-left">
-									<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">Banner URL</label>
-									<input type="text" value={appearance.banner ?? ""} onChange={(e) => setAppearance({ ...appearance, banner: e.target.value || null })} placeholder="https://cdn.example.com/banner.png" className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
-								</div>
-							</div>
 							<div className="space-y-1.5 text-left">
 								<label className="block font-mono text-[12px] font-bold text-fg-default uppercase tracking-wider">About Me Description</label>
 								<textarea rows={3} value={appearance.bio ?? ""} onChange={(e) => setAppearance({ ...appearance, bio: e.target.value || null })} className="w-full p-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50 resize-none leading-relaxed" placeholder="Supports basic markdown formatting" />

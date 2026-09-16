@@ -25,6 +25,7 @@ import { useGuildSnapshot } from "@/hooks/useGuildSnapshot";
 import type { ModeConfig, QueueConfig } from "@/lib/db-types";
 import CategoryDropdown from "@/components/ui/CategoryDropdown";
 import ChannelDropdown from "@/components/ui/ChannelDropdown";
+import OptionDropdown from "@/components/ui/OptionDropdown";
 
 type TabVariant = "modes" | "architecture";
 type ModeType = "casual" | "classic" | "captain" | "party" | "event" | "elo" | "standard";
@@ -358,9 +359,7 @@ export default function Page() {
 									</div>
 									<div className="space-y-1">
 										<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">Mode Type</label>
-										<select value={mode.type} onChange={(e) => updateMode(idx, { type: e.target.value as ModeType })} className="w-full h-8 px-2 bg-panel-bg/40 border border-border-subtle rounded-md font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50">
-											{MODE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-										</select>
+<OptionDropdown value={mode.type} onChange={(value) => updateMode(idx, { type: value as ModeType })} options={MODE_TYPES.map((type) => ({ value: type, label: type }))} placeholder="Select mode type" />
 									</div>
 									<div className="flex items-end justify-end">
 										<button onClick={() => setGameModes(gameModes.filter((_, i) => i !== idx))} className="h-8 px-3 flex items-center justify-center gap-1.5 border border-border-subtle bg-panel-bg/40 hover:bg-red-500/10 text-fg-muted hover:text-red-400 rounded-md font-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer">
@@ -532,9 +531,7 @@ export default function Page() {
 											</div>
 											<div className="sm:col-span-3 space-y-1">
 												<label className="block font-mono text-[8px] font-bold text-fg-muted uppercase tracking-wider">Bound Mode</label>
-												<select value={setting.mode} onChange={(e) => updateSetting(gi, si, { mode: e.target.value })} className="w-full h-8 px-2 bg-panel-bg/40 border border-border-subtle rounded-md font-mono text-[11px] text-fg-default focus:outline-none focus:border-primary-500/50">
-													{gameModes.map((m, mi) => <option key={mi} value={m.stable_id ?? m.name}>{m.name}</option>)}
-												</select>
+<OptionDropdown value={setting.mode} onChange={(value) => updateSetting(gi, si, { mode: value })} options={gameModes.map((mode) => ({ value: mode.stable_id ?? mode.name, label: mode.name }))} placeholder="Select bound mode" />
 											</div>
 											<div className="sm:col-span-2 flex items-end gap-2">
 												<button onClick={() => updateSetting(gi, si, { is_enabled: !setting.is_enabled })} className={`h-8 flex-1 border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer ${setting.is_enabled ? "bg-success/10 border-success/30 text-success" : "bg-panel-bg border-border-subtle text-fg-muted"}`}>
@@ -550,36 +547,6 @@ export default function Page() {
 								</div>
 							</div>
 
-							{/* Voice Channel Name Templates */}
-							<div className="pt-4 border-t border-border-subtle/30 space-y-3">
-								<div className="flex justify-between items-center px-1">
-									<span className="font-mono text-[10px] font-bold text-fg-muted uppercase tracking-widest">// Voice Channel Name Templates</span>
-								</div>
-								<div className="space-y-2">
-									<div className="space-y-1">
-										<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Team Voice Channel Template</label>
-										<input 
-											type="text" 
-											value={(group as any).voice_team_template ?? "Match #{match_id} - Team {team_color}"} 
-											onChange={(e) => updateGroup(gi, { voice_team_template: e.target.value || null } as any)} 
-											placeholder="Match #{match_id} - Team {team_color}"
-											className="w-full h-8 px-2.5 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" 
-										/>
-										<span className="block font-mono text-[8px] text-fg-muted uppercase tracking-wide">Variables: {'{match_id}'}, {'{team_color}'}, {'{mode_name}'}</span>
-									</div>
-									<div className="space-y-1">
-										<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Waiting Room Template</label>
-										<input 
-											type="text" 
-											value={(group as any).voice_waiting_template ?? "Waiting - {mode_name}"} 
-											onChange={(e) => updateGroup(gi, { voice_waiting_template: e.target.value || null } as any)} 
-											placeholder="Waiting - {mode_name}"
-											className="w-full h-8 px-2.5 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" 
-										/>
-										<span className="block font-mono text-[8px] text-fg-muted uppercase tracking-wide">Variables: {"{mode_name}"}, {"{queue_name}"}</span>
-									</div>
-								</div>
-							</div>
 						</div>
 					))}
 				</div>

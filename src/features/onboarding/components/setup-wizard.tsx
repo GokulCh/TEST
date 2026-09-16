@@ -45,6 +45,7 @@ interface ThemePreset {
 }
 
 const PRESETS: Record<string, ThemePreset> = {
+	default: { id: "default", name: "Default Matrix", primary: "#38bdf8", panelBg: "#111827", canvasBg: "#080b12" },
 	indigo: { id: "indigo", name: "Core Indigo", primary: "#4f46e5", panelBg: "#1e1b4b", canvasBg: "#090514" },
 	emerald: { id: "emerald", name: "Obsidian Emerald", primary: "#10b981", panelBg: "#064e3b", canvasBg: "#020617" },
 	rose: { id: "rose", name: "Crimson Velvet", primary: "#f43f5e", panelBg: "#4c0519", canvasBg: "#0f0507" },
@@ -84,7 +85,7 @@ export function SetupWizard() {
 	const [activeGuild, setActiveGuild] = useState<SelectedGuildContext | null>(null);
 	const [subdomain, setSubdomain] = useState("");
 	const [themeMode, setThemeMode] = useState<"preset" | "custom">("preset");
-	const [selectedPreset, setSelectedPreset] = useState("emerald");
+	const [selectedPreset, setSelectedPreset] = useState("default");
 	const [customPrimary, setCustomPrimary] = useState("#3b82f6");
 	const [customPanel, setCustomPanel] = useState("#1e293b");
 	const customCanvas = "#0f172a";
@@ -185,8 +186,16 @@ export function SetupWizard() {
 		return { id: "custom", name: "Custom Matrix Node", primary: customPrimary, panelBg: customPanel, canvasBg: customCanvas };
 	}, [themeMode, selectedPreset, customPrimary, customPanel]);
 
-	// ── Step transitions ─────────────────────────────────────────────────────
-	const handleStepTransition = (nextStep: VisualStep) => {
+	// ── Step transitions ───���─────────────────────────────────────────────────
+		useEffect(() => {
+			document.documentElement.style.setProperty("--primary-500", activeThemeColors.primary);
+			document.documentElement.style.setProperty("--primary-600", activeThemeColors.primary);
+			document.documentElement.style.setProperty("--primary-50", `${activeThemeColors.primary}26`);
+			document.documentElement.style.setProperty("--panel-bg", activeThemeColors.panelBg);
+			document.documentElement.style.setProperty("--bg-canvas", activeThemeColors.canvasBg);
+		}, [activeThemeColors]);
+
+		const handleStepTransition = (nextStep: VisualStep) => {
 		setIsSimulating(true);
 		setTimeout(() => {
 			setIsSimulating(false);
@@ -291,10 +300,6 @@ export function SetupWizard() {
 
 	return (
 		<div className="relative w-full px-8 lg:px-16 py-12 lg:py-20 overflow-hidden">
-			{/* Background glow */}
-			<div aria-hidden className="pointer-events-none absolute inset-0 -z-50 overflow-hidden select-none">
-				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[65rem] h-[45rem] bg-primary-500/10 rounded-full blur-[140px]" />
-			</div>
 
 			{/* Loading overlay */}
 			{(isSimulating || isLoadingAuth) && (
@@ -363,7 +368,7 @@ export function SetupWizard() {
 					</div>
 				)}
 
-				{/* ═══════════════ STEP 2: SERVER SELECT ═══════════════ */}
+				{/* ═══════════════ STEP 2: SERVER SELECT ══════════════��� */}
 				{step === "SERVER_SELECT" && (
 					<div className="w-full flex flex-col items-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
 						<div className="max-w-3xl space-y-4">
@@ -788,7 +793,7 @@ export function SetupWizard() {
 						</div>
 
 						<button
-							onClick={() => router.push(`/dashboard/${activeGuild?.id}`)}
+							onClick={() => router.push(`/dashboard/${activeGuild?.id}?tour=1`)}
 							className="inline-flex items-center gap-3 bg-primary-500 hover:bg-primary-600 text-white font-mono font-bold text-sm uppercase tracking-wider h-14 px-10 rounded-control transition-all shadow-lg shadow-primary-500/20 active:scale-98 cursor-pointer"
 						>
 							Open Dashboard <ArrowRight className="size-4" />

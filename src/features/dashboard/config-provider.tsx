@@ -17,6 +17,7 @@ import React, {
 	useState,
 } from "react";
 import { useUnsavedChangesContext } from "@/lib/contexts/changes-context";
+import { ServiceUnavailable } from "@/components/shared/service-unavailable";
 import type {
 	GuildConfigModel,
 	GameMetaModel,
@@ -219,15 +220,25 @@ export function GuildConfigProvider({ guildSnowflake, children }: Props) {
 					fetchWithRetry(`/api/db/guilds/${resolvedDbId}/matchmaking`).then((r) => r.json()),
 				]);
 
-				if (configRes.status === "fulfilled") setConfig(configRes.value?.data ?? null);
-				if (metaRes.status === "fulfilled") setMeta(metaRes.value?.data ?? null);
-				if (queueRes.status === "fulfilled") setQueues(queueRes.value?.data?.queues ?? []);
+					const failedResource = [configRes, metaRes, queueRes].find((result) => result.status === "rejected");
+					if (failedResource?.status === "rejected") {
+						throw failedResource.reason instanceof Error ? failedResource.reason : new Error("Database service unavailable");
+					}
+					if (configRes.status === "fulfilled") setConfig(configRes.value?.data ?? null);
+					if (metaRes.status === "fulfilled") setMeta(metaRes.value?.data ?? null);
+					if (queueRes.status === "fulfilled") setQueues(queueRes.value?.data?.queues ?? []);
 			})
 			.catch((e) => setLoadError(e.message))
 			.finally(() => setIsLoading(false));
 	}, [guildSnowflake, tick, fetchWithRetry]);
 
-	const reload = useCallback(() => setTick((t) => t + 1), []);
+		const reload = useCallback(() => setTick((t) => t + 1), []);
+
+		useEffect(() => {
+			if (!loadError) return;
+			const retryTimer = window.setTimeout(() => setTick((current) => current + 1), 60_000);
+			return () => window.clearTimeout(retryTimer);
+		}, [loadError]);
 
 	// ── Save helpers ───────────────────────────────────────────────────────
 	const saveConfigSection = useCallback(
@@ -344,7 +355,7 @@ export function GuildConfigProvider({ guildSnowflake, children }: Props) {
 				reload,
 			}}
 		>
-			{children}
-		</GuildConfigContext.Provider>
+				{loadError ? <ServiceUnavailable onRetry={reload} /> : children}
+			</GuildConfigContext.Provider>
 	);
 }

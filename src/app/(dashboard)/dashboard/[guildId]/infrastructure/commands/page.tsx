@@ -8,17 +8,19 @@ import {
 	Save,
 	Search,
 	Settings2,
-	Shield,
 	Terminal,
 	ToggleLeft,
 	ToggleRight,
 	Trash2,
 	Zap,
+	Check,
+	X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import { useGuildSnapshot } from "@/hooks/useGuildSnapshot";
+import MultiOptionDropdown from "@/components/ui/MultiOptionDropdown";
 import RoleDropdown from "@/components/ui/RoleDropdown";
 import ChannelDropdown from "@/components/ui/ChannelDropdown";
 import CategoryDropdown from "@/components/ui/CategoryDropdown";
@@ -162,7 +164,10 @@ export default function Page() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [commands, setCommands] = useState<CommandEntry[]>([]);
 	const [expandedCommands, setExpandedCommands] = useState<Set<string>>(new Set());
-	const [searchQuery, setSearchQuery] = useState("");
+		const [searchQuery, setSearchQuery] = useState("");
+		const [selectedCommands, setSelectedCommands] = useState<Set<string>>(new Set());
+		const [bulkRole, setBulkRole] = useState("");
+		const [bulkRoleMode, setBulkRoleMode] = useState<"allowed_roles" | "denied_roles">("allowed_roles");
 
 	// Command interceptors state
 	const [prefix, setPrefix] = useState("=");
@@ -383,7 +388,30 @@ export default function Page() {
 		updateCommand(cmdName, { aliases });
 	};
 
-	const toggleExpand = (name: string) => {
+		const toggleSelected = (name: string) => {
+			setSelectedCommands((prev) => {
+				const next = new Set(prev);
+				if (next.has(name)) next.delete(name); else next.add(name);
+				return next;
+			});
+		};
+
+		const applyBulkRole = (mode: "add" | "remove") => {
+			if (!bulkRole || selectedCommands.size === 0) return;
+			setCommands((prev) => prev.map((command) => {
+				if (!selectedCommands.has(command.name)) return command;
+				const current = command[bulkRoleMode] ?? [];
+				const values = mode === "add" ? Array.from(new Set([...current, bulkRole])) : current.filter((role) => role !== bulkRole);
+				return { ...command, [bulkRoleMode]: values.length ? values : null };
+			}));
+		};
+
+		const resetSelected = () => {
+			if (selectedCommands.size === 0) return;
+			setCommands((prev) => prev.map((command) => selectedCommands.has(command.name) ? { ...command, ...DEFAULT_PERMISSION(command.name), category: command.category, description: command.description } : command));
+		};
+
+		const toggleExpand = (name: string) => {
 		setExpandedCommands((prev) => {
 			const next = new Set(prev);
 			if (next.has(name)) {
@@ -542,17 +570,19 @@ export default function Page() {
 		return (
 			<div
 				key={cmd.name}
-				className={`border border-border-subtle bg-panel-bg/20 rounded-xl shadow-xs animate-in fade-in duration-150 ${
+				className={`border border-border-subtle bg-panel-bg/20 rounded-xl shadow-xs ${
 					needsConfig ? "border-amber-500/30 bg-amber-500/5" : ""
 				}`}
 			>
 				{/* Command Header - Always Visible */}
 				<div
 					onClick={() => toggleExpand(cmd.name)}
-					className="p-4 cursor-pointer hover:bg-panel-bg/30 transition-all"
+					className="p-4 cursor-pointer hover:bg-panel-bg/30"
 				>
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-						<div className="min-w-0 flex-1">
+						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+							<div className="flex min-w-0 flex-1 items-start gap-3">
+								<input type="checkbox" aria-label={`Select ${cmd.name}`} checked={selectedCommands.has(cmd.name)} onChange={() => toggleSelected(cmd.name)} onClick={(e) => e.stopPropagation()} className="mt-1 size-4 appearance-none rounded border border-border-subtle bg-bg-canvas/80 transition-colors checked:border-primary-500 checked:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
+							<div className="min-w-0 flex-1">
 							<div className="flex items-center gap-2">
 								{isExpanded ? (
 									<ChevronDown className="size-4 text-fg-muted shrink-0" />
@@ -571,12 +601,17 @@ export default function Page() {
 							<p className="font-mono text-[9px] text-fg-muted uppercase tracking-wide mt-1 pl-6">
 								{cmd.description || "No description"}
 							</p>
-						</div>
+							</div>
+							</div>
 
-						<div className="flex items-center gap-2 shrink-0">
-							{needsConfig && (
-								<AlertTriangle className="size-4 text-amber-500" aria-label="Requires configuration" />
-							)}
+							<div className="flex items-center gap-2 shrink-0">
+								{needsConfig ? (
+									<AlertTriangle className="size-4 text-amber-500" aria-label="Requires configuration" />
+								) : requirements.length > 0 && configStatus?.configured === requirements.length ? (
+									<span className="inline-flex items-center gap-1 rounded-md border border-success/25 bg-success/10 px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-success">
+										<Settings2 className="size-3" /> Configured
+									</span>
+								) : null}
 							<button
 								onClick={(e) => {
 									e.stopPropagation();
@@ -627,10 +662,10 @@ export default function Page() {
 
 				{/* Expanded Configuration */}
 				{isExpanded && (
-					<div className="px-4 pb-4 pt-4 border-t border-border-subtle/20 space-y-4 animate-in fade-in duration-150">
+					<div className="px-4 pb-4 pt-4 border-t border-border-subtle/20 space-y-4">
 						{/* Required Configuration Dropdowns */}
-						{flattenRequirements(cmd.requirements).length > 0 && (
-							<div className="space-y-2">
+							{flattenRequirements(cmd.requirements).length > 0 && !needsConfig && (
+								<div className="space-y-2">
 								<div className="flex items-center gap-2 border-b border-amber-500/30 pb-1.5">
 									<Settings2 className="size-3.5 text-amber-500" />
 									<span className="font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">
@@ -756,14 +791,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Allowed Roles
 								</label>
-								<RoleDropdown
-									value={cmd.allowed_roles?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											allowed_roles: value ? [value] : null,
-										})
-									}
-									roles={roleOptions}
+<MultiOptionDropdown
+										values={cmd.allowed_roles ?? []}
+										onChange={(values) => updateCommand(cmd.name, { allowed_roles: values.length ? values : null })}
+										options={roleOptions.map((role) => ({ value: role.id, label: role.name }))}
+										ariaLabel="Allowed roles"
 									placeholder="Select allowed role"
 								/>
 							</div>
@@ -771,14 +803,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Denied Roles
 								</label>
-								<RoleDropdown
-									value={cmd.denied_roles?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											denied_roles: value ? [value] : null,
-										})
-									}
-									roles={roleOptions}
+<MultiOptionDropdown
+										values={cmd.denied_roles ?? []}
+										onChange={(values) => updateCommand(cmd.name, { denied_roles: values.length ? values : null })}
+										options={roleOptions.map((role) => ({ value: role.id, label: role.name }))}
+										ariaLabel="Denied roles"
 									placeholder="Select denied role"
 								/>
 							</div>
@@ -789,15 +818,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Allowed Channels
 								</label>
-								<ChannelDropdown
-									value={cmd.allowed_channels?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											allowed_channels: value ? [value] : null,
-										})
-									}
-									channels={channels}
-									threads={threads}
+<MultiOptionDropdown
+										values={cmd.allowed_channels ?? []}
+										onChange={(values) => updateCommand(cmd.name, { allowed_channels: values.length ? values : null })}
+										options={[...channels, ...threads].map((channel) => ({ value: channel.id, label: channel.name }))}
+										ariaLabel="Allowed channels"
 									placeholder="Select allowed channel"
 								/>
 							</div>
@@ -805,15 +830,11 @@ export default function Page() {
 								<label className="block font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 									Disallowed Channels
 								</label>
-								<ChannelDropdown
-									value={cmd.disallowed_channels?.[0] || ""}
-									onChange={(value) =>
-										updateCommand(cmd.name, {
-											disallowed_channels: value ? [value] : null,
-										})
-									}
-									channels={channels}
-									threads={threads}
+<MultiOptionDropdown
+										values={cmd.disallowed_channels ?? []}
+										onChange={(values) => updateCommand(cmd.name, { disallowed_channels: values.length ? values : null })}
+										options={[...channels, ...threads].map((channel) => ({ value: channel.id, label: channel.name }))}
+										ariaLabel="Disallowed channels"
 									placeholder="Select disallowed channel"
 								/>
 							</div>
@@ -833,7 +854,7 @@ export default function Page() {
 	}
 
 	return (
-		<div className="w-full p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto text-left overflow-visible">
+		<div className="w-full p-6 lg:p-8 space-y-6 select-none max-w-7xl mx-auto text-left overflow-visible pb-24">
 			{/* HUD PANEL HEADER */}
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-subtle pb-6">
 				<div>
@@ -885,7 +906,7 @@ export default function Page() {
 				</div>
 			</div>
 
-			{/* COMMAND INTERCEPTORS */}
+				{/* COMMAND INTERCEPTORS */}
 			<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm text-left space-y-4">
 				<div className="flex items-center justify-between border-b border-border-subtle/50 pb-2.5">
 					<div className="flex items-center gap-2">
@@ -909,35 +930,41 @@ export default function Page() {
 						<span>{isSavingCommands ? "Saving..." : "Save"}</span>
 					</button>
 				</div>
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-					<div className="space-y-1.5 text-left">
-						<label className="block font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Prefix</label>
-						<input type="text" maxLength={10} value={prefix} onChange={(e) => setPrefix(e.target.value)} className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50" />
-					</div>
-					<div className="flex items-center justify-between p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
-						<div className="flex items-center gap-2">
-							<Terminal className="size-3.5 text-primary-500" />
-							<span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Prefix Commands</span>
-						</div>
-						<button
-							onClick={() => setIsPrefixEnabled(!isPrefixEnabled)}
-							className={`h-7 px-2.5 border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-								isPrefixEnabled
-									? "bg-primary-500/10 border-primary-500/30 text-primary-500"
-									: "bg-panel-bg border-border-subtle text-fg-muted"
-							}`}
-						>
-							{isPrefixEnabled ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
-							{isPrefixEnabled ? "Enabled" : "Disabled"}
-						</button>
-					</div>
-					<div className="flex items-center justify-between p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
-						<div className="flex items-center gap-2">
-							<Zap className="size-3.5 text-emerald-500" />
-							<span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Slash Commands</span>
-						</div>
-						<button
-							onClick={() => setIsSlashEnabled(!isSlashEnabled)}
+  <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+  <div className="flex min-h-[92px] flex-col justify-between gap-3 p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
+  <div className="flex items-center gap-2">
+  <Terminal className="size-3.5 text-primary-500" />
+  <span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Prefix Configuration</span>
+  </div>
+  <div className="flex items-center gap-2 h-8 px-2.5 border border-border-subtle/60 rounded-md bg-bg-canvas/40">
+  <label htmlFor="command-prefix" className="font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">Prefix</label>
+  <input id="command-prefix" type="text" maxLength={10} value={prefix} onChange={(e) => setPrefix(e.target.value)} className="min-w-0 flex-1 bg-transparent font-mono text-xs text-fg-default focus:outline-none" />
+  </div>
+  </div>
+  <div className="flex min-h-[92px] flex-col justify-between gap-3 p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
+  <div className="flex items-center gap-2">
+  <Terminal className="size-3.5 text-primary-500" />
+  <span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Prefix Commands</span>
+  </div>
+  <button
+  onClick={() => setIsPrefixEnabled(!isPrefixEnabled)}
+  className={`h-8 w-full border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+  isPrefixEnabled
+  ? "bg-primary-500/10 border-primary-500/30 text-primary-500"
+  : "bg-panel-bg border-border-subtle text-fg-muted"
+  }`}
+  >
+  {isPrefixEnabled ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
+  {isPrefixEnabled ? "Enabled" : "Disabled"}
+  </button>
+  </div>
+  <div className="flex min-h-[92px] flex-col justify-between gap-3 p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
+  <div className="flex items-center gap-2">
+  <Zap className="size-3.5 text-emerald-500" />
+  <span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Slash Commands</span>
+  </div>
+  <button
+  onClick={() => setIsSlashEnabled(!isSlashEnabled)}
 							className={`h-7 px-2.5 border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
 								isSlashEnabled
 									? "bg-primary-500/10 border-primary-500/30 text-primary-500"
@@ -949,11 +976,32 @@ export default function Page() {
 						</button>
 					</div>
 				</div>
-			</div>
+				</div>
 
-			{/* COMMAND SECTIONS */}
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-visible">
-				<div className="lg:col-span-2 space-y-8 overflow-visible">
+				{/* BULK COMMAND ACTIONS */}
+				<div className="w-full space-y-4 rounded-xl border border-border-subtle bg-panel-bg/20 p-5 shadow-sm">
+					<div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
+						<div>
+							<h3 className="font-mono text-xs font-black uppercase tracking-wide text-fg-default">Bulk command actions</h3>
+							<p className="mt-1 font-mono text-[9px] uppercase text-fg-muted">Select commands, then apply permissions or reset their overrides.</p>
+						</div>
+						<div className="flex items-center gap-2">
+							<button type="button" onClick={() => setSelectedCommands(new Set(sortedCommands.map((command) => command.name)))} className="rounded-md border border-border-subtle bg-bg-canvas/60 px-3 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted transition-colors hover:border-primary-500/40 hover:text-primary-500">Select all</button>
+							<button type="button" onClick={() => setSelectedCommands(new Set())} className="rounded-md border border-border-subtle bg-bg-canvas/60 px-3 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted transition-colors hover:border-primary-500/40 hover:text-primary-500">Clear</button>
+							<span className="rounded-md bg-primary-500/10 px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase text-primary-500">{selectedCommands.size} selected</span>
+						</div>
+					</div>
+					<div className="flex flex-wrap items-center justify-center gap-2 border-t border-border-subtle/60 pt-4">
+						<select value={bulkRoleMode} onChange={(event) => setBulkRoleMode(event.target.value as "allowed_roles" | "denied_roles")} className="h-9 appearance-none rounded-md border border-border-subtle bg-bg-canvas px-3 font-mono text-[10px] text-fg-default outline-none transition-colors focus:border-primary-500/50"><option value="allowed_roles">Allowed roles</option><option value="denied_roles">Denied roles</option></select>
+						<select value={bulkRole} onChange={(event) => setBulkRole(event.target.value)} className="h-9 min-w-48 appearance-none rounded-md border border-border-subtle bg-bg-canvas px-3 font-mono text-[10px] text-fg-default outline-none transition-colors focus:border-primary-500/50"><option value="">Select a role</option>{roleOptions.map((role) => <option key={role.id} value={role.id}>{role.name}</option>)}</select>
+						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("add")} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-success/30 bg-success/10 px-3 font-mono text-[9px] font-bold uppercase text-success transition-colors hover:bg-success/15 disabled:opacity-40"><Check className="size-3.5" /> Add role</button>
+						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("remove")} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-danger/30 bg-danger/10 px-3 font-mono text-[9px] font-bold uppercase text-danger transition-colors hover:bg-danger/15 disabled:opacity-40"><X className="size-3.5" /> Remove role</button>
+						<button type="button" disabled={selectedCommands.size === 0} onClick={resetSelected} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-warning/30 bg-warning/10 px-3 font-mono text-[9px] font-bold uppercase text-warning transition-colors hover:bg-warning/15 disabled:opacity-40"><Trash2 className="size-3.5" /> Reset selected</button>
+					</div>
+				</div>
+
+				{/* COMMAND SECTIONS */}
+				<div className="flex flex-col gap-5 overflow-visible">
 					{/* COMMANDS THAT STILL NEED CONFIGURATION — PULLED TO THE TOP */}
 					{commandsNeedingConfig.length > 0 && (
 						<div className="space-y-3 overflow-visible">
@@ -966,8 +1014,10 @@ export default function Page() {
 									{commandsNeedingConfig.length} {commandsNeedingConfig.length === 1 ? "command" : "commands"}
 								</span>
 							</div>
-							{commandsNeedingConfig.map((cmd) => renderCommandCard(cmd))}
-						</div>
+								<div className="grid grid-cols-1 items-start md:grid-cols-2 gap-4">
+									{commandsNeedingConfig.map((cmd) => renderCommandCard(cmd))}
+								</div>
+							</div>
 					)}
 
 					{CATEGORIES.map((category) => {
@@ -992,41 +1042,14 @@ export default function Page() {
 								</span>
 							</div>
 
-							{categoryCommands.map((cmd) => renderCommandCard(cmd))}
-						</div>
-						);
-					})}
-				</div>
-
-				<div className="space-y-6">
-					<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl space-y-4 h-fit">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Shield className="size-4 text-cyan-500" />
-							<h3 className="font-mono text-[11px] font-bold text-fg-default uppercase tracking-widest">
-								Security Guardrails
-							</h3>
-						</div>
-						<p className="font-mono text-[9px] text-fg-muted uppercase tracking-wide leading-relaxed text-left">
-							Slash command permissions are pushed directly to the Discord
-							gateway on boot. Allowed and denied role vectors gate execution
-							server-side for both slash and prefix interpreters.
-						</p>
+								<div className="grid grid-cols-1 items-start md:grid-cols-2 gap-4">
+									{categoryCommands.map((cmd) => renderCommandCard(cmd))}
+								</div>
+							</div>
+							);
+						})}
 					</div>
-
-					<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl space-y-4 h-fit">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Terminal className="size-4 text-violet-500" />
-							<h3 className="font-mono text-[11px] font-bold text-fg-default uppercase tracking-widest">
-								Click to Expand
-							</h3>
-						</div>
-						<p className="font-mono text-[9px] text-fg-muted uppercase tracking-wide leading-relaxed text-left">
-							Click on any command to expand its configuration panel and view
-							all available settings for that specific command.
-						</p>
-					</div>
-				</div>
 			</div>
-		</div>
-	);
-}
+		);
+	}
+

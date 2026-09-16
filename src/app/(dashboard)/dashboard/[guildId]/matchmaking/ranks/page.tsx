@@ -60,7 +60,7 @@ export default function Page() {
 
 			<div className="flex justify-between items-center bg-panel-bg/10 p-4 border border-border-subtle rounded-xl">
 				<div>
-					<h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Roster Tier Nodes</h3>
+					<h3 className="font-mono text-xs font-black text-fg-default uppercase tracking-wide">Player rank tiers</h3>
 					<p className="font-mono text-[9px] text-fg-muted uppercase mt-0.5">Define ELO bands, K-factor economy and Discord role assignments for each rank tier</p>
 				</div>
 				<button

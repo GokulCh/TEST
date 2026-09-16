@@ -148,8 +148,8 @@ export default function Page() {
 				</div>
 			)}
 
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				<div className="lg:col-span-2 space-y-4">
+				{maps.length > 0 && <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+					<div className="lg:col-span-2 space-y-4">
 					{maps.map((m, idx) => (
 						<div key={idx} className="p-4 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-3 shadow-xs">
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
@@ -245,7 +245,8 @@ export default function Page() {
 						</p>
 					</div>
 				</div>
+				</div>
+				}
 			</div>
-		</div>
-	);
-}
+		);
+	}

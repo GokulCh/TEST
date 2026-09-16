@@ -54,6 +54,7 @@ const DEVELOPER_USER_ID = "716417561008275497";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useUnsavedChangesContext } from "@/lib/contexts/changes-context";
+import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 
 // Page ID mapping for access control
 const PATH_TO_PAGE_ID: Record<string, string> = {
@@ -255,20 +256,32 @@ export function Sidebar() {
 
 	// ================= SUB-SYSTEM REGISTRIES =================
 
-	const coreNodes = [
-		{
-			id: "overview",
-			href: `${baseHref}`,
-			label: "Overview",
-			icon: LayoutDashboard,
-		},
-		{
-			id: "commands",
-			href: `${baseHref}/infrastructure/commands`,
-			label: "Commands",
-			icon: Terminal,
-		},
-	];
+		const coreNodes = [
+			{
+				id: "overview",
+				href: `${baseHref}`,
+				label: "Overview",
+				icon: LayoutDashboard,
+			},
+			{
+				id: "players",
+				href: `${baseHref}/matchmaking/players`,
+				label: "Players",
+				icon: Users,
+			},
+			{
+				id: "games",
+				href: `${baseHref}/matchmaking/matches`,
+				label: "Games",
+				icon: Swords,
+			},
+			{
+				id: "commands",
+				href: `${baseHref}/infrastructure/commands`,
+				label: "Commands",
+				icon: Terminal,
+			},
+		];
 
 	const matchmakingMatrix: NavItem[] = [
 		{
@@ -277,18 +290,8 @@ export function Sidebar() {
 			label: "Queue Systems",
 			icon: ListOrdered,
 		},
-		{
-			id: "players",
-			href: `${baseHref}/matchmaking/players`,
-			label: "Player Profiles",
-			icon: Users,
-		},
-		{
-			id: "matches",
-			href: `${baseHref}/matchmaking/matches`,
-			label: "Live Matches",
-			icon: Swords,
-		},
+
+
 		{
 			id: "ranks",
 			href: `${baseHref}/matchmaking/ranks`,
@@ -321,13 +324,19 @@ export function Sidebar() {
 		},
 	];
 
-	const infrastructureNodes: NavItem[] = [
-		{
-			id: "hosting",
-			href: `${baseHref}/infrastructure/hosting`,
-			label: "Bot Nodes",
-			icon: Server,
-		},
+		const infrastructureNodes: NavItem[] = [
+			{
+				id: "proxies",
+				href: `${baseHref}/infrastructure/auto-proxy`,
+				label: "Server Instance",
+				icon: Cpu,
+			},
+			{
+				id: "hosting",
+				href: `${baseHref}/infrastructure/hosting`,
+				label: "Bot Nodes",
+				icon: Server,
+			},
 		{
 			id: "maps",
 			href: `${baseHref}/infrastructure/maps`,
@@ -340,12 +349,7 @@ export function Sidebar() {
 			label: "Season Breaks",
 			icon: CalendarDays,
 		},
-		{
-			id: "proxies",
-			href: `${baseHref}/infrastructure/auto-proxy`,
-			label: "Instance Proxies",
-			icon: Cpu,
-		},
+
 	];
 
 	const moderationNodes: NavItem[] = [
@@ -589,31 +593,32 @@ export function Sidebar() {
 		const pattern = item.href.replace(guildId || "", "[guildId]");
 		const pageId = PATH_TO_PAGE_ID[pattern];
 		const isAccessible = session?.userId === DEVELOPER_USER_ID || accessiblePages.has(pageId || "");
-		const isRestricted = pageId && session?.userId !== DEVELOPER_USER_ID && !accessiblePages.has(pageId);
 
-		// Hide restricted pages from normal users
-		if (!isAccessible && session?.userId !== DEVELOPER_USER_ID) {
-			return null;
-		}
 
-		return (
+			// Keep unavailable pages visible so everyone can understand what is locked.
+			// Developers retain normal navigation access to inspect the locked surface.
+			return (
 			<a
-				key={item.href}
-				href={item.href}
-				onClick={(e) => guardedNavigate(e, item.href)}
-				className={`group/link flex items-center gap-2.5 px-3 py-2 rounded-lg font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-98 cursor-pointer ${
+					key={item.href}
+					data-tour={item.id === "overview" ? "overview-nav" : item.id === "players" ? "players-nav" : item.id === "games" ? "games-nav" : item.id === "commands" ? "commands-nav" : undefined}
+					href={item.href}
+					onClick={(e) => {
+						if (!isAccessible) { e.preventDefault(); return; }
+						guardedNavigate(e, item.href);
+					}}
+					className={`group/link flex items-center gap-2.5 px-3 py-2 rounded-lg font-mono text-[12px] font-bold uppercase tracking-wider transition-all active:scale-98 ${isAccessible ? "cursor-pointer" : "cursor-not-allowed"} ${
 					active
 						? "bg-primary-500/10 text-primary-500 border border-primary-500/20 shadow-sm"
 						: "text-fg-muted hover:text-fg-default hover:bg-panel-bg/40 border border-transparent"
-				} ${isRestricted ? "opacity-50" : ""}`}
+				} ${!isAccessible ? "opacity-60" : ""}`}
 			>
 				<Icon
 					className={`size-4 shrink-0 ${active ? "text-primary-500" : colorClass}`}
 				/>
 				<span className="truncate">{item.label}</span>
-				{isRestricted && session?.userId === DEVELOPER_USER_ID && (
-					<Lock className="size-3.5 text-amber-500 shrink-0" />
-				)}
+					{!isAccessible && (
+						<Lock className="ml-auto size-3.5 shrink-0 text-amber-500" aria-label="Locked" />
+					)}
 			</a>
 		);
 	};
@@ -624,12 +629,14 @@ export function Sidebar() {
 		isOpen: boolean,
 		onToggle: () => void,
 		isSubCategory = false,
-		colorClass = "text-primary-500",
-	) => {
+			colorClass = "text-primary-500",
+			dataTour?: string,
+		) => {
 		const Icon = icon;
 		return (
-			<button
-				onClick={onToggle}
+				<button
+					data-tour={dataTour}
+					onClick={onToggle}
 				className={`w-full flex items-center justify-between px-3 py-2 rounded-lg font-mono font-bold uppercase tracking-wider transition-all active:scale-98 border border-transparent ${
 					isSubCategory
 						? "text-fg-muted/70 hover:text-fg-default hover:bg-panel-bg/20 text-[11px]"
@@ -660,7 +667,7 @@ export function Sidebar() {
 	};
 
 	return (
-		<aside className="hidden lg:flex w-64 flex-col border-r border-border-subtle bg-panel-bg/40 backdrop-blur-md transition-colors duration-300 relative z-10 select-none">
+		<aside data-tour="sidebar" className="hidden lg:flex w-64 flex-col border-r border-border-subtle bg-panel-bg/40 backdrop-blur-md transition-colors duration-300 relative z-10 select-none">
 			{isLoggingOut && (
 				<div className="absolute inset-0 bg-bg-canvas/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center space-y-3">
 					<RefreshCw className="size-5 text-red-500 animate-spin" />
@@ -735,63 +742,67 @@ export function Sidebar() {
 
 						<div className="space-y-0.5">
 							{renderDropdownTrigger(
-								"Modules Matrix",
+								"Modules",
 								Layers,
 								modulesExpanded,
 								() => setModulesExpanded(!modulesExpanded),
 								false,
-								"text-primary-500",
-							)}
+																"text-primary-500",
+																"modules-nav",
+															)}
 							{modulesExpanded && (
 								<div className="pl-2 ml-1 border-l border-border-subtle/50 space-y-1.5 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
-									{/* ⚔️ MATCHMAKING MATRIX (Violet / Purple Accent Vector) */}
-									<div className="space-y-0.5">
-										{renderDropdownTrigger(
-											"Matchmaking",
-											ListOrdered,
-											categoryStates.matchmaking,
-											() => toggleCategory("matchmaking"),
-											true,
-											"text-violet-500",
-										)}
-										{categoryStates.matchmaking && (
-											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
-												{matchmakingMatrix.map((item) =>
-													renderLink(item, "text-violet-500/60"),
-												)}
-											</div>
-										)}
-									</div>
+										{/* Infrastructure pages */}
+										<div className="space-y-0.5">
+											{renderDropdownTrigger(
+												"Infrastructure",
+												Server,
+												categoryStates.infrastructure,
+												() => toggleCategory("infrastructure"),
+												true,
+																"text-cyan-500",
+																"infrastructure-module",
+															)}
+											{categoryStates.infrastructure && (
+												<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
+													{infrastructureNodes.map((item) =>
+														renderLink(item, "text-cyan-500/60"),
+													)}
+												</div>
+											)}
+										</div>
 
-									{/* 🌐 INFRASTRUCTURE NODES (Cyan / Light Blue Accent Vector) */}
-									<div className="space-y-0.5">
-										{renderDropdownTrigger(
-											"Infrastructure",
-											Server,
-											categoryStates.infrastructure,
-											() => toggleCategory("infrastructure"),
-											true,
-											"text-cyan-500",
-										)}
-										{categoryStates.infrastructure && (
-											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
-												{infrastructureNodes.map((item) =>
-													renderLink(item, "text-cyan-500/60"),
-												)}
-											</div>
-										)}
-									</div>
+										{/* ⚔️ MATCHMAKING MATRIX (Violet / Purple Accent Vector) */}
+										<div className="space-y-0.5">
+											{renderDropdownTrigger(
+												"Matchmaking",
+												ListOrdered,
+												categoryStates.matchmaking,
+												() => toggleCategory("matchmaking"),
+												true,
+																"text-violet-500",
+																"matchmaking-module",
+															)}
+											{categoryStates.matchmaking && (
+												<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
+													{matchmakingMatrix.map((item) =>
+														renderLink(item, "text-violet-500/60"),
+													)}
+												</div>
+											)}
+										</div>
 
 									{/* 🛡️ SANCTIONS & SECURITY (Rose / Red Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Sanctions & Security",
+											"Moderation",
 											Shield,
 											categoryStates.moderation,
 											() => toggleCategory("moderation"),
 											true,
-											"text-rose-500",
-										)}
+																"text-rose-500",
+																"moderation-module",
+															)}
 										{categoryStates.moderation && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{moderationNodes.map((item) =>
@@ -804,13 +815,14 @@ export function Sidebar() {
 									{/* 🎫 TICKET SUBSYSTEM (Orange / Bronze Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Ticket Subsystem",
+											"Tickets",
 											LifeBuoy,
 											categoryStates.tickets,
 											() => toggleCategory("tickets"),
 											true,
-											"text-orange-500",
-										)}
+																"text-orange-500",
+																"tickets-module",
+															)}
 										{categoryStates.tickets && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{ticketNodes.map((item) =>
@@ -823,13 +835,14 @@ export function Sidebar() {
 									{/* 🎨 CREATOR TOOLKITS (Emerald / Green Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Creator Toolkits",
+											"Toolkits",
 											Image,
 											categoryStates.toolkits,
 											() => toggleCategory("toolkits"),
 											true,
-											"text-emerald-500",
-										)}
+																"text-emerald-500",
+																"toolkits-module",
+															)}
 										{categoryStates.toolkits && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{creatorTools.map((item) =>
@@ -847,8 +860,9 @@ export function Sidebar() {
 											categoryStates.capabilities,
 											() => toggleCategory("capabilities"),
 											true,
-											"text-indigo-500",
-										)}
+																"text-indigo-500",
+																"capabilities-module",
+															)}
 										{categoryStates.capabilities && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{platformFeatures.map((item) =>
@@ -861,13 +875,14 @@ export function Sidebar() {
 									{/* 📊 SIMULATION MODELS (Sky Blue Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Simulation Models",
+											"Simulations",
 											Calculator,
 											categoryStates.simulations,
 											() => toggleCategory("simulations"),
 											true,
-											"text-sky-500",
-										)}
+																"text-sky-500",
+																"simulations-module",
+															)}
 										{categoryStates.simulations && (
 											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
 												{simulationNodes.map((item) =>
@@ -881,11 +896,12 @@ export function Sidebar() {
 						</div>
 
 						{/* Base Controls Strip Footer Layer (Neutral Muted Gray Icons) */}
-						<div className="space-y-0.5 pt-2 border-t border-border-subtle/30">
-							{filteredSystemControls.map((node) =>
-								renderLink(node, "text-fg-muted/60"),
-							)}
-						</div>
+							<div className="space-y-0.5 pt-2 border-t border-border-subtle/30">
+								{filteredSystemControls.map((node) =>
+									renderLink(node, "text-fg-muted/60"),
+								)}
+							</div>
+							<ThemeSwitcher />
 					</>
 				) : (
 					<div className="p-4 border border-dashed border-border-subtle/50 rounded-xl text-center">
