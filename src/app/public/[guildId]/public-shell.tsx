@@ -21,7 +21,7 @@ export function PublicShell({ guildId, children }: { guildId: string; children: 
   const base = `/public/${guildId}`
   return <ThemeScope><div className="flex min-h-screen flex-col bg-[#070a0f] text-white selection:bg-cyan-400/30">
     <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#070a0f]/85 backdrop-blur-xl">
-      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 sm:px-8">
+      <div className="mx-auto flex h-18 max-w-[95rem] items-center justify-between px-5 sm:px-8">
         <Link href={base} className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
           <span className="grid size-9 place-items-center rounded-xl bg-cyan-400 text-[#071016] shadow-[0_0_24px_rgba(34,211,238,.22)] transition-transform group-hover:rotate-6"><Swords className="size-4" /></span>
           <span><strong className="block text-sm tracking-[0.18em]">{guildDisplayName(guildId)}</strong><span className="font-mono text-[10px] text-white/40">{guildDomain(guildId)}</span></span>
@@ -35,7 +35,7 @@ export function PublicShell({ guildId, children }: { guildId: string; children: 
       {open && <nav className="flex flex-col gap-1 border-t border-white/[0.08] px-5 py-4 md:hidden">{links.map(([label, suffix, description]) => <Link key={label} href={`${base}${suffix}`} onClick={() => setOpen(false)} className="flex items-center justify-between rounded-lg border border-transparent px-3 py-3 text-sm text-white/70 hover:border-white/[0.08] hover:bg-white/[0.06] hover:text-white"><span>{label}</span><span className="font-mono text-[10px] text-white/30">{description}</span></Link>)}</nav>}
     </header>
     <main className="flex-1">{children}</main>
-    <footer className="border-t border-white/[0.08] px-5 py-8 sm:px-8"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-xs text-white/40 sm:flex-row"><span>{guildDisplayName(guildId)} · Competitive community portal</span><span className="font-mono">POWERED BY MYRBW.DEV</span></div></footer>
+    <footer className="border-t border-white/[0.08] px-5 py-8 sm:px-8"><div className="mx-auto flex max-w-[95rem] flex-col justify-between gap-4 text-xs text-white/40 sm:flex-row"><span>{guildDisplayName(guildId)} · Competitive community portal</span><span className="font-mono">POWERED BY MYRBW.DEV</span></div></footer>
   </div></ThemeScope>
 }
 
