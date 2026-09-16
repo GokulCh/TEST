@@ -105,8 +105,20 @@ interface DashboardShellProps {
  * UnsavedChangesProvider and the guard dialog are available to all children.
  */
 export function DashboardShell({ children }: DashboardShellProps) {
+	const [showMobileNotice, setShowMobileNotice] = React.useState(true);
+
 	return (
 		<UnsavedChangesProvider>
+			{showMobileNotice && (
+				<div className="mx-3 mt-3 flex items-start gap-3 rounded-xl border border-warning/25 bg-warning/10 px-4 py-3 text-warning md:hidden" role="status">
+					<AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+					<div className="min-w-0 flex-1 text-left">
+						<p className="font-mono text-[10px] font-bold uppercase tracking-widest">Best viewed in a browser</p>
+						<p className="mt-1 text-xs leading-5 text-fg-muted">The dashboard works on mobile, but a desktop browser gives you the clearest view of configuration panels.</p>
+					</div>
+					<button type="button" onClick={() => setShowMobileNotice(false)} className="rounded-md p-1 text-warning/70 hover:bg-warning/10 hover:text-warning" aria-label="Dismiss browser recommendation"><X className="size-4" aria-hidden="true" /></button>
+				</div>
+			)}
 			{children}
 			<SaveBar />
 			<NavigationGuardDialog />
