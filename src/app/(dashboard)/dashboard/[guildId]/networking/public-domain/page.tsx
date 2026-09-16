@@ -11,7 +11,7 @@ import {
 import { useState, useMemo } from "react";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 
-export default function Page() {
+export default function Page({ params }: { params: { guildId: string } }) {
 	const [isSaving, setIsSaving] = useState(false);
 	const [domain, setDomain] = useState("");
 	const [sslStatus, setSslStatus] = useState("VALID");
@@ -53,6 +53,11 @@ export default function Page() {
 
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				<div className="lg:col-span-2 space-y-6">
+					<div className="p-5 border border-primary-500/20 bg-primary-500/5 rounded-xl space-y-3 text-left">
+						<div className="flex items-center gap-2"><Globe className="size-4 text-primary-500" /><h3 className="font-mono text-[11px] font-bold text-fg-default uppercase tracking-widest">Public portal preview</h3></div>
+						<p className="text-sm leading-6 text-fg-muted">The public community portal is separate from this dashboard. Preview the landing page, players, games, leaderboard, and store before connecting DNS.</p>
+						<a href={`/public/${params.guildId}`} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-lg border border-primary-500/30 px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-wider text-primary-500 transition-colors hover:bg-primary-500/10">Open portal preview</a>
+					</div>
 					{/* DOMAIN INPUT */}
 					<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl space-y-4 shadow-xs">
 						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">

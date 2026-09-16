@@ -18,6 +18,18 @@ const PUBLIC_ROUTES = [
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const host = req.headers.get("host")?.split(":")[0] ?? "";
+
+  // Map configured subdomains to the isolated public portal route tree.
+  // The explicit /public/[guildId] path remains available for previews and local testing.
+  if (host.endsWith(".myrbw.dev") && !pathname.startsWith("/public/") && !pathname.startsWith("/_next/") && !pathname.startsWith("/api/")) {
+    const guildSlug = host.slice(0, -".myrbw.dev".length);
+    if (guildSlug && guildSlug !== "www") {
+      const rewriteUrl = req.nextUrl.clone();
+      rewriteUrl.pathname = `/public/${guildSlug}${pathname === "/" ? "" : pathname}`;
+      return NextResponse.rewrite(rewriteUrl);
+    }
+  }
 
   // Allow public routes to pass through
   if (PUBLIC_ROUTES.some(route => pathname.startsWith(route))) {
