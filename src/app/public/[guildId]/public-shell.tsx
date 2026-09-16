@@ -16,8 +16,8 @@ export function PublicShell({ guildId, children }: { guildId: string; children: 
   const [open, setOpen] = useState(false)
   const base = `/public/${guildId}`
   useEffect(() => setOpen(false), [pathname])
-  return <ThemeScope><div className="min-h-screen bg-[#070a0f] text-white selection:bg-cyan-400/30">
-    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#070a0f]/95 backdrop-blur-xl">
+  return <ThemeScope><div className="relative min-h-screen overflow-x-hidden bg-[#070a0f] text-white selection:bg-cyan-400/30"><div className="pointer-events-none fixed inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] [background-size:48px_48px]" /><div className="pointer-events-none fixed -left-32 top-40 size-96 rounded-full bg-cyan-400/[0.05] blur-3xl" /><div className="pointer-events-none fixed -right-40 bottom-20 size-[28rem] rounded-full bg-amber-300/[0.04] blur-3xl" />
+    <header className="relative sticky top-0 z-40 border-b border-white/[0.08] bg-[#070a0f]/95 backdrop-blur-xl">
       <div className="mx-auto flex min-h-[4.5rem] max-w-[95rem] items-center gap-5 px-5 sm:px-8">
         <Link href={base} className="flex min-w-0 shrink-0 items-center gap-3"><span className="grid size-9 place-items-center rounded-lg bg-cyan-400 text-[#071016] shadow-[0_0_24px_rgba(34,211,238,.22)]"><Swords className="size-4" /></span><span className="min-w-0"><strong className="block truncate text-xs tracking-[0.14em]">{guildDisplayName(guildId)}</strong><span className="hidden font-mono text-[9px] text-white/35 sm:block">{guildDomain(guildId)}</span></span></Link>
         <nav className="hidden min-w-0 flex-1 items-center justify-end gap-1 lg:flex">{links.map(([label, suffix]) => { const href = `${base}${suffix}`; const active = pathname === href || (suffix === "" && pathname === base); return <Link key={label} href={href} aria-current={active ? "page" : undefined} className={`whitespace-nowrap rounded-lg border px-2.5 py-2 text-[10px] font-semibold transition-colors xl:px-3 xl:text-[11px] ${active ? "border-cyan-300/20 bg-cyan-300/[0.08] text-cyan-200" : "border-transparent text-white/50 hover:border-white/10 hover:bg-white/[0.05] hover:text-white"}`}>{label}</Link> })}</nav>
@@ -25,8 +25,8 @@ export function PublicShell({ guildId, children }: { guildId: string; children: 
       </div>
       {open && <nav className="border-t border-white/[0.08] px-5 py-4 sm:px-8 lg:hidden"><div className="mx-auto grid max-w-[95rem] gap-1 sm:grid-cols-2">{links.map(([label, suffix, description]) => { const href = `${base}${suffix}`; return <Link key={label} href={href} className="flex items-center justify-between rounded-lg border border-transparent px-3 py-3 text-sm text-white/70 hover:border-white/[0.08] hover:bg-white/[0.06] hover:text-white"><span>{label}</span><span className="font-mono text-[10px] text-white/30">{description}</span></Link> })}</div></nav>}
     </header>
-    <main className="motion-page">{children}</main>
-    <footer className="border-t border-white/[0.08] px-5 py-8 sm:px-8"><div className="mx-auto flex max-w-[95rem] flex-col justify-between gap-3 text-xs text-white/40 sm:flex-row"><span>{guildDisplayName(guildId)} · Competitive community portal</span><span className="font-mono text-[10px]">{guildDomain(guildId)}</span></div></footer>
+    <main className="relative z-10 motion-page">{children}</main>
+    <footer className="relative z-10 border-t border-white/[0.08] bg-[#05080c] px-5 py-5 sm:px-8"><div className="mx-auto flex max-w-[95rem] items-center justify-between gap-4 text-[10px] text-white/35"><span className="truncate">{guildDisplayName(guildId)} <span className="text-white/15">·</span> Competitive community portal</span><span className="shrink-0 font-mono">{guildDomain(guildId)}</span></div></footer>
   </div></ThemeScope>
 }
 
