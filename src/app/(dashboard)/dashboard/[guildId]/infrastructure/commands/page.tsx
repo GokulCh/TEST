@@ -950,9 +950,8 @@ export default function Page() {
 				</div>
 			</div>
 
-			{/* COMMAND SECTIONS */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-5 overflow-visible">
-					<div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 items-start overflow-visible">
+				{/* COMMAND SECTIONS */}
+				<div className="flex flex-col gap-5 overflow-visible">
 					{/* COMMANDS THAT STILL NEED CONFIGURATION — PULLED TO THE TOP */}
 					{commandsNeedingConfig.length > 0 && (
 						<div className="space-y-3 overflow-visible">
