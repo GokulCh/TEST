@@ -126,6 +126,8 @@ const del = <T>(path: string) => request<T>("DELETE", path);
 // ── Guild service ──────────────────────────────────────────────────────────────
 
 const guilds = {
+  count: () => get<{ count: number }>(`/v1/guilds/count`),
+
   getBySnowflake: (snowflakeId: string) =>
     get<GuildModel>(`/v1/guilds/snowflake/${snowflakeId}`),
 
@@ -309,6 +311,8 @@ const matchmaking = {
 // ── Player service ─────────────────────────────────────────────────────────────
 
 const players = {
+  count: () => get<{ count: number }>(`/v1/players/count`),
+
   getBySnowflake: (snowflakeId: string) =>
     get<PlayerModel>(`/v1/players/snowflake/${snowflakeId}`),
 

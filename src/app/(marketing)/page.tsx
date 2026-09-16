@@ -10,6 +10,7 @@ import {
   Terminal,
 } from "lucide-react";
 import Link from "next/link";
+import { dbApi } from "@/lib/api-client";
 
 const capabilities = [
   { icon: Bot, title: "Discord orchestration", text: "Turn community actions into reliable, observable workflows." },
@@ -18,13 +19,17 @@ const capabilities = [
   { icon: ShieldCheck, title: "Safety by default", text: "Keep moderation, sanctions, audit trails, and permissions close to the work." },
 ];
 
-const events = [
-  ["02:14:08", "MATCHMAKING", "Queue north-america-1 accepted 12 players"],
-  ["02:14:11", "PROVISION", "bedwars-lobby-04 is ready for traffic"],
-  ["02:14:16", "PERSIST", "Round results committed to the player ledger"],
-];
+export default async function LandingPage() {
+  const [guilds, players] = await Promise.allSettled([
+    dbApi.guilds.count(),
+    dbApi.players.count(),
+  ]);
+  const guildCount = guilds.status === "fulfilled" ? guilds.value.count : null;
+  const playerCount = players.status === "fulfilled" ? players.value.count : null;
+  const formatCount = (value: number | null) =>
+    value === null ? "—" : new Intl.NumberFormat("en-US").format(value);
+  const telemetryAvailable = guildCount !== null || playerCount !== null;
 
-export default function LandingPage() {
   return (
     <div className="relative overflow-hidden">
       <section className="mx-auto grid max-w-[95rem] gap-12 px-4 pb-20 pt-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20 lg:pb-28 lg:pt-24">
@@ -46,13 +51,17 @@ export default function LandingPage() {
         <div className="command-preview panel-container relative overflow-hidden p-0">
           <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
             <div className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded-lg bg-primary-50 text-primary-500"><Terminal className="size-4" /></span><div><p className="font-mono text-[10px] uppercase tracking-widest text-fg-muted">workspace / operations</p><p className="text-sm font-semibold">Ranked Bedwars</p></div></div>
-            <span className="status-pill status-success"><span className="size-1.5 rounded-full bg-success" /> all systems normal</span>
+            <span className={`status-pill ${telemetryAvailable ? "status-success" : "status-warning"}`}><span className={`size-1.5 rounded-full ${telemetryAvailable ? "bg-success" : "bg-warning"}`} /> {telemetryAvailable ? "live data connected" : "data unavailable"}</span>
           </div>
           <div className="grid gap-3 p-5 sm:grid-cols-3">
-            {[['Active matches', '14', 'up 12%'], ['Players online', '286', 'steady'], ['Queue health', '99.8%', 'nominal']].map(([label, value, note]) => <div key={label} className="surface-inset rounded-lg p-3"><p className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">{label}</p><p className="mt-2 text-2xl font-bold tracking-tight">{value}</p><p className="mt-1 font-mono text-[10px] text-success">{note}</p></div>)}
+            {[
+              ["Registered guilds", formatCount(guildCount), "database total"],
+              ["Registered players", formatCount(playerCount), "database total"],
+              ["Telemetry source", telemetryAvailable ? "LIVE" : "—", telemetryAvailable ? "database API" : "unavailable"],
+            ].map(([label, value, note]) => <div key={label} className="surface-inset rounded-lg p-3"><p className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">{label}</p><p className="mt-2 text-2xl font-bold tracking-tight">{value}</p><p className="mt-1 font-mono text-[10px] text-success">{note}</p></div>)}
           </div>
-          <div className="border-t border-border-subtle px-5 py-4"><div className="mb-3 flex items-center justify-between"><p className="font-mono text-[10px] uppercase tracking-widest text-fg-muted">live event stream</p><span className="font-mono text-[10px] text-fg-muted">auto-refresh 5s</span></div><div className="flex flex-col gap-3">{events.map(([time, type, text]) => <div key={time} className="grid grid-cols-[62px_90px_1fr] gap-2 font-mono text-[10px] leading-5"><span className="text-fg-muted">{time}</span><span className="text-primary-500">{type}</span><span className="text-fg-default">{text}</span></div>)}</div></div>
-          <div className="flex items-center justify-between border-t border-border-subtle bg-panel-bg/60 px-5 py-3 font-mono text-[10px] text-fg-muted"><span>region: us-east-1</span><span className="flex items-center gap-1.5 text-success"><span className="size-1.5 rounded-full bg-success" /> connected</span></div>
+          <div className="border-t border-border-subtle px-5 py-4"><div className="mb-3 flex items-center justify-between"><p className="font-mono text-[10px] uppercase tracking-widest text-fg-muted">live platform telemetry</p><span className="font-mono text-[10px] text-fg-muted">server-rendered</span></div><p className="font-mono text-xs leading-6 text-fg-muted">Counts are read directly from the connected database when this page renders. No sample or placeholder metrics are shown.</p></div>
+          <div className="flex items-center justify-between border-t border-border-subtle bg-panel-bg/60 px-5 py-3 font-mono text-[10px] text-fg-muted"><span>source: connected database</span><span className={`flex items-center gap-1.5 ${telemetryAvailable ? "text-success" : "text-warning"}`}><span className={`size-1.5 rounded-full ${telemetryAvailable ? "bg-success" : "bg-warning"}`} /> {telemetryAvailable ? "live" : "unavailable"}</span></div>
         </div>
       </section>
 
