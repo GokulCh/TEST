@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
+import OptionDropdown from "@/components/ui/OptionDropdown";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import type { BotStatus } from "@/lib/db-types";
 
@@ -157,7 +158,7 @@ export default function Page() {
 	const championBots = bots.filter((b) => b.tier === "champion").length;
 
 	return (
-		<div className="w-full p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto text-left">
+		<div className="w-full p-6 lg:p-8 space-y-6 select-none max-w-7xl mx-auto text-left">
 			{/* HUD PANEL HEADER */}
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-subtle pb-6">
 				<div>
@@ -274,16 +275,12 @@ export default function Page() {
 									<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">
 										Tier Class
 									</label>
-									<select
-										value={bot.tier ?? "champion"}
-										onChange={(e) =>
-											updateBot(index, { tier: e.target.value as BotTier })
-										}
-										className="w-full h-8 px-2 bg-bg-canvas/40 border border-border-subtle rounded-md font-mono text-xs text-fg-default focus:outline-none"
-									>
-										<option value="titan">Titan</option>
-										<option value="champion">Champion</option>
-									</select>
+										<OptionDropdown
+											value={bot.tier ?? "champion"}
+											onChange={(value) => updateBot(index, { tier: value as BotTier })}
+											options={[{ value: "titan", label: "Titan" }, { value: "champion", label: "Champion" }]}
+											placeholder="Select tier"
+										/>
 								</div>
 
 								<div className="flex gap-2 justify-end sm:justify-start">
@@ -319,21 +316,12 @@ export default function Page() {
 									<span className="font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">
 										Runtime State
 									</span>
-									<select
+									<OptionDropdown
 										value={bot.status}
-										onChange={(e) =>
-											updateBot(index, {
-												status: e.target.value as BotStatus,
-											})
-										}
-										className="h-7 px-2 bg-bg-canvas/40 border border-border-subtle rounded-md font-mono text-[10px] text-fg-default focus:outline-none"
-									>
-										<option value="offline">Offline</option>
-										<option value="starting">Starting</option>
-										<option value="available">Available</option>
-										<option value="busy">Busy</option>
-										<option value="cooldown">Cooldown</option>
-									</select>
+										onChange={(value) => updateBot(index, { status: value as BotStatus })}
+										options={Object.entries(STATUS_META).map(([value, meta]) => ({ value, label: meta.label }))}
+										placeholder="Select status"
+									/>
 								</div>
 
 								<div className="flex items-center gap-2">
