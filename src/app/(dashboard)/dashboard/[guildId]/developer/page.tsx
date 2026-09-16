@@ -68,13 +68,13 @@ export default function Page() {
 	const [updateLogs, setUpdateLogs] = useState<DevUpdateLog[]>([]);
 	const [pageConfigs, setPageConfigs] = useState<PageConfig[]>([]);
 	const [categoryConfigs, setCategoryConfigs] = useState<CategoryConfig[]>([]);
-	const [activeTab, setActiveTab] = useState<"logs" | "pages" | "categories" | "access">("logs");
+	const [activeTab, setActiveTab] = useState<"logs" | "navigation" | "access">("logs");
+	const [navigationQuery, setNavigationQuery] = useState("");
 	const [isPreviewMode, setIsPreviewMode] = useState(false);
 
 	const TAB_LABELS = {
 		logs: "Update Logs",
-		pages: "Page Control",
-		categories: "Categories",
+			navigation: "Navigation Control",
 		access: "Access Control",
 	} as const;
 
@@ -109,10 +109,9 @@ export default function Page() {
 	const handleDiscard = useCallback((discardedTab: typeof activeTab) => {
 		if (discardedTab === "logs") {
 			setUpdateLogs([...savedLogs]);
-		} else if (discardedTab === "pages") {
-			setPageConfigs([...savedPages]);
-		} else if (discardedTab === "categories") {
-			setCategoryConfigs([...savedCategories]);
+			} else if (discardedTab === "navigation") {
+				setPageConfigs([...savedPages]);
+				setCategoryConfigs([...savedCategories]);
 		}
 	}, [savedLogs, savedPages, savedCategories]);
 
@@ -121,9 +120,8 @@ export default function Page() {
 		setActiveTab,
 		tabSnapshots: {
 			logs:       { local: localLogs,       saved: savedLogs },
-			pages:      { local: localPages,      saved: savedPages },
-			categories: { local: localCategories, saved: savedCategories },
-			access:     { local: null,            saved: null },
+				navigation: { local: { pages: localPages, categories: localCategories }, saved: { pages: savedPages, categories: savedCategories } },
+				access:     { local: null,            saved: null },
 		},
 		onDiscard: handleDiscard,
 	});
@@ -515,7 +513,7 @@ export default function Page() {
 
 			{/* Tabs */}
 			<div className="flex border-b border-border-subtle/40 gap-2">
-				{(["logs", "pages", "categories", "access"] as const).map((tab) => {
+					{(["logs", "navigation", "access"] as const).map((tab) => {
 					const isActive = activeTab === tab;
 					const isDirtyTab = tabGuard.isTabDirty(tab);
 					return (
@@ -529,13 +527,11 @@ export default function Page() {
 							}`}
 						>
 							{tab === "logs" && <Clock className="size-3.5" />}
-							{tab === "pages" && <Eye className="size-3.5" />}
-							{tab === "categories" && <Code className="size-3.5" />}
-							{tab === "access" && <Lock className="size-3.5" />}
-							{tab === "logs" && "Update Logs"}
-							{tab === "pages" && "Page Control"}
-							{tab === "categories" && "Categories"}
-							{tab === "access" && "Access Control"}
+								{tab === "navigation" && <Code className="size-3.5" />}
+								{tab === "access" && <Lock className="size-3.5" />}
+								{tab === "logs" && "Update Logs"}
+								{tab === "navigation" && "Navigation Control"}
+								{tab === "access" && "Access Control"}
 							{/* Dirty dot indicator */}
 							{isDirtyTab && (
 								<span className="size-1.5 rounded-full bg-warning shrink-0" title="Unsaved changes" />
@@ -693,8 +689,16 @@ export default function Page() {
 				</div>
 			)}
 
-			{activeTab === "pages" && (
-				<div className="space-y-4">
+				{activeTab === "navigation" && (
+					<div className="space-y-5">
+					<div className="mb-4 flex flex-col gap-3 rounded-xl border border-border-subtle bg-panel-bg/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+						<div>
+							<p className="font-mono text-[10px] font-bold uppercase tracking-widest text-fg-default">Navigation Control</p>
+							<p className="mt-1 font-mono text-[10px] text-fg-muted">Manage standalone pages and grouped categories from one view.</p>
+						</div>
+						<input value={navigationQuery} onChange={(event) => setNavigationQuery(event.target.value)} placeholder="Filter pages or categories..." className="h-9 w-full rounded-lg border border-border-subtle bg-bg-canvas/40 px-3 font-mono text-xs text-fg-default outline-none focus:border-primary-500/50 sm:max-w-xs" />
+					</div>
+					<div className="space-y-4">
 					<div className="p-5 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-4">
 						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
 							<Eye className="size-4 text-cyan-500" />
@@ -773,11 +777,13 @@ export default function Page() {
 							</div>
 						))
 					)}
-				</div>
-			)}
+					</div>
 
-			{activeTab === "categories" && (
-				<div className="space-y-4">
+					<div className="space-y-4">
+						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
+							<Code className="size-4 text-violet-500" />
+							<h3 className="font-mono text-[11px] font-bold uppercase tracking-widest text-fg-default">Categories &amp; Groups</h3>
+						</div>
 					<div className="p-5 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-4">
 						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
 							<Code className="size-4 text-violet-500" />
@@ -863,10 +869,11 @@ export default function Page() {
 							</div>
 						))
 					)}
-				</div>
-			)}
+											</div>
+						</div>
+					)}
 
-			{activeTab === "access" && (
+					{activeTab === "access" && (
 				<div className="space-y-4">
 					<div className="p-5 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-4">
 						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
