@@ -219,8 +219,14 @@ export default function Page() {
 				</button>
 			</div>
 
-			{/* THREE-COLUMN GRID */}
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				{bots.length === 0 ? (
+					<div className="p-8 border border-dashed border-border-subtle/40 rounded-xl text-center font-mono text-xs text-fg-muted uppercase tracking-wider">
+						No bot nodes configured yet — click &ldquo;Register Bot Account&rdquo; to add one.
+					</div>
+				) : null}
+
+				{/* THREE-COLUMN GRID */}
+				{bots.length > 0 && <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* BOT REGISTRY LIST */}
 				<div className="lg:col-span-2 space-y-4">
 					{bots.map((bot, index) => (
@@ -426,7 +432,8 @@ export default function Page() {
 						</p>
 					</div>
 				</div>
+				</div>
+				}
 			</div>
-		</div>
-	);
-}
+		);
+	}

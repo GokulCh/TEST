@@ -232,8 +232,14 @@ export default function Page() {
 				<div className="p-4 rounded-xl border border-danger/30 bg-danger/10 text-danger font-mono text-xs uppercase">{error}</div>
 			)}
 
-			{!loading && !error && (
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				{!loading && !error && processed.length === 0 && (
+					<div className="p-8 border border-dashed border-border-subtle/40 rounded-xl text-center font-mono text-xs text-fg-muted uppercase tracking-wider">
+						No players registered yet.
+					</div>
+				)}
+
+				{!loading && !error && processed.length > 0 && (
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 					{/* Player list */}
 					<div className="lg:col-span-2 space-y-2 max-h-[580px] overflow-y-auto pr-1">
 						<div className="px-1 flex justify-between font-mono text-[9px] font-bold text-fg-muted uppercase tracking-widest">
