@@ -190,7 +190,7 @@ export default function Page() {
 	const isPageLoading = configLoading || (statsLoading && !stats);
 
 	return (
-		<div className="w-full p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto">
+		<div className="relative w-full overflow-hidden p-6 lg:p-8 space-y-6 animate-in fade-in duration-300 select-none max-w-7xl mx-auto"><div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-primary-500/[0.06] blur-3xl" /><div className="pointer-events-none absolute right-12 top-20 hidden size-24 rotate-12 rounded-2xl border border-primary-500/10 lg:block" />
 			{/* Header */}
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border-subtle pb-6">
 				<div>
