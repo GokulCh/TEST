@@ -9,6 +9,7 @@ import { useGuildSnapshot } from "@/hooks/useGuildSnapshot";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import type { StrikeLadderConfig, StrikeLadderLevel, StrikeLadderStep } from "@/lib/db-types";
 import RoleDropdown from "@/components/ui/RoleDropdown";
+import OptionDropdown from "@/components/ui/OptionDropdown";
 
 type DurationUnit = "minutes" | "hours" | "days";
 interface UIStep extends StrikeLadderStep { _key: string; }
@@ -102,11 +103,7 @@ export default function Page() {
 				</div>
 				<div className="p-4 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-1.5 shadow-xs">
 					<label className="block font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">Offence Accounting Mode</label>
-					<select value={offenceMode} onChange={(e) => setOffenceMode(e.target.value as typeof offenceMode)} className="w-full h-9 px-3 bg-bg-canvas/40 border border-border-subtle rounded-lg font-mono text-xs text-fg-default focus:outline-none focus:border-primary-500/50">
-						<option value="persistent">Persistent (Lifetime)</option>
-						<option value="active_only">Active Only</option>
-						<option value="season_reset">Season Reset</option>
-					</select>
+<OptionDropdown value={offenceMode} onChange={(value) => setOffenceMode(value as typeof offenceMode)} options={[{ value: "persistent", label: "Persistent (Lifetime)" }, { value: "active_only", label: "Active Only" }, { value: "season_reset", label: "Season Reset" }]} />
 				</div>
 			</div>
 

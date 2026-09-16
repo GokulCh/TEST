@@ -12,6 +12,22 @@ input[type="number"] {
   appearance: textfield;
 }
 
+/* Native selects that cannot use a data-backed dropdown still follow the dashboard theme. */
+select {
+  color-scheme: dark;
+}
+
+select option,
+select optgroup {
+  background: var(--panel-bg);
+  color: var(--fg-default);
+}
+
+select option:checked {
+  background: var(--primary-500);
+  color: var(--bg-canvas);
+}
+
 /* ==========================================================================
    1. CORE THEME CONFIGURATION (Tailwind v4 @theme Architecture)
    ========================================================================== */
