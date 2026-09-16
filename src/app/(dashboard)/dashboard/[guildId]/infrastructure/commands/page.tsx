@@ -13,6 +13,8 @@ import {
 	ToggleRight,
 	Trash2,
 	Zap,
+	Check,
+	X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useGuildConfig } from "@/features/dashboard/config-provider";
@@ -162,7 +164,10 @@ export default function Page() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [commands, setCommands] = useState<CommandEntry[]>([]);
 	const [expandedCommands, setExpandedCommands] = useState<Set<string>>(new Set());
-	const [searchQuery, setSearchQuery] = useState("");
+		const [searchQuery, setSearchQuery] = useState("");
+		const [selectedCommands, setSelectedCommands] = useState<Set<string>>(new Set());
+		const [bulkRole, setBulkRole] = useState("");
+		const [bulkRoleMode, setBulkRoleMode] = useState<"allowed_roles" | "denied_roles">("allowed_roles");
 
 	// Command interceptors state
 	const [prefix, setPrefix] = useState("=");
@@ -383,7 +388,30 @@ export default function Page() {
 		updateCommand(cmdName, { aliases });
 	};
 
-	const toggleExpand = (name: string) => {
+		const toggleSelected = (name: string) => {
+			setSelectedCommands((prev) => {
+				const next = new Set(prev);
+				if (next.has(name)) next.delete(name); else next.add(name);
+				return next;
+			});
+		};
+
+		const applyBulkRole = (mode: "add" | "remove") => {
+			if (!bulkRole || selectedCommands.size === 0) return;
+			setCommands((prev) => prev.map((command) => {
+				if (!selectedCommands.has(command.name)) return command;
+				const current = command[bulkRoleMode] ?? [];
+				const values = mode === "add" ? Array.from(new Set([...current, bulkRole])) : current.filter((role) => role !== bulkRole);
+				return { ...command, [bulkRoleMode]: values.length ? values : null };
+			}));
+		};
+
+		const resetSelected = () => {
+			if (selectedCommands.size === 0) return;
+			setCommands((prev) => prev.map((command) => selectedCommands.has(command.name) ? { ...command, ...DEFAULT_PERMISSION(command.name), category: command.category, description: command.description } : command));
+		};
+
+		const toggleExpand = (name: string) => {
 		setExpandedCommands((prev) => {
 			const next = new Set(prev);
 			if (next.has(name)) {
@@ -551,8 +579,10 @@ export default function Page() {
 					onClick={() => toggleExpand(cmd.name)}
 					className="p-4 cursor-pointer hover:bg-panel-bg/30"
 				>
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-						<div className="min-w-0 flex-1">
+						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+							<div className="flex min-w-0 flex-1 items-start gap-3">
+								<input type="checkbox" aria-label={`Select ${cmd.name}`} checked={selectedCommands.has(cmd.name)} onChange={() => toggleSelected(cmd.name)} onClick={(e) => e.stopPropagation()} className="mt-1 size-4 accent-primary-500" />
+							<div className="min-w-0 flex-1">
 							<div className="flex items-center gap-2">
 								{isExpanded ? (
 									<ChevronDown className="size-4 text-fg-muted shrink-0" />
@@ -571,9 +601,10 @@ export default function Page() {
 							<p className="font-mono text-[9px] text-fg-muted uppercase tracking-wide mt-1 pl-6">
 								{cmd.description || "No description"}
 							</p>
-						</div>
+							</div>
+							</div>
 
-						<div className="flex items-center gap-2 shrink-0">
+							<div className="flex items-center gap-2 shrink-0">
 							{needsConfig && (
 								<AlertTriangle className="size-4 text-amber-500" aria-label="Requires configuration" />
 							)}
@@ -871,7 +902,29 @@ export default function Page() {
 				</div>
 			</div>
 
-			{/* COMMAND INTERCEPTORS */}
+				{/* BULK COMMAND ACTIONS */}
+				<div className="space-y-3 rounded-xl border border-border-subtle bg-panel-bg/10 p-4">
+					<div className="flex flex-wrap items-center justify-between gap-3">
+						<div>
+							<h3 className="font-mono text-xs font-black uppercase tracking-wide text-fg-default">Bulk command actions</h3>
+							<p className="font-mono text-[9px] uppercase text-fg-muted">Select commands, then apply permissions or reset their overrides.</p>
+						</div>
+						<div className="flex flex-wrap items-center gap-2">
+							<button type="button" onClick={() => setSelectedCommands(new Set(sortedCommands.map((command) => command.name)))} className="rounded-md border border-border-subtle px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted hover:text-fg-default">Select all</button>
+							<button type="button" onClick={() => setSelectedCommands(new Set())} className="rounded-md border border-border-subtle px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted hover:text-fg-default">Clear</button>
+							<span className="font-mono text-[9px] uppercase text-primary-500">{selectedCommands.size} selected</span>
+						</div>
+					</div>
+					<div className="flex flex-wrap items-center gap-2">
+						<select value={bulkRoleMode} onChange={(event) => setBulkRoleMode(event.target.value as "allowed_roles" | "denied_roles")} className="h-8 rounded-md border border-border-subtle bg-bg-canvas px-2 font-mono text-[10px] text-fg-default"><option value="allowed_roles">Allowed roles</option><option value="denied_roles">Denied roles</option></select>
+						<select value={bulkRole} onChange={(event) => setBulkRole(event.target.value)} className="h-8 min-w-44 rounded-md border border-border-subtle bg-bg-canvas px-2 font-mono text-[10px] text-fg-default"><option value="">Select a role</option>{roleOptions.map((role) => <option key={role.id} value={role.id}>{role.name}</option>)}</select>
+						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("add")} className="inline-flex h-8 items-center gap-1 rounded-md border border-success/30 bg-success/10 px-2.5 font-mono text-[9px] font-bold uppercase text-success disabled:opacity-40"><Check className="size-3.5" /> Add role</button>
+						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("remove")} className="inline-flex h-8 items-center gap-1 rounded-md border border-danger/30 bg-danger/10 px-2.5 font-mono text-[9px] font-bold uppercase text-danger disabled:opacity-40"><X className="size-3.5" /> Remove role</button>
+						<button type="button" disabled={selectedCommands.size === 0} onClick={resetSelected} className="inline-flex h-8 items-center gap-1 rounded-md border border-warning/30 bg-warning/10 px-2.5 font-mono text-[9px] font-bold uppercase text-warning disabled:opacity-40"><Trash2 className="size-3.5" /> Reset selected</button>
+					</div>
+				</div>
+
+				{/* COMMAND INTERCEPTORS */}
 			<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm text-left space-y-4">
 				<div className="flex items-center justify-between border-b border-border-subtle/50 pb-2.5">
 					<div className="flex items-center gap-2">
