@@ -32,7 +32,7 @@ export default async function LandingPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="relative mx-auto grid max-w-[95rem] gap-12 overflow-hidden px-4 pb-20 pt-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20 lg:pb-28 lg:pt-24">
+      <section className="relative mx-auto grid max-w-[95rem] gap-12 px-4 pb-20 pt-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20 lg:pb-28 lg:pt-24">
         <div className="relative z-10 max-w-2xl">
           <div className="eyebrow"><CircleDot className="size-3 text-success" /> competitive infrastructure / online</div>
           <h1 className="mt-6 text-hero max-w-3xl">The command center for competitive communities.</h1>
