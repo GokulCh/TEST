@@ -199,8 +199,8 @@ export default function Page() {
 				</div>
 			)}
 
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				<div className="lg:col-span-2 space-y-4">
+				{seasons.length > 0 && <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+					<div className="lg:col-span-2 space-y-4">
 					{seasons.map((s) => (
 						<div key={s.id} className="p-4 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-3 shadow-xs">
 							<div className="flex justify-between items-center border-b border-border-subtle/20 pb-2">
@@ -269,7 +269,8 @@ export default function Page() {
 						</p>
 					</div>
 				</div>
+				</div>
+				}
 			</div>
-		</div>
-	);
-}
+		);
+	}
