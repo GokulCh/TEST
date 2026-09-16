@@ -300,10 +300,6 @@ export function SetupWizard() {
 
 	return (
 		<div className="relative w-full px-8 lg:px-16 py-12 lg:py-20 overflow-hidden">
-			{/* Background glow */}
-			<div aria-hidden className="pointer-events-none absolute inset-0 -z-50 overflow-hidden select-none">
-				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[65rem] h-[45rem] bg-primary-500/10 rounded-full blur-[140px]" />
-			</div>
 
 			{/* Loading overlay */}
 			{(isSimulating || isLoadingAuth) && (
