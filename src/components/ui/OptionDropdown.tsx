@@ -35,6 +35,7 @@ export default function OptionDropdown({
 }: OptionDropdownProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
+	const [openUpward, setOpenUpward] = useState(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const searchId = useId();
 	const selected = options.find((option) => option.value === value);
@@ -44,11 +45,22 @@ export default function OptionDropdown({
 
 	useEffect(() => {
 		if (!isOpen) return;
+		const updatePlacement = () => {
+			const rect = rootRef.current?.getBoundingClientRect();
+			if (rect) setOpenUpward(rect.bottom + 330 > window.innerHeight && rect.top > 330);
+		};
+		updatePlacement();
+		window.addEventListener("resize", updatePlacement);
+		window.addEventListener("scroll", updatePlacement, true);
 		const handlePointerDown = (event: MouseEvent) => {
 			if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false);
 		};
 		document.addEventListener("mousedown", handlePointerDown);
-		return () => document.removeEventListener("mousedown", handlePointerDown);
+		return () => {
+			document.removeEventListener("mousedown", handlePointerDown);
+			window.removeEventListener("resize", updatePlacement);
+			window.removeEventListener("scroll", updatePlacement, true);
+		};
 	}, [isOpen]);
 
 	const selectOption = (option: DropdownOption) => {
@@ -76,7 +88,7 @@ export default function OptionDropdown({
 			</button>
 
 			{isOpen && (
-				<div className="absolute inset-x-0 top-full z-[100] mt-1 overflow-hidden rounded-lg border border-border-subtle bg-panel-bg shadow-xl shadow-black/30">
+				<div className={`absolute inset-x-0 z-[100] overflow-hidden rounded-lg border border-border-subtle bg-panel-bg shadow-xl shadow-black/30 ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}>
 					<div className="border-b border-border-subtle/60 p-2">
 						<div className="relative">
 							<Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-fg-muted" />
