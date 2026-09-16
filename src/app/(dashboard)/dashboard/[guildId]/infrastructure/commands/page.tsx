@@ -605,9 +605,13 @@ export default function Page() {
 							</div>
 
 							<div className="flex items-center gap-2 shrink-0">
-							{needsConfig && (
-								<AlertTriangle className="size-4 text-amber-500" aria-label="Requires configuration" />
-							)}
+								{needsConfig ? (
+									<AlertTriangle className="size-4 text-amber-500" aria-label="Requires configuration" />
+								) : requirements.length > 0 && configStatus?.configured === requirements.length ? (
+									<span className="inline-flex items-center gap-1 rounded-md border border-success/25 bg-success/10 px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-success">
+										<Settings2 className="size-3" /> Configured
+									</span>
+								) : null}
 							<button
 								onClick={(e) => {
 									e.stopPropagation();
@@ -660,8 +664,8 @@ export default function Page() {
 				{isExpanded && (
 					<div className="px-4 pb-4 pt-4 border-t border-border-subtle/20 space-y-4">
 						{/* Required Configuration Dropdowns */}
-						{flattenRequirements(cmd.requirements).length > 0 && (
-							<div className="space-y-2">
+							{flattenRequirements(cmd.requirements).length > 0 && !needsConfig && (
+								<div className="space-y-2">
 								<div className="flex items-center gap-2 border-b border-amber-500/30 pb-1.5">
 									<Settings2 className="size-3.5 text-amber-500" />
 									<span className="font-mono text-[9px] font-bold text-fg-default uppercase tracking-wider">
@@ -975,7 +979,7 @@ export default function Page() {
 				</div>
 
 				{/* BULK COMMAND ACTIONS */}
-				<div className="mx-auto w-full max-w-5xl space-y-4 rounded-xl border border-border-subtle bg-panel-bg/20 p-5 shadow-sm">
+				<div className="w-full space-y-4 rounded-xl border border-border-subtle bg-panel-bg/20 p-5 shadow-sm">
 					<div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
 						<div>
 							<h3 className="font-mono text-xs font-black uppercase tracking-wide text-fg-default">Bulk command actions</h3>
