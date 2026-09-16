@@ -895,25 +895,41 @@ export default function Page() {
 						<span>{isSavingCommands ? "Saving..." : "Save"}</span>
 					</button>
 				</div>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<div className="flex items-center justify-between gap-3 p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
-							<div className="flex items-center gap-2">
-								<Terminal className="size-3.5 text-primary-500" />
-								<span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Prefix Commands</span>
-							</div>
-							<div className="flex items-center gap-2 h-7 px-2.5 border border-border-subtle/60 rounded-md bg-bg-canvas/40">
-								<label htmlFor="command-prefix" className="font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">Prefix</label>
-								<input id="command-prefix" type="text" maxLength={10} value={prefix} onChange={(e) => setPrefix(e.target.value)} className="w-16 bg-transparent font-mono text-xs text-fg-default focus:outline-none" />
-							</div>
-						</div>
-						<div className="flex items-center justify-between p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
-
-						<div className="flex items-center gap-2">
-							<Zap className="size-3.5 text-emerald-500" />
-							<span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Slash Commands</span>
-						</div>
-						<button
-							onClick={() => setIsSlashEnabled(!isSlashEnabled)}
+  <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+  <div className="flex min-h-[92px] flex-col justify-between gap-3 p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
+  <div className="flex items-center gap-2">
+  <Terminal className="size-3.5 text-primary-500" />
+  <span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Prefix Configuration</span>
+  </div>
+  <div className="flex items-center gap-2 h-8 px-2.5 border border-border-subtle/60 rounded-md bg-bg-canvas/40">
+  <label htmlFor="command-prefix" className="font-mono text-[9px] font-bold text-fg-muted uppercase tracking-wider">Prefix</label>
+  <input id="command-prefix" type="text" maxLength={10} value={prefix} onChange={(e) => setPrefix(e.target.value)} className="min-w-0 flex-1 bg-transparent font-mono text-xs text-fg-default focus:outline-none" />
+  </div>
+  </div>
+  <div className="flex min-h-[92px] flex-col justify-between gap-3 p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
+  <div className="flex items-center gap-2">
+  <Terminal className="size-3.5 text-primary-500" />
+  <span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Prefix Commands</span>
+  </div>
+  <button
+  onClick={() => setIsPrefixEnabled(!isPrefixEnabled)}
+  className={`h-8 w-full border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+  isPrefixEnabled
+  ? "bg-primary-500/10 border-primary-500/30 text-primary-500"
+  : "bg-panel-bg border-border-subtle text-fg-muted"
+  }`}
+  >
+  {isPrefixEnabled ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
+  {isPrefixEnabled ? "Enabled" : "Disabled"}
+  </button>
+  </div>
+  <div className="flex min-h-[92px] flex-col justify-between gap-3 p-3 border border-border-subtle/40 rounded-lg bg-bg-canvas/20">
+  <div className="flex items-center gap-2">
+  <Zap className="size-3.5 text-emerald-500" />
+  <span className="font-mono text-[10px] font-bold text-fg-default uppercase tracking-wider">Slash Commands</span>
+  </div>
+  <button
+  onClick={() => setIsSlashEnabled(!isSlashEnabled)}
 							className={`h-7 px-2.5 border rounded-md font-mono text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
 								isSlashEnabled
 									? "bg-primary-500/10 border-primary-500/30 text-primary-500"
