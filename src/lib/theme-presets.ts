@@ -16,7 +16,8 @@ export interface ThemePreset {
 const palette = (id: string, name: string, primary: string, canvasBg: string, panelBg: string, raised: string, inset: string, border: string, secondary: string, danger: string): ThemePreset => ({ id, name, primary, canvasBg, panelBg, raised, inset, border, secondary, danger, fgDefault: "#f5f1e8", fgMuted: "#aaa49a" });
 
 export const THEME_PRESETS: Record<string, ThemePreset> = {
-  default: palette("default", "Default Matrix", "#39d98a", "#171513", "#211f1c", "#292622", "#0d0c0b", "#454039", "#c8a66a", "#ff5c6c"),
+  default: palette("default", "Introduction Midnight", "#0ea5e9", "#07090d", "#0d1118", "#141a24", "#05070a", "#202936", "#39d98a", "#ff6978"),
+  matrix: palette("matrix", "Default Matrix", "#39d98a", "#171513", "#211f1c", "#292622", "#0d0c0b", "#454039", "#c8a66a", "#ff5c6c"),
   indigo: palette("indigo", "Core Indigo", "#8fa8ff", "#0c1020", "#151c34", "#202a4a", "#080b16", "#3c4b77", "#c0a8ff", "#ff7484"),
   emerald: palette("emerald", "Obsidian Emerald", "#4be6a5", "#071713", "#0e2920", "#164333", "#04100d", "#2e5f4c", "#f0c674", "#ff7180"),
   rose: palette("rose", "Crimson Velvet", "#ff8395", "#1b0b12", "#351522", "#492030", "#10050a", "#713545", "#f6c177", "#ff5c6c"),
