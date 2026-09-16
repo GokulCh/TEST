@@ -581,7 +581,7 @@ export default function Page() {
 				>
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 							<div className="flex min-w-0 flex-1 items-start gap-3">
-								<input type="checkbox" aria-label={`Select ${cmd.name}`} checked={selectedCommands.has(cmd.name)} onChange={() => toggleSelected(cmd.name)} onClick={(e) => e.stopPropagation()} className="mt-1 size-4 accent-primary-500" />
+								<input type="checkbox" aria-label={`Select ${cmd.name}`} checked={selectedCommands.has(cmd.name)} onChange={() => toggleSelected(cmd.name)} onClick={(e) => e.stopPropagation()} className="mt-1 size-4 appearance-none rounded border border-border-subtle bg-bg-canvas/80 transition-colors checked:border-primary-500 checked:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
 							<div className="min-w-0 flex-1">
 							<div className="flex items-center gap-2">
 								{isExpanded ? (
@@ -902,28 +902,6 @@ export default function Page() {
 				</div>
 			</div>
 
-				{/* BULK COMMAND ACTIONS */}
-				<div className="space-y-3 rounded-xl border border-border-subtle bg-panel-bg/10 p-4">
-					<div className="flex flex-wrap items-center justify-between gap-3">
-						<div>
-							<h3 className="font-mono text-xs font-black uppercase tracking-wide text-fg-default">Bulk command actions</h3>
-							<p className="font-mono text-[9px] uppercase text-fg-muted">Select commands, then apply permissions or reset their overrides.</p>
-						</div>
-						<div className="flex flex-wrap items-center gap-2">
-							<button type="button" onClick={() => setSelectedCommands(new Set(sortedCommands.map((command) => command.name)))} className="rounded-md border border-border-subtle px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted hover:text-fg-default">Select all</button>
-							<button type="button" onClick={() => setSelectedCommands(new Set())} className="rounded-md border border-border-subtle px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted hover:text-fg-default">Clear</button>
-							<span className="font-mono text-[9px] uppercase text-primary-500">{selectedCommands.size} selected</span>
-						</div>
-					</div>
-					<div className="flex flex-wrap items-center gap-2">
-						<select value={bulkRoleMode} onChange={(event) => setBulkRoleMode(event.target.value as "allowed_roles" | "denied_roles")} className="h-8 rounded-md border border-border-subtle bg-bg-canvas px-2 font-mono text-[10px] text-fg-default"><option value="allowed_roles">Allowed roles</option><option value="denied_roles">Denied roles</option></select>
-						<select value={bulkRole} onChange={(event) => setBulkRole(event.target.value)} className="h-8 min-w-44 rounded-md border border-border-subtle bg-bg-canvas px-2 font-mono text-[10px] text-fg-default"><option value="">Select a role</option>{roleOptions.map((role) => <option key={role.id} value={role.id}>{role.name}</option>)}</select>
-						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("add")} className="inline-flex h-8 items-center gap-1 rounded-md border border-success/30 bg-success/10 px-2.5 font-mono text-[9px] font-bold uppercase text-success disabled:opacity-40"><Check className="size-3.5" /> Add role</button>
-						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("remove")} className="inline-flex h-8 items-center gap-1 rounded-md border border-danger/30 bg-danger/10 px-2.5 font-mono text-[9px] font-bold uppercase text-danger disabled:opacity-40"><X className="size-3.5" /> Remove role</button>
-						<button type="button" disabled={selectedCommands.size === 0} onClick={resetSelected} className="inline-flex h-8 items-center gap-1 rounded-md border border-warning/30 bg-warning/10 px-2.5 font-mono text-[9px] font-bold uppercase text-warning disabled:opacity-40"><Trash2 className="size-3.5" /> Reset selected</button>
-					</div>
-				</div>
-
 				{/* COMMAND INTERCEPTORS */}
 			<div className="p-5 border border-border-subtle bg-panel-bg/20 backdrop-blur-md rounded-xl shadow-sm text-left space-y-4">
 				<div className="flex items-center justify-between border-b border-border-subtle/50 pb-2.5">
@@ -994,7 +972,29 @@ export default function Page() {
 						</button>
 					</div>
 				</div>
-			</div>
+				</div>
+
+				{/* BULK COMMAND ACTIONS */}
+				<div className="mx-auto w-full max-w-5xl space-y-4 rounded-xl border border-border-subtle bg-panel-bg/20 p-5 shadow-sm">
+					<div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
+						<div>
+							<h3 className="font-mono text-xs font-black uppercase tracking-wide text-fg-default">Bulk command actions</h3>
+							<p className="mt-1 font-mono text-[9px] uppercase text-fg-muted">Select commands, then apply permissions or reset their overrides.</p>
+						</div>
+						<div className="flex items-center gap-2">
+							<button type="button" onClick={() => setSelectedCommands(new Set(sortedCommands.map((command) => command.name)))} className="rounded-md border border-border-subtle bg-bg-canvas/60 px-3 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted transition-colors hover:border-primary-500/40 hover:text-primary-500">Select all</button>
+							<button type="button" onClick={() => setSelectedCommands(new Set())} className="rounded-md border border-border-subtle bg-bg-canvas/60 px-3 py-1.5 font-mono text-[9px] font-bold uppercase text-fg-muted transition-colors hover:border-primary-500/40 hover:text-primary-500">Clear</button>
+							<span className="rounded-md bg-primary-500/10 px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase text-primary-500">{selectedCommands.size} selected</span>
+						</div>
+					</div>
+					<div className="flex flex-wrap items-center justify-center gap-2 border-t border-border-subtle/60 pt-4">
+						<select value={bulkRoleMode} onChange={(event) => setBulkRoleMode(event.target.value as "allowed_roles" | "denied_roles")} className="h-9 appearance-none rounded-md border border-border-subtle bg-bg-canvas px-3 font-mono text-[10px] text-fg-default outline-none transition-colors focus:border-primary-500/50"><option value="allowed_roles">Allowed roles</option><option value="denied_roles">Denied roles</option></select>
+						<select value={bulkRole} onChange={(event) => setBulkRole(event.target.value)} className="h-9 min-w-48 appearance-none rounded-md border border-border-subtle bg-bg-canvas px-3 font-mono text-[10px] text-fg-default outline-none transition-colors focus:border-primary-500/50"><option value="">Select a role</option>{roleOptions.map((role) => <option key={role.id} value={role.id}>{role.name}</option>)}</select>
+						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("add")} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-success/30 bg-success/10 px-3 font-mono text-[9px] font-bold uppercase text-success transition-colors hover:bg-success/15 disabled:opacity-40"><Check className="size-3.5" /> Add role</button>
+						<button type="button" disabled={!bulkRole || selectedCommands.size === 0} onClick={() => applyBulkRole("remove")} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-danger/30 bg-danger/10 px-3 font-mono text-[9px] font-bold uppercase text-danger transition-colors hover:bg-danger/15 disabled:opacity-40"><X className="size-3.5" /> Remove role</button>
+						<button type="button" disabled={selectedCommands.size === 0} onClick={resetSelected} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-warning/30 bg-warning/10 px-3 font-mono text-[9px] font-bold uppercase text-warning transition-colors hover:bg-warning/15 disabled:opacity-40"><Trash2 className="size-3.5" /> Reset selected</button>
+					</div>
+				</div>
 
 				{/* COMMAND SECTIONS */}
 				<div className="flex flex-col gap-5 overflow-visible">
@@ -1010,7 +1010,7 @@ export default function Page() {
 									{commandsNeedingConfig.length} {commandsNeedingConfig.length === 1 ? "command" : "commands"}
 								</span>
 							</div>
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div className="grid grid-cols-1 items-start md:grid-cols-2 gap-4">
 									{commandsNeedingConfig.map((cmd) => renderCommandCard(cmd))}
 								</div>
 							</div>
@@ -1038,7 +1038,7 @@ export default function Page() {
 								</span>
 							</div>
 
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div className="grid grid-cols-1 items-start md:grid-cols-2 gap-4">
 									{categoryCommands.map((cmd) => renderCommandCard(cmd))}
 								</div>
 							</div>
