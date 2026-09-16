@@ -740,7 +740,7 @@ export function Sidebar() {
 
 						<div className="space-y-0.5">
 							{renderDropdownTrigger(
-								"Modules Matrix",
+								"Modules",
 								Layers,
 								modulesExpanded,
 								() => setModulesExpanded(!modulesExpanded),
@@ -749,48 +749,48 @@ export function Sidebar() {
 							)}
 							{modulesExpanded && (
 								<div className="pl-2 ml-1 border-l border-border-subtle/50 space-y-1.5 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
-									{/* ⚔️ MATCHMAKING MATRIX (Violet / Purple Accent Vector) */}
-									<div className="space-y-0.5">
-										{renderDropdownTrigger(
-											"Matchmaking",
-											ListOrdered,
-											categoryStates.matchmaking,
-											() => toggleCategory("matchmaking"),
-											true,
-											"text-violet-500",
-										)}
-										{categoryStates.matchmaking && (
-											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
-												{matchmakingMatrix.map((item) =>
-													renderLink(item, "text-violet-500/60"),
-												)}
-											</div>
-										)}
-									</div>
+										{/* 🌐 INFRASTRUCTURE NODES (Cyan / Light Blue Accent Vector) */}
+										<div className="space-y-0.5">
+											{renderDropdownTrigger(
+												"Infrastructure",
+												Server,
+												categoryStates.infrastructure,
+												() => toggleCategory("infrastructure"),
+												true,
+												"text-cyan-500",
+											)}
+											{categoryStates.infrastructure && (
+												<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
+													{infrastructureNodes.map((item) =>
+														renderLink(item, "text-cyan-500/60"),
+													)}
+												</div>
+											)}
+										</div>
 
-									{/* 🌐 INFRASTRUCTURE NODES (Cyan / Light Blue Accent Vector) */}
-									<div className="space-y-0.5">
-										{renderDropdownTrigger(
-											"Infrastructure",
-											Server,
-											categoryStates.infrastructure,
-											() => toggleCategory("infrastructure"),
-											true,
-											"text-cyan-500",
-										)}
-										{categoryStates.infrastructure && (
-											<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
-												{infrastructureNodes.map((item) =>
-													renderLink(item, "text-cyan-500/60"),
-												)}
-											</div>
-										)}
-									</div>
+										{/* ⚔️ MATCHMAKING MATRIX (Violet / Purple Accent Vector) */}
+										<div className="space-y-0.5">
+											{renderDropdownTrigger(
+												"Matchmaking",
+												ListOrdered,
+												categoryStates.matchmaking,
+												() => toggleCategory("matchmaking"),
+												true,
+												"text-violet-500",
+											)}
+											{categoryStates.matchmaking && (
+												<div className="space-y-0.5 pl-2 animate-in fade-in duration-100">
+													{matchmakingMatrix.map((item) =>
+														renderLink(item, "text-violet-500/60"),
+													)}
+												</div>
+											)}
+										</div>
 
 									{/* 🛡️ SANCTIONS & SECURITY (Rose / Red Accent Vector) */}
 									<div className="space-y-0.5">
 										{renderDropdownTrigger(
-											"Sanctions & Security",
+											"Moderation",
 											Shield,
 											categoryStates.moderation,
 											() => toggleCategory("moderation"),
