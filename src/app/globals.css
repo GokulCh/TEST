@@ -1,20 +1,5 @@
 ﻿@import "tailwindcss";
 
-.public-domain header nav a { font-size: 0.8125rem; }
-.public-domain header strong { font-size: 0.9375rem; }
-.public-domain header span { font-size: 0.75rem; }
-.public-domain footer { font-size: 0.75rem; }
-.public-domain main p { font-size: 1rem; }
-.public-domain main p.font-mono { font-size: 0.75rem; }
-.public-domain main h2 { font-size: 1.375rem; }
-.public-domain main button, .public-domain main a { font-size: 0.875rem; }
-.public-domain main input, .public-domain main select { font-size: 1rem; }
-.public-domain .public-enter > h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
-@media (max-width: 640px) {
-  .public-domain header nav a { font-size: 0.875rem; }
-  .public-domain main p { font-size: 0.9375rem; }
-}
-
 /* Keep numeric fields compact and consistent across the dashboard. */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

@@ -167,11 +167,11 @@ export default function Page() {
 		const defaultPages: PageConfig[] = [
 			// Core
 			{ id: "overview", name: "Overview", path: "/dashboard/[guildId]", is_enabled: true, is_restricted: false, category: "core" },
-			{ id: "commands", name: "Custom Commands", path: "/dashboard/[guildId]/commands", is_enabled: true, is_restricted: false, category: "core" },
+			{ id: "commands", name: "Custom Commands", path: "/dashboard/[guildId]/infrastructure/commands", is_enabled: true, is_restricted: false, category: "core" },
 			// Matchmaking
 			{ id: "queues", name: "Queue Systems", path: "/dashboard/[guildId]/matchmaking/queues", is_enabled: true, is_restricted: false, category: "matchmaking" },
-			{ id: "players", name: "Player Profiles", path: "/dashboard/[guildId]/players", is_enabled: true, is_restricted: false, category: "matchmaking" },
-			{ id: "matches", name: "Live Matches", path: "/dashboard/[guildId]/matches", is_enabled: true, is_restricted: false, category: "matchmaking" },
+			{ id: "players", name: "Player Profiles", path: "/dashboard/[guildId]/matchmaking/players", is_enabled: true, is_restricted: false, category: "matchmaking" },
+			{ id: "matches", name: "Live Matches", path: "/dashboard/[guildId]/matchmaking/matches", is_enabled: true, is_restricted: false, category: "matchmaking" },
 			{ id: "ranks", name: "Rank Thresholds", path: "/dashboard/[guildId]/matchmaking/ranks", is_enabled: true, is_restricted: false, category: "matchmaking" },
 			{ id: "weights", name: "Stat Weighting", path: "/dashboard/[guildId]/matchmaking/weights", is_enabled: true, is_restricted: false, category: "matchmaking" },
 			{ id: "teams", name: "Team Generation", path: "/dashboard/[guildId]/matchmaking/team-formation", is_enabled: true, is_restricted: false, category: "matchmaking" },

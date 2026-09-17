@@ -7,16 +7,15 @@ export type PublicPlayer = {
   games: number
   streak: number
   avatar: string
-  avatarUrl: string
 }
 
 export const publicPlayers: PublicPlayer[] = [
-  { id: "wriggles", name: "WIGGLES", rank: "MASTER", elo: 1842, wins: 142, games: 196, streak: 8, avatar: "W", avatarUrl: "https://nmsr.nickac.dev/face/_Wiggels" },
-  { id: "prbw", name: "PRBW", rank: "DIAMOND", elo: 1716, wins: 118, games: 178, streak: 5, avatar: "P", avatarUrl: "https://nmsr.nickac.dev/face/PRBW" },
-  { id: "maven", name: "MAVEN", rank: "DIAMOND", elo: 1654, wins: 104, games: 164, streak: 3, avatar: "M", avatarUrl: "https://nmsr.nickac.dev/face/MAVEN" },
-  { id: "notch", name: "NOTCH", rank: "PLATINUM", elo: 1548, wins: 92, games: 157, streak: 2, avatar: "N", avatarUrl: "https://nmsr.nickac.dev/face/NOTCH" },
-  { id: "cobalt", name: "COBALT", rank: "PLATINUM", elo: 1490, wins: 87, games: 149, streak: 4, avatar: "C", avatarUrl: "https://nmsr.nickac.dev/face/COBALT" },
-  { id: "orbit", name: "ORBIT", rank: "GOLD", elo: 1362, wins: 70, games: 142, streak: 1, avatar: "O", avatarUrl: "https://nmsr.nickac.dev/face/ORBIT" },
+  { id: "wriggles", name: "WIGGLES", rank: "MASTER", elo: 1842, wins: 142, games: 196, streak: 8, avatar: "W" },
+  { id: "prbw", name: "PRBW", rank: "DIAMOND", elo: 1716, wins: 118, games: 178, streak: 5, avatar: "P" },
+  { id: "maven", name: "MAVEN", rank: "DIAMOND", elo: 1654, wins: 104, games: 164, streak: 3, avatar: "M" },
+  { id: "notch", name: "NOTCH", rank: "PLATINUM", elo: 1548, wins: 92, games: 157, streak: 2, avatar: "N" },
+  { id: "cobalt", name: "COBALT", rank: "PLATINUM", elo: 1490, wins: 87, games: 149, streak: 4, avatar: "C" },
+  { id: "orbit", name: "ORBIT", rank: "GOLD", elo: 1362, wins: 70, games: 142, streak: 1, avatar: "O" },
 ]
 
 export type PublicGame = { id: string; mode: string; map: string; winner: string; score: string; time: string }
