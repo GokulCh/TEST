@@ -9,10 +9,10 @@ const DEVELOPER_USER_ID = "716417561008275497";
 // Path to page ID mapping
 const PATH_TO_PAGE_ID: Record<string, string> = {
 	"/dashboard/[guildId]": "overview",
-	"/dashboard/[guildId]/infrastructure/commands": "commands",
+	"/dashboard/[guildId]/commands": "commands",
 	"/dashboard/[guildId]/matchmaking/queues": "queues",
-	"/dashboard/[guildId]/matchmaking/players": "players",
-	"/dashboard/[guildId]/matchmaking/matches": "matches",
+"/dashboard/[guildId]/players": "players",
+  "/dashboard/[guildId]/matches": "matches",
 	"/dashboard/[guildId]/matchmaking/ranks": "ranks",
 	"/dashboard/[guildId]/matchmaking/weights": "weights",
 	"/dashboard/[guildId]/matchmaking/team-formation": "teams",

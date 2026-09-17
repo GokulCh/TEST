@@ -59,10 +59,10 @@ import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 // Page ID mapping for access control
 const PATH_TO_PAGE_ID: Record<string, string> = {
 	"/dashboard/[guildId]": "overview",
-	"/dashboard/[guildId]/infrastructure/commands": "commands",
+	"/dashboard/[guildId]/commands": "commands",
 	"/dashboard/[guildId]/matchmaking/queues": "queues",
-	"/dashboard/[guildId]/matchmaking/players": "players",
-	"/dashboard/[guildId]/matchmaking/matches": "matches",
+"/dashboard/[guildId]/players": "players",
+		"/dashboard/[guildId]/matches": "matches",
 	"/dashboard/[guildId]/matchmaking/ranks": "ranks",
 	"/dashboard/[guildId]/matchmaking/weights": "weights",
 	"/dashboard/[guildId]/matchmaking/team-formation": "teams",
@@ -265,19 +265,19 @@ export function Sidebar() {
 			},
 			{
 				id: "players",
-				href: `${baseHref}/matchmaking/players`,
+				href: `${baseHref}/players`,
 				label: "Players",
 				icon: Users,
 			},
 			{
 				id: "games",
-				href: `${baseHref}/matchmaking/matches`,
+				href: `${baseHref}/matches`,
 				label: "Games",
 				icon: Swords,
 			},
 			{
 				id: "commands",
-				href: `${baseHref}/infrastructure/commands`,
+				href: `${baseHref}/commands`,
 				label: "Commands",
 				icon: Terminal,
 			},

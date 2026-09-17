@@ -6,15 +6,17 @@ import { useParams, usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 const navItems = [
+  { href: "", label: "Overview" },
   { href: "/players", label: "Players" },
-  { href: "/matches", label: "Matches" },
+  { href: "/matches", label: "Games" },
+  { href: "/commands", label: "Commands" },
   { href: "/matchmaking", label: "Matchmaking" },
-  { href: "/hosting", label: "Hosting" },
+  { href: "/infrastructure/hosting", label: "Hosting" },
   { href: "/moderation", label: "Moderation" },
-  { href: "/banner-builder", label: "Banner Builder" },
-  { href: "/bracket-builder", label: "Bracket Builder" },
+  { href: "/toolkits/banner-builder", label: "Banner Builder" },
+  { href: "/toolkits/bracket-builder", label: "Bracket Builder" },
   { href: "/simulators", label: "Simulators" },
-  { href: "/audit-logs", label: "Audit Logs" },
+  { href: "/networking/audit-logs", label: "Audit Logs" },
 ]
 
 export function MobileSidebar() {

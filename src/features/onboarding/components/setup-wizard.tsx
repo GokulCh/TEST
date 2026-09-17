@@ -371,14 +371,14 @@ export function SetupWizard() {
 				{/* ═══════════════ STEP 2: SERVER SELECT ══════════════��� */}
 				{step === "SERVER_SELECT" && (
 					<div className="w-full flex flex-col items-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-						<div className="max-w-3xl space-y-4">
-							<div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-primary-50 border border-primary-500/20 text-primary-500 text-[10px] font-mono font-bold uppercase tracking-widest select-none">
-								Select Workspace Node
+							<div className="w-full max-w-3xl space-y-4 text-center">
+								<div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-primary-50 border border-primary-500/20 text-primary-500 text-[10px] font-mono font-bold uppercase tracking-widest select-none">
+									Select Workspace Node
+								</div>
+								<h1 className="mx-auto max-w-2xl text-hero text-fg-default font-black tracking-tighter sm:text-5xl lg:text-6xl leading-none">
+									Select Server Node
+								</h1>
 							</div>
-							<h1 className="text-hero text-fg-default font-black tracking-tighter sm:text-5xl lg:text-6xl max-w-2xl leading-none">
-								Select Server Node
-							</h1>
-						</div>
 
 						{/* Search */}
 						<div className="w-full max-w-xl relative">
