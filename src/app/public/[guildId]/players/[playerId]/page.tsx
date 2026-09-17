@@ -3,11 +3,12 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, Flame, Swords, Trophy } from "lucide-react"
 import type { ComponentType } from "react"
 import { PublicCard } from "../../public-shell"
-import { publicPlayers } from "../../data"
+import { getGuildPlayers } from "../../player-data"
 
 export default async function PlayerPage({ params }: { params: Promise<{ guildId: string; playerId: string }> }) {
   const { guildId, playerId } = await params
-  const player = publicPlayers.find((entry) => entry.id === playerId)
+  const players = await getGuildPlayers(guildId)
+  const player = players.find((entry) => entry.slug === playerId)
 
   if (!player) notFound()
 

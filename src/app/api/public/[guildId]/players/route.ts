@@ -8,10 +8,16 @@ export async function GET(req: Request, { params }: Params) {
   const limit = Number(new URL(req.url).searchParams.get("limit") ?? "500")
 
   try {
-    const [configs, stats] = await Promise.all([
-      dbApi.players.listConfigByGuild(guildId, limit),
-      dbApi.players.listStatsByGuild(guildId, limit),
-    ])
+    const guild = await dbApi.guilds.getBySnowflake(guildId)
+    const lookupIds = [...new Set([String(guild.id), guildId])]
+    
+    const results = await Promise.all(lookupIds.map(async (lookupId) => Promise.allSettled([
+      dbApi.players.listConfigByGuild(lookupId, limit),
+      dbApi.players.listStatsByGuild(lookupId, limit),
+    ])))
+    
+    const configs = results.flatMap((result) => result[0].status === "fulfilled" ? result[0].value : [])
+    const stats = results.flatMap((result) => result[1].status === "fulfilled" ? result[1].value : [])
 
     return NextResponse.json({ data: { configs, stats } })
   } catch (error) {
