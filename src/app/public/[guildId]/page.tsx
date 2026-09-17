@@ -8,12 +8,10 @@ import {
 	Users,
 	Zap,
 	Activity,
-	Target,
 } from "lucide-react";
 import { PublicCard, SectionHeading } from "./public-shell";
-import { guildDisplayName } from "./data";
 import { getGuildPlayers } from "./player-data";
-import { getPublicStats, getPublicGames } from "./server-data";
+import { getPublicStats, getPublicGuildName } from "./server-data";
 
 export default async function PublicHome({
 	params,
@@ -22,10 +20,10 @@ export default async function PublicHome({
 }) {
 	const { guildId } = await params;
 	const base = `/public/${guildId}`;
-	const [publicPlayers, stats, publicGames] = await Promise.all([
+	const [publicPlayers, stats, guildName] = await Promise.all([
 		getGuildPlayers(guildId),
 		getPublicStats(guildId),
-		getPublicGames(guildId),
+		getPublicGuildName(guildId),
 	]);
 	const leaders = [...publicPlayers].sort((a, b) => b.elo - a.elo).slice(0, 3);
 	const podium = [
@@ -58,7 +56,7 @@ export default async function PublicHome({
 							<span className="text-cyan-300">Climb higher.</span>
 						</h1>
 						<p className="mt-7 max-w-xl text-lg leading-8 text-white/55">
-							{guildDisplayName(guildId)} is a competitive home for players who
+							{guildName} is a competitive home for players who
 							want fair matchmaking, clean stats, and games worth remembering.
 						</p>
 						<div className="mt-9 flex flex-wrap gap-3">
@@ -195,59 +193,6 @@ export default async function PublicHome({
 						</Link>
 					))}
 				</div>
-			</section>
-			<section className="mx-auto max-w-[95rem] px-5 pb-24 sm:px-8">
-				<PublicCard className="overflow-hidden p-6 sm:p-8">
-					<div className="mb-6 flex items-end justify-between">
-						<div>
-							<p className="font-mono text-[10px] tracking-[.2em] text-cyan-300">
-								MATCH ACTIVITY
-							</p>
-							<h2 className="mt-2 text-2xl font-black">Latest games</h2>
-						</div>
-						<Link
-							href={`${base}/games`}
-							className="text-xs font-bold text-cyan-300"
-						>
-							View all <ArrowRight className="ml-1 inline size-3" />
-						</Link>
-					</div>
-					<div className="divide-y divide-white/[0.07]">
-						{publicGames.length > 0 ? (
-							publicGames.slice(0, 4).map((game) => (
-								<div
-									key={game.id}
-									className="flex flex-wrap items-center justify-between gap-3 py-4"
-								>
-									<div className="flex items-center gap-3">
-										<span className="grid size-8 place-items-center rounded-lg bg-cyan-300/10 text-cyan-300">
-											<Target className="size-3.5" />
-										</span>
-										<div>
-											<span className="font-mono text-xs text-white/35">
-												{game.id}
-											</span>
-											<span className="ml-3 text-sm font-bold">
-												{game.winner}
-											</span>
-											<span className="ml-3 rounded bg-white/[0.06] px-2 py-1 font-mono text-[10px] text-white/45">
-												{game.map}
-											</span>
-										</div>
-									</div>
-									<div className="flex items-center gap-5 font-mono text-xs">
-										<span className="text-white/60">{game.score}</span>
-										<span className="text-white/30">{game.time}</span>
-									</div>
-								</div>
-							))
-						) : (
-							<div className="py-8 text-center font-mono text-xs text-white/35">
-								No games recorded yet.
-							</div>
-						)}
-					</div>
-				</PublicCard>
 			</section>
 			<section className="mx-auto grid max-w-[95rem] gap-4 px-5 pb-24 sm:px-8 md:grid-cols-2 lg:grid-cols-4">
 				{[

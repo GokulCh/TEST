@@ -1,11 +1,36 @@
 import { dbApi } from "@/lib/api-client"
+import { resolvePublicGuildId } from "@/lib/portal-domains"
 import type { PublicGame, PublicPlayer } from "./data"
-import { slugifyName } from "./data"
+import { slugifyName, guildDisplayName } from "./data"
+
+export async function getPublicGuildInfo(
+  guildId: string,
+): Promise<{ exists: boolean; name: string }> {
+  const resolved = await resolvePublicGuildId(guildId)
+  // The demo guild is a self-contained preview that isn't registered in the DB.
+  if (resolved === "demo") {
+    return { exists: true, name: guildDisplayName("demo") }
+  }
+  try {
+    const guild = await dbApi.guilds.getBySnowflake(resolved)
+    const name = guild.name?.trim()
+    return { exists: true, name: name || guildDisplayName(resolved) }
+  } catch (error) {
+    console.error("[public guild info]", error)
+    return { exists: false, name: guildDisplayName(resolved) }
+  }
+}
+
+export async function getPublicGuildName(guildId: string): Promise<string> {
+  const info = await getPublicGuildInfo(guildId)
+  return info.name
+}
 
 export async function getLivePublicData(guildId: string) {
+  const resolved = await resolvePublicGuildId(guildId)
   try {
-    const guild = await dbApi.guilds.getBySnowflake(guildId)
-    const lookupIds = [...new Set([String(guild.id), guildId])]
+    const guild = await dbApi.guilds.getBySnowflake(resolved)
+    const lookupIds = [...new Set([String(guild.id), resolved])]
     const results = await Promise.all(lookupIds.map(async (lookupId) => Promise.allSettled([
       dbApi.players.listConfigByGuild(lookupId),
       dbApi.players.listStatsByGuild(lookupId),
@@ -29,6 +54,10 @@ export async function getLivePublicData(guildId: string) {
           wins: stat?.wins ?? 0,
           games: stat?.games_played ?? 0,
           streak: stat?.win_streak ?? 0,
+          kills: 0,
+          deaths: 0,
+          bedsBroken: 0,
+          mvps: 0,
           avatar: name.charAt(0).toUpperCase(),
           avatarUrl: `https://nmsr.nickac.dev/face/${encodeURIComponent(name)}`,
         }
@@ -42,9 +71,10 @@ export async function getLivePublicData(guildId: string) {
 }
 
 export async function getPublicStats(guildId: string) {
+  const resolved = await resolvePublicGuildId(guildId)
   try {
-    const guild = await dbApi.guilds.getBySnowflake(guildId)
-    const lookupIds = [...new Set([String(guild.id), guildId])]
+    const guild = await dbApi.guilds.getBySnowflake(resolved)
+    const lookupIds = [...new Set([String(guild.id), resolved])]
     
     const results = await Promise.all(lookupIds.map(async (lookupId) => Promise.allSettled([
       dbApi.games.listActive(lookupId),
@@ -72,9 +102,10 @@ export async function getPublicStats(guildId: string) {
 }
 
 export async function getPublicGames(guildId: string): Promise<PublicGame[]> {
+  const resolved = await resolvePublicGuildId(guildId)
   try {
-    const guild = await dbApi.guilds.getBySnowflake(guildId)
-    const lookupIds = [...new Set([String(guild.id), guildId])]
+    const guild = await dbApi.guilds.getBySnowflake(resolved)
+    const lookupIds = [...new Set([String(guild.id), resolved])]
     
     const results = await Promise.all(lookupIds.map(async (lookupId) => 
       Promise.allSettled([dbApi.games.list(lookupId, 20, 0)])

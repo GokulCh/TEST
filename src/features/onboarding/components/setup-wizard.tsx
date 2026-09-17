@@ -21,6 +21,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PanelGuild } from "@/lib/db-types";
+import { PUBLIC_PORTAL_ROOT_DOMAIN } from "@/lib/config-public-url";
 
 type VisualStep =
 	| "DISCORD_CONNECT"
@@ -570,7 +571,7 @@ export function SetupWizard() {
 									className="flex-1 h-12 px-4 text-sm font-semibold text-fg-default bg-transparent focus:outline-none text-right placeholder-fg-muted/50"
 								/>
 								<div className="h-12 px-4 bg-muted border-l border-border-subtle flex items-center font-mono text-xs font-bold text-fg-muted select-none uppercase tracking-wider">
-									.myrbw.dev
+									.{PUBLIC_PORTAL_ROOT_DOMAIN}
 								</div>
 							</div>
 						</div>

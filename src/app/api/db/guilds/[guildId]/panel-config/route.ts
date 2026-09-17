@@ -12,6 +12,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/requireInternalAuth";
 import { dbApi } from "@/lib/api-client";
+import { PUBLIC_PORTAL_ROOT_DOMAIN } from "@/lib/config-public-url";
+import {
+  extractSubdomain,
+  isValidSubdomain,
+  isReservedSubdomain,
+} from "@/lib/portal-domain-utils";
+import { findPortalBySubdomain, invalidatePortalDomainsCache } from "@/lib/portal-domains";
 import type {
   PanelThemeConfig,
   LeaderboardDisplayConfig,
@@ -52,9 +59,38 @@ export async function PUT(req: NextRequest, { params }: Params) {
       case "leaderboards":
         await dbApi.panelConfig.saveLeaderboards(guildId, data as LeaderboardDisplayConfig[]);
         break;
-      case "domain":
-        await dbApi.panelConfig.setPublicDomain(guildId, data as string);
+      case "domain": {
+        // Always re-read from the DB so a freshly saved domain is seen by the
+        // next claim attempt.
+        invalidatePortalDomainsCache();
+        const raw = typeof data === "string" ? data.trim() : "";
+        if (!raw) {
+          await dbApi.panelConfig.setPublicDomain(guildId, "");
+          break;
+        }
+        const sub = extractSubdomain(raw);
+        if (!sub || !isValidSubdomain(sub)) {
+          return NextResponse.json(
+            { error: "Invalid subdomain. Use letters, numbers, and hyphens (no spaces)." },
+            { status: 400 },
+          );
+        }
+        if (isReservedSubdomain(sub)) {
+          return NextResponse.json(
+            { error: `"${sub}" is a reserved subdomain and cannot be claimed.` },
+            { status: 409 },
+          );
+        }
+        const owner = await findPortalBySubdomain(sub);
+        if (owner && String(owner.guildId) !== guildId) {
+          return NextResponse.json(
+            { error: `This subdomain is already registered to "${owner.name}". Pick a different one.` },
+            { status: 409 },
+          );
+        }
+        await dbApi.panelConfig.setPublicDomain(guildId, `${sub}.${PUBLIC_PORTAL_ROOT_DOMAIN}`);
         break;
+      }
       case "audit-settings":
         await dbApi.panelConfig.saveAuditSettings(guildId, data as PanelAuditSettings);
         break;

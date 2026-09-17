@@ -126,6 +126,8 @@ const del = <T>(path: string) => request<T>("DELETE", path);
 // ── Guild service ──────────────────────────────────────────────────────────────
 
 const guilds = {
+  listAll: () => get<GuildModel[]>(`/v1/guilds`),
+
   count: () => get<{ count: number }>(`/v1/guilds/count`),
 
   getBySnowflake: (snowflakeId: string) =>

@@ -131,39 +131,53 @@ export default function LeaderboardPage({
           />
         </div>
         <PublicCard className="overflow-hidden">
-          <div className="grid grid-cols-[3rem_1fr_5rem_5rem] gap-3 border-b border-white/[0.08] px-5 py-3 font-mono text-[10px] tracking-widest text-white/30">
-            <span>#</span>
-            <span>PLAYER</span>
-            <span>ELO</span>
-            <span>FORM</span>
-          </div>
-          {displayedPlayers.map((player, index) => (
-            <div
-              key={player.id}
-              className="grid grid-cols-[3rem_1fr_5rem_5rem] items-center gap-3 border-b border-white/[0.06] px-5 py-4 last:border-0"
-            >
-              <span className="font-mono text-sm font-bold text-white/35">
-                {(page - 1) * ITEMS_PER_PAGE + index + 1}
-              </span>
-              <div className="flex items-center gap-3">
-                <img
-                  src={`https://mc-heads.net/avatar/${player.name}/32`}
-                  alt={`${player.name} Minecraft avatar`}
-                  className="size-9 rounded-lg border border-cyan-300/20 bg-[#111923] object-cover"
-                />
-                <div>
-                  <p className="text-sm font-bold">{player.name}</p>
-                  <p className="font-mono text-[10px] text-white/35">
-                    {player.rank}
-                  </p>
-                </div>
-              </div>
-              <span className="text-sm font-black">{player.elo}</span>
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-300">
-                <TrendingUp className="size-3" /> {player.streak}
-              </span>
+          <div className="overflow-x-auto">
+            <div className="grid min-w-[62rem] grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_5rem_5rem_5rem] gap-3 border-b border-white/[0.08] px-5 py-3 font-mono text-[10px] tracking-widest text-white/30">
+              <span className="text-center">#</span>
+              <span>PLAYER</span>
+              <span className="text-center">ELO</span>
+              <span className="text-center">WINS</span>
+              <span className="text-center">KILLS</span>
+              <span className="text-center">DEATHS</span>
+              <span className="text-center">BEDS</span>
+              <span className="text-center">GAMES</span>
+              <span className="text-center">MVPS</span>
+              <span className="text-center">FORM</span>
             </div>
-          ))}
+            {displayedPlayers.map((player, index) => (
+              <div
+                key={player.id}
+                className="grid min-w-[62rem] grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_5rem_5rem_5rem] items-center gap-3 border-b border-white/[0.06] px-5 py-4 last:border-0"
+              >
+                <span className="text-center font-mono text-sm font-bold text-white/35">
+                  {(page - 1) * ITEMS_PER_PAGE + index + 1}
+                </span>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={`https://mc-heads.net/avatar/${player.name}/32`}
+                    alt={`${player.name} Minecraft avatar`}
+                    className="size-9 rounded-lg border border-cyan-300/20 bg-[#111923] object-cover"
+                  />
+                  <div>
+                    <p className="text-sm font-bold">{player.name}</p>
+                    <p className="font-mono text-[10px] text-white/35">
+                      {player.rank}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-center text-sm font-black">{player.elo}</span>
+                <span className="text-center text-sm font-semibold text-white/70">{player.wins}</span>
+                <span className="text-center text-sm font-semibold text-white/70">{player.kills}</span>
+                <span className="text-center text-sm font-semibold text-white/70">{player.deaths}</span>
+                <span className="text-center text-sm font-semibold text-white/70">{player.bedsBroken}</span>
+                <span className="text-center text-sm font-semibold text-white/70">{player.games}</span>
+                <span className="text-center text-sm font-semibold text-white/70">{player.mvps}</span>
+                <span className="flex items-center justify-center gap-1 text-xs font-bold text-emerald-300">
+                  <TrendingUp className="size-3" /> {player.streak}
+                </span>
+              </div>
+            ))}
+          </div>
           <div className="flex items-center justify-between border-t border-white/[0.08] px-5 py-4">
             <div className="flex items-center gap-2">
               <button
