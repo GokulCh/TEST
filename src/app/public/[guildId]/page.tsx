@@ -8,10 +8,12 @@ import { getPublicStats, getPublicGames } from "./server-data"
 export default async function PublicHome({ params }: { params: Promise<{ guildId: string }> }) {
   const { guildId } = await params
   const base = `/public/${guildId}`
-  const publicPlayers = await getGuildPlayers(guildId)
+  const [publicPlayers, stats, publicGames] = await Promise.all([
+    getGuildPlayers(guildId),
+    getPublicStats(guildId),
+    getPublicGames(guildId)
+  ])
   const leaders = [...publicPlayers].sort((a, b) => b.elo - a.elo).slice(0, 3)
-  const stats = await getPublicStats(guildId)
-  const publicGames = await getPublicGames(guildId)
   
   const publicStats = [
     ["ONLINE NOW", String(stats.activeGames)],
