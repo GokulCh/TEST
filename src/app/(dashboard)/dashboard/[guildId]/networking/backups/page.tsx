@@ -5,7 +5,7 @@ import { useState, useMemo } from "react";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 
 import { PageShell } from "@/components/panel/page-shell";
-import { Button } from "@/components/panel/form-parts";
+import { Button, InfoCard } from "@/components/panel/form-parts";
 export default function Page() {
 	const [isSaving, setIsSaving] = useState(false);
 	const [dailyBackups, setDailyBackups] = useState(true);
@@ -136,17 +136,11 @@ export default function Page() {
 				</div>
 
 				<div className="space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 h-fit text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Database className="size-4 text-cyan-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Redundancy Storage
-							</h3>
-						</div>
+					<InfoCard icon={<Database className="size-4 text-cyan-500" />} title="Redundancy Storage">
 						<p className="text-xs text-fg-muted leading-relaxed">
 							Snapshots are archived locally on bot nodes. You can sync them to AWS S3 storage layers inside settings overrides.
 						</p>
-					</div>
+					</InfoCard>
 				</div>
 			</div>
 		</PageShell>
