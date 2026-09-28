@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { AlertTriangle, Lock } from "lucide-react";
+import { Spinner } from "@/components/panel/form-parts";
 import { useDeveloperConfig } from "@/hooks/use-developer-config";
 import { useSession } from "@/hooks/use-session";
 import { pageAccess, pageIdForPathname, type PageAccess } from "@/lib/navigation";
@@ -35,20 +36,22 @@ export function PageAccessGuard({ children }: { children: React.ReactNode }) {
 
 	if (loading) {
 		return (
-			<div className="flex items-center justify-center h-64">
-				<div role="status" aria-label="Checking access" className="animate-spin size-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full" />
+			<div role="status" aria-label="Checking access" className="motion-fade flex h-64 items-center justify-center">
+				<Spinner className="size-6 text-primary-500" />
 			</div>
 		);
 	}
 
 	if (!access.allowed) {
 		return (
-			<div className="flex items-center justify-center h-64">
-				<div className="text-center space-y-4 max-w-md">
-					<Lock className="size-12 text-fg-muted mx-auto" />
+			<div className="motion-fade flex h-64 items-center justify-center">
+				<div className="max-w-md space-y-4 text-center">
+					<div className="mx-auto flex size-12 items-center justify-center rounded-full border border-border-subtle bg-panel-bg/60">
+						<Lock className="size-5 text-fg-muted" />
+					</div>
 					<div>
 						<h3 className="text-base font-semibold text-fg-default">Access restricted</h3>
-						<p className="font-mono text-xs text-fg-muted mt-2">{access.reason}</p>
+						<p className="mt-2 font-mono text-xs text-fg-muted">{access.reason}</p>
 					</div>
 					<div className="flex items-center justify-center gap-2 text-fg-muted/60">
 						<AlertTriangle className="size-4" />

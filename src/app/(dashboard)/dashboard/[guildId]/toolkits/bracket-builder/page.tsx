@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 
 import { PageShell } from "@/components/panel/page-shell";
+import { InfoCard } from "@/components/panel/form-parts";
 const DEFAULT_TOURNAMENT = {
 	type: "SINGLE_ELIMINATION",
 	slots: 0,
@@ -33,14 +34,7 @@ export default function Page() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* CONFIG */}
 				<div className="lg:col-span-2 space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 shadow-xs text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Sliders className="size-4 text-cyan-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Bracket Configurations
-							</h3>
-						</div>
-
+					<InfoCard icon={<Sliders className="size-4 text-cyan-500" />} title="Bracket Configurations">
 						<div className="space-y-4 font-mono text-xs">
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 								<div className="space-y-1.5">
@@ -94,22 +88,16 @@ export default function Page() {
 								</button>
 							</div>
 						</div>
-					</div>
+					</InfoCard>
 				</div>
 
 				{/* TEST DISPLAY */}
 				<div className="space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 h-fit text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Award className="size-4 text-amber-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Competitive Rules
-							</h3>
-						</div>
+					<InfoCard icon={<Award className="size-4 text-amber-500" />} title="Competitive Rules">
 						<p className="text-xs text-fg-muted leading-relaxed">
 							Brackets deploy instantly as graphical messages in Discord channels. Users click match nodes to join regional game servers.
 						</p>
-					</div>
+					</InfoCard>
 				</div>
 			</div>
 		</PageShell>

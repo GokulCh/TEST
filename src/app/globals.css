@@ -164,6 +164,28 @@ html.dark {
 }
 
 /* ==========================================================================
+   2b. PUBLIC PORTAL PALETTE (fixed, game-branded dark theme)
+   The public guild site is a distinct visitor-facing surface from the
+   dashboard/marketing/setup token system above — it is always dark and does
+   not follow the guild's dashboard theme preset (that preset lives only in
+   the admin's browser localStorage, not on the guild, so there is nothing to
+   read here). These tokens exist so its color usage is centralized and
+   consistent rather than scattered raw Tailwind literals per file.
+   ========================================================================== */
+:root {
+	--public-bg: #070a0f;
+	--public-bg-deep: #05080c;
+	--public-fg: #ffffff;
+	--public-border: rgb(255 255 255 / 0.09);
+	--public-border-soft: rgb(255 255 255 / 0.08);
+	--public-surface: rgb(255 255 255 / 0.025);
+	--public-accent: oklch(0.79 0.15 200); /* cyan */
+	--public-accent-strong: oklch(0.72 0.17 200);
+	--public-accent-ink: #071016;
+	--public-highlight: oklch(0.83 0.14 80); /* amber */
+}
+
+/* ==========================================================================
    3. GLOBAL BASE LAYER STANDARDIZATIONS
    ========================================================================== */
 @layer base {
@@ -386,15 +408,6 @@ html.dark {
 	}
 
 	/* --- Production Page Structural Micro Layout Shorthands --- */
-	.page-layout-wrapper {
-		max-width: 80rem; /* 1280px master desktop constraint grid */
-		margin-left: auto;
-		margin-right: auto;
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-
 		.flex-center {
 			display: flex;
 			align-items: center;

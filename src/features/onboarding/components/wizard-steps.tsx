@@ -4,7 +4,7 @@
 
 import type { ReactNode } from "react";
 import {
-	AlertCircle, ArrowLeft, ArrowRight, Bot, CheckCircle2, ExternalLink, Globe, Loader2, MessageSquareCode, Paintbrush, PlusCircle,
+	AlertCircle, ArrowLeft, ArrowRight, Bot, CheckCircle2, ExternalLink, Globe, MessageSquareCode, Paintbrush, PlusCircle,
 	RefreshCw, Search, ShieldCheck, Sliders, Sparkles,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/panel/page-shell";
@@ -20,6 +20,70 @@ const heroTitle = "text-hero text-fg-default text-center font-bold tracking-tigh
 function Badge({ children, tone = "primary" }: { children: ReactNode; tone?: "primary" | "success" }) {
 	const cls = tone === "success" ? "bg-success/10 border-success/20 text-success" : "bg-primary-50 border-primary-500/20 text-primary-500 select-none";
 	return <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-medium ${cls}`}>{children}</div>;
+}
+
+/** The wizard's full step order, for the persistent progress track. */
+export const WIZARD_STEPS = [
+	{ id: "DISCORD_CONNECT", label: "Sign in" },
+	{ id: "SERVER_SELECT", label: "Server" },
+	{ id: "PROVISION_DOMAIN", label: "Domain" },
+	{ id: "THEME_SELECT", label: "Theme" },
+	{ id: "BOT_INVITE", label: "Invite bot" },
+	{ id: "SUCCESS_MOCK", label: "Done" },
+] as const;
+
+/** Numbered track across the whole flow; each per-step screen still shows its own finer-grained badge underneath. */
+export function StepProgress({ current }: { current: (typeof WIZARD_STEPS)[number]["id"] }) {
+    const activeIndex = WIZARD_STEPS.findIndex((s) => s.id === current);
+    const progressPercent = activeIndex / (WIZARD_STEPS.length - 1);
+
+    return (
+        <div className="relative mx-auto w-full max-w-2xl px-3" aria-label="Setup progress">
+            {/* Track Background Line */}
+            <div className="absolute top-3 left-[8.33%] right-[8.33%] h-px bg-border-subtle" />
+
+            {/* Active Track Progress Line */}
+            <div
+                className="absolute top-3 left-[8.33%] h-px bg-primary-500 transition-all duration-300"
+                style={{ width: `calc(83.34% * ${progressPercent})` }}
+            />
+
+            {/* Step Nodes */}
+            <ol className="relative z-10 grid grid-cols-6 text-center">
+                {WIZARD_STEPS.map((s, i) => {
+                    const done = i < activeIndex;
+                    const active = i === activeIndex;
+
+                    return (
+                        <li key={s.id} className="flex flex-col items-center">
+                            {/* Circle Indicator */}
+                            <span
+                                aria-current={active ? "step" : undefined}
+                                className={`flex size-6 items-center justify-center rounded-full border text-[11px] font-semibold leading-none transition-colors duration-200 ${
+                                    done
+                                        ? "border-primary-500 bg-primary-500 text-white"
+                                        : active
+                                            ? "border-primary-500 bg-bg-canvas text-primary-500"
+                                            : "border-border-subtle bg-bg-canvas text-fg-muted"
+                                }`}
+                            >
+                                {done ? <CheckCircle2 className="size-3.5" /> : <span>{i + 1}</span>}
+                            </span>
+
+                            {/* Label */}
+                            <span
+                                className={`mt-1.5 hidden text-center text-[11px] font-medium sm:block ${
+                                    active ? "text-fg-default" : "text-fg-muted"
+                                }`}
+                            >
+                                {s.label}
+                            </span>
+                        </li>
+                    );
+                })}
+            </ol>
+        </div>
+    );
 }
 
 function BackButton({ onClick, children = "Back" }: { onClick: () => void; children?: ReactNode }) {
@@ -106,116 +170,125 @@ function GuildTile({ guild, onClick, tone, fallback, caption }: { guild: PanelGu
 const emptyNote = "text-xs text-fg-muted border border-dashed border-border-subtle/60 rounded-lg p-4";
 
 export function ServerSelectStep({
-	configured,
-	unconfigured,
-	pendingCount,
-	loading,
-	error,
-	query,
-	onQuery,
-	onReload,
-	onOpen,
-	onNew,
-	onShowMore,
-	onBack,
+    configured,
+    unconfigured,
+    pendingCount,
+    loading,
+    error,
+    query,
+    onQuery,
+    onReload,
+    onOpen,
+    onNew,
+    onShowMore,
+    onBack,
 }: {
-	configured: PanelGuild[];
-	/** Already limited to what is visible. */
-	unconfigured: PanelGuild[];
-	pendingCount: number;
-	loading: boolean;
-	error: string | null;
-	query: string;
-	onQuery: (q: string) => void;
-	onReload: () => void;
-	onOpen: (g: PanelGuild) => void;
-	onNew: (g: PanelGuild) => void;
-	onShowMore: () => void;
-	onBack: () => void;
+    configured: PanelGuild[];
+    /** Already limited to what is visible. */
+    unconfigured: PanelGuild[];
+    pendingCount: number;
+    loading: boolean;
+    error: string | null;
+    query: string;
+    onQuery: (q: string) => void;
+    onReload: () => void;
+    onOpen: (g: PanelGuild) => void;
+    onNew: (g: PanelGuild) => void;
+    onShowMore: () => void;
+    onBack: () => void;
 }) {
-	return (
-		<div className={`w-full flex flex-col items-center space-y-8 ${enter}`}>
-			<div className="max-w-3xl space-y-4">
-				<Badge>Your servers</Badge>
-				<h1 className={`${heroTitle} sm:text-5xl lg:text-6xl max-w-2xl`}>Choose a server</h1>
-			</div>
+    return (
+        <div className={`w-full flex flex-col items-center space-y-8 ${enter}`}>
+            {/* Header Section */}
+            <div className="w-full max-w-7xl flex flex-col items-center space-y-4 text-center">
+                <Badge>Your servers</Badge>
+                <h1 className={`${heroTitle} sm:text-5xl lg:text-6xl`}>Choose a server</h1>
+            </div>
 
-			<div className="w-full max-w-xl relative">
-				<div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-fg-muted/70">
-					<Search className="size-4" />
-				</div>
-				<input
-					type="text"
-					value={query}
-					onChange={(e) => onQuery(e.target.value)}
-					placeholder="Search indexing nodes..."
-					className="w-full h-12 pl-11 pr-4 bg-panel-bg/40 backdrop-blur-md border border-border-subtle rounded-control font-medium text-sm text-fg-default placeholder-fg-muted focus:outline-none focus:border-primary-500/50 transition-colors"
-				/>
-				<Button variant="secondary" onClick={onReload} title="Refresh guild list">
-					<RefreshCw className={`size-4 ${loading ? "animate-spin text-primary-500" : ""}`} />
-				</Button>
-			</div>
+            {/* Search Bar + Resync Button Controls Bar */}
+            <div className="w-full max-w-xl flex items-center gap-3">
+                <div className="relative flex-1">
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-fg-muted/70">
+                        <Search className="size-4" />
+                    </div>
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={(e) => onQuery(e.target.value)}
+                        placeholder="Search indexing nodes..."
+                        className="w-full h-12 pl-11 pr-4 bg-panel-bg/40 backdrop-blur-md border border-border-subtle rounded-control font-medium text-sm text-fg-default placeholder-fg-muted focus:outline-none focus:border-primary-500/50 transition-colors"
+                    />
+                </div>
+                <Button
+                    variant="secondary"
+                    onClick={onReload}
+                    title="Refresh guild list"
+                    className="size-12 p-0 flex items-center justify-center shrink-0 rounded-control"
+                >
+                    <RefreshCw className={`size-4 ${loading ? "animate-spin text-primary-500" : ""}`} />
+                </Button>
+            </div>
 
-			{error && (
-				<div className="w-full max-w-xl flex items-center gap-3 p-4 rounded-xl border border-danger/30 bg-danger/10 text-danger">
-					<AlertCircle className="size-4 shrink-0" />
-					<p className="font-mono text-xs">{error}</p>
-					<Button variant="secondary" className="ml-auto" onClick={onReload}>Retry</Button>
-				</div>
-			)}
+            {error && (
+                <div className="w-full max-w-xl flex items-center gap-3 p-4 rounded-xl border border-danger/30 bg-danger/10 text-danger">
+                    <AlertCircle className="size-4 shrink-0" />
+                    <p className="font-mono text-xs">{error}</p>
+                    <Button variant="secondary" className="ml-auto" onClick={onReload}>Retry</Button>
+                </div>
+            )}
 
-			{loading && (
-				<div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-4">
-					{Array.from({ length: 4 }).map((_, i) => (
-						<div key={i} className="h-24 rounded-xl border border-border-subtle/40 bg-panel-bg/20 animate-pulse" />
-					))}
-				</div>
-			)}
+            {loading && (
+                <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="h-24 rounded-xl border border-border-subtle/40 bg-panel-bg/20 animate-pulse" />
+                    ))}
+                </div>
+            )}
 
-			{!loading && (
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl pt-2 text-left items-start">
-					<div className="space-y-4">
-						<div className="flex items-center gap-2 px-1">
-							<Sliders className="size-3.5 text-primary-500" />
-							<h2 className="text-[13px] font-semibold text-fg-default">Configured Workspaces</h2>
-							<span className="text-xs px-1.5 py-0.5 rounded bg-panel-bg/80 border border-border-subtle text-fg-muted">{configured.length} Active</span>
-						</div>
-						<div className="space-y-3 max-h-[26rem] overflow-y-auto pr-1 select-none">
-							{configured.length === 0 && <p className={emptyNote}>No configured workspaces yet.</p>}
-							{configured.map((g) => (
-								<GuildTile key={g.id} guild={g} tone="success" onClick={() => onOpen(g)} fallback={<ShieldCheck className="h-5 w-5" />} caption={`${g.owner ? "Server Owner" : "Admin"} · Click to open dashboard`} />
-							))}
-						</div>
-					</div>
+            {!loading && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl pt-2 text-left items-start">
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2 px-1">
+                            <Sliders className="size-3.5 text-primary-500" />
+                            <h2 className="text-[13px] font-semibold text-fg-default">Configured Workspaces</h2>
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-panel-bg/80 border border-border-subtle text-fg-muted">{configured.length} Active</span>
+                        </div>
+                        <div className="space-y-3 max-h-[26rem] overflow-y-auto pr-1 select-none">
+                            {configured.length === 0 && <p className={emptyNote}>No configured workspaces yet.</p>}
+                            {configured.map((g) => (
+                                <GuildTile key={g.id} guild={g} tone="success" onClick={() => onOpen(g)} fallback={<ShieldCheck className="h-5 w-5" />} caption={`${g.owner ? "Server Owner" : "Admin"} · Click to open dashboard`} />
+                            ))}
+                        </div>
+                    </div>
 
-					<div className="space-y-4">
-						<div className="flex items-center gap-2 px-1">
-							<PlusCircle className="size-3.5 text-fg-muted" />
-							<h2 className="text-xs font-medium text-fg-muted">Available Guilds</h2>
-							<span className="text-xs px-1.5 py-0.5 rounded bg-panel-bg/40 border border-border-subtle/40 text-fg-muted/60">{pendingCount} Pending</span>
-						</div>
-						<div className="space-y-3 max-h-[26rem] overflow-y-auto pr-1 select-none">
-							{unconfigured.length === 0 && <p className={emptyNote}>All your servers are already configured.</p>}
-							{unconfigured.map((g) => (
-								<GuildTile key={g.id} guild={g} tone="primary" onClick={() => onNew(g)} fallback={<Sparkles className="h-5 w-5" />} caption="Unconfigured. Click to deploy engine instance." />
-							))}
-							{pendingCount > unconfigured.length && (
-								<Button variant="secondary" className="w-full" onClick={onShowMore}>
-									Show more...
-								</Button>
-							)}
-						</div>
-					</div>
-				</div>
-			)}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2 px-1">
+                            <PlusCircle className="size-3.5 text-fg-muted" />
+                            <h2 className="text-xs font-medium text-fg-muted">Available Guilds</h2>
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-panel-bg/40 border border-border-subtle/40 text-fg-muted/60">{pendingCount} Pending</span>
+                        </div>
+                        <div className="space-y-3 max-h-[26rem] overflow-y-auto pr-1 select-none">
+                            {unconfigured.length === 0 && <p className={emptyNote}>All your servers are already configured.</p>}
+                            {unconfigured.map((g) => (
+                                <GuildTile key={g.id} guild={g} tone="primary" onClick={() => onNew(g)} fallback={<Sparkles className="h-5 w-5" />} caption="Unconfigured. Click to deploy engine instance." />
+                            ))}
+                            {pendingCount > unconfigured.length && (
+                                <Button variant="secondary" className="w-full" onClick={onShowMore}>
+                                    Show more...
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
-			<div className="pt-4 w-full max-w-7xl text-left">
-				<Button variant="secondary" onClick={onBack}>
-					<ArrowLeft className="size-4 mr-2" /> Back to Verification
-				</Button>
-			</div>
-		</div>
-	);
+            <div className="pt-4 w-full max-w-7xl text-left">
+                <Button variant="secondary" onClick={onBack}>
+                    <ArrowLeft className="size-4 mr-2" /> Back to Verification
+                </Button>
+            </div>
+        </div>
+    );
 }
 
 // ── 3. Domain ───────────────────────────────────────────────────────────────

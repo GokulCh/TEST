@@ -1,11 +1,11 @@
 "use client";
 
-import { FlaskConical, Info, Layers, PackageX, Plus, Ruler, Save, Timer, ToggleLeft, ToggleRight, Trash2 } from "lucide-react";
+import { FlaskConical, Info, Layers, PackageX, Ruler, Timer } from "lucide-react";
 import { useState } from "react";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 
 import { PageShell } from "@/components/panel/page-shell";
-import { Button } from "@/components/panel/form-parts";
+import { AddButton, DeleteButton, InfoCard, NoteCard, Panel, SectionBar, Toggle } from "@/components/panel/form-parts";
 interface PresetRecord {
 	id: number;
 	name: string;
@@ -73,27 +73,18 @@ export default function Page() {
 		<PageShell preview eyebrow="Sanctions" title="Game Presets" onSave={handleSaveChanges} dirty={isDirty}>
 
 			{/* ACTION BAR */}
-			<div className="flex justify-between items-center bg-panel-bg/10 p-4 border border-border-subtle rounded-xl">
-				<div>
-					<h3 className="text-[13px] font-semibold text-fg-default">
-						Game Presets
-					</h3>
-					<p className="text-xs text-fg-muted mt-0.5">
-						Game settings applied when matches start
-					</p>
-				</div>
-				<Button variant="dashed" size="sm"
-					onClick={handleAddPreset}>
-					<Plus className="size-3.5" /> Add Preset
-				</Button>
-			</div>
+			<SectionBar
+				title="Game Presets"
+				description="Game settings applied when matches start"
+				action={<AddButton onClick={handleAddPreset}>Add Preset</AddButton>}
+			/>
 
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				<div className="lg:col-span-2 space-y-4">
 					{presets.map((preset) => (
-						<div
+						<Panel
 							key={preset.id}
-							className="p-4 border border-border-subtle bg-panel-bg/20 rounded-xl space-y-4 shadow-xs motion-fade"
+							className="space-y-4 bg-panel-bg/20 p-4 motion-fade"
 						>
 							{/* PRESET HEADER */}
 							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border-subtle/20">
@@ -111,27 +102,8 @@ export default function Page() {
 									</div>
 								</div>
 								<div className="flex items-center gap-2 shrink-0">
-									<button
-										onClick={() => togglePreset(preset.id)}
-										className={`h-8 px-3 border rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
-											preset.enabled
-												? "bg-success/10 border-success/30 text-success"
-												: "bg-panel-bg border-border-subtle text-fg-muted"
-										}`}
-									>
-										{preset.enabled ? (
-											<ToggleRight className="size-4" />
-										) : (
-											<ToggleLeft className="size-4" />
-										)}
-										<span>{preset.enabled ? "Active" : "Disabled"}</span>
-									</button>
-									<button
-										onClick={() => handleDeletePreset(preset.id)}
-										className="size-8 flex items-center justify-center border border-border-subtle hover:bg-red-500/10 text-fg-muted hover:text-red-400 rounded-md transition-all cursor-pointer"
-									>
-										<Trash2 className="size-3.5" />
-									</button>
+									<Toggle size="sm" checked={preset.enabled} onChange={() => togglePreset(preset.id)} onLabel="Active" offLabel="Disabled" />
+									<DeleteButton onClick={() => handleDeletePreset(preset.id)} label="Delete preset" />
 								</div>
 							</div>
 
@@ -256,32 +228,20 @@ export default function Page() {
 									))}
 								</div>
 							</div>
-						</div>
+						</Panel>
 					))}
 				</div>
 
 				<div className="space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 h-fit">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Layers className="size-4 text-cyan-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								How Presets Work
-							</h3>
-						</div>
-						<p className="text-xs text-fg-muted leading-relaxed text-left">
+					<InfoCard icon={<Layers className="size-4 text-cyan-500" />} title="How Presets Work">
+						<p className="text-left text-xs leading-relaxed text-fg-muted">
 							Presets are applied when matches start and control game rules like build limits, item bans, and game phases.
 						</p>
-					</div>
+					</InfoCard>
 
-					<div className="p-4 border border-dashed border-border-subtle bg-panel-bg/5 rounded-xl space-y-2">
-						<div className="flex items-center gap-1.5 text-[13px] font-semibold text-fg-default">
-							<Info className="size-3.5 text-primary-500" />
-							<span>Enforcement Note</span>
-						</div>
-						<p className="text-xs text-fg-muted leading-normal text-left">
-							Player rules are managed separately. These presets only control game settings and competitive rules.
-						</p>
-					</div>
+					<NoteCard icon={<Info className="size-3.5 text-primary-500" />} title="Enforcement Note">
+						Player rules are managed separately. These presets only control game settings and competitive rules.
+					</NoteCard>
 				</div>
 			</div>
 		</PageShell>

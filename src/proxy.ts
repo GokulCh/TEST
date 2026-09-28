@@ -73,6 +73,15 @@ export async function proxy(req: NextRequest) {
     console.log(`[Proxy] Request: ${pathname}, Host: ${host}, Subdomain: ${sub}`);
   }
 
+  // Fast path for root route and public routes - no proxy processing needed
+  if (!sub && (pathname === "/" || pathname.startsWith("/reference") || pathname.startsWith("/setup"))) {
+    const response = NextResponse.next();
+    response.headers.set('X-Content-Type-Options', 'nosniff');
+    response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    return response;
+  }
+
   // Restrict API routes to api.myrbw.dev or localhost for development
   const isApiRoute = pathname.startsWith("/api/v1");
   const isAllowedDomain = 

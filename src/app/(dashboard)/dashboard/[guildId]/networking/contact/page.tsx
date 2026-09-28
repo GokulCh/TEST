@@ -3,6 +3,7 @@
 import { Mail, MessageCircle, Info } from "lucide-react";
 
 import { PageShell } from "@/components/panel/page-shell";
+import { InfoCard } from "@/components/panel/form-parts";
 export default function Page() {
 	return (
 		<PageShell eyebrow="Networking" title="Contact">
@@ -10,14 +11,7 @@ export default function Page() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* CONTACT INFO */}
 				<div className="lg:col-span-2 space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 shadow-xs text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<MessageCircle className="size-4 text-primary-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Developer Contact Information
-							</h3>
-						</div>
-
+					<InfoCard icon={<MessageCircle className="size-4 text-primary-500" />} title="Developer Contact Information">
 						<div className="space-y-4">
 							<div className="p-4 border border-primary-500/20 bg-primary-500/5 rounded-xl space-y-3">
 								<div className="flex items-center gap-3">
@@ -52,17 +46,11 @@ export default function Page() {
 								</p>
 							</div>
 						</div>
-					</div>
+					</InfoCard>
 				</div>
 
 				<div className="space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 h-fit text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Mail className="size-4 text-amber-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Best Practices
-							</h3>
-						</div>
+					<InfoCard icon={<Mail className="size-4 text-amber-500" />} title="Best Practices">
 						<div className="space-y-3">
 							<div className="flex items-start gap-2">
 								<div className="size-1.5 rounded-full bg-success mt-1.5 shrink-0" />
@@ -83,7 +71,7 @@ export default function Page() {
 								</p>
 							</div>
 						</div>
-					</div>
+					</InfoCard>
 				</div>
 			</div>
 		</PageShell>

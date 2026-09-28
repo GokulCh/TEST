@@ -5,6 +5,7 @@ import { useState, useMemo } from "react";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 
 import { PageShell } from "@/components/panel/page-shell";
+import { InfoCard } from "@/components/panel/form-parts";
 export default function Page() {
 		const [streaks, setStreaks] = useState({
 		consecutiveMatches: 0,
@@ -32,14 +33,7 @@ export default function Page() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* CONFIG */}
 				<div className="lg:col-span-2 space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 shadow-xs text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<SlidersHorizontal className="size-4 text-primary-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Daily Streak Coefficients
-							</h3>
-						</div>
-
+					<InfoCard icon={<SlidersHorizontal className="size-4 text-primary-500" />} title="Daily Streak Coefficients">
 						<div className="space-y-4 font-mono text-xs">
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 								<div className="space-y-1.5">
@@ -80,21 +74,15 @@ export default function Page() {
 								/>
 							</div>
 						</div>
-					</div>
+					</InfoCard>
 				</div>
 
 				<div className="space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 h-fit text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Sparkles className="size-4 text-cyan-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Active Incentives
-							</h3>
-						</div>
+					<InfoCard icon={<Sparkles className="size-4 text-cyan-500" />} title="Active Incentives">
 						<p className="text-xs text-fg-muted leading-relaxed">
 							Daily streaks reset if a player does not queue or complete a match session during a rolling 24-hour buffer window.
 						</p>
-					</div>
+					</InfoCard>
 				</div>
 			</div>
 		</PageShell>

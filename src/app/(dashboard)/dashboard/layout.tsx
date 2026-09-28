@@ -1,4 +1,4 @@
-﻿import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { GuildContextBar } from "@/components/layout/guild-context-bar";
 import { MobileHeader } from "@/components/layout/mobile-header";
@@ -19,7 +19,6 @@ export default function DashboardLayout({
 					<Breadcrumbs />
 					<main className="motion-page flex-1 overflow-x-hidden bg-bg-canvas/80 px-4 pb-28 pt-6 sm:px-6 lg:px-8">{children}</main>
 				</div>
-				{/* <HelpDrawer /> */}
 			</div>
 		</DashboardShell>
 	);

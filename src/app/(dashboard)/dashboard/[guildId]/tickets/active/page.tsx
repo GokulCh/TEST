@@ -4,7 +4,7 @@ import { Ticket, UserCheck, Clock, AlertCircle, XCircle, Users } from "lucide-re
 import { useState } from "react";
 
 import { PageShell } from "@/components/panel/page-shell";
-import { Button } from "@/components/panel/form-parts";
+import { Button, InfoCard } from "@/components/panel/form-parts";
 export default function Page() {
 	const [activeCategory, setActiveCategory] = useState("ALL");
 
@@ -118,17 +118,11 @@ export default function Page() {
 				</div>
 
 				<div className="space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 h-fit">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<AlertCircle className="size-4 text-cyan-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Response Guidelines
-							</h3>
-						</div>
+					<InfoCard icon={<AlertCircle className="size-4 text-cyan-500" />} title="Response Guidelines">
 						<p className="text-xs text-fg-muted leading-relaxed text-left">
 							Open tickets should be claimed by moderators within 15 minutes. Critical tickets send automatic notifications to staff.
 						</p>
-					</div>
+					</InfoCard>
 				</div>
 			</div>
 		</PageShell>

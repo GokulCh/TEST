@@ -1,16 +1,16 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { Spinner } from "@/components/panel/form-parts";
 import { useGuilds } from "@/hooks/use-guilds";
 import { useSession } from "@/hooks/use-session";
 import { ApiRequestError, apiSend } from "@/lib/client/api";
 import { PUBLIC_PORTAL_ROOT_DOMAIN } from "@/lib/config-public-url";
 import type { PanelGuild } from "@/lib/db-types";
 import { navigateToDashboard } from "@/lib/routing-utils";
-import { ConnectStep, DomainStep, InviteStep, resolveTheme, ServerSelectStep, SuccessStep, ThemeStep, type ThemeChoice } from "./wizard-steps";
+import { ConnectStep, DomainStep, InviteStep, resolveTheme, ServerSelectStep, StepProgress, SuccessStep, ThemeStep, type ThemeChoice } from "./wizard-steps";
 
 type Step = "DISCORD_CONNECT" | "SERVER_SELECT" | "PROVISION_DOMAIN" | "THEME_SELECT" | "BOT_INVITE" | "SUCCESS_MOCK";
 
@@ -144,10 +144,14 @@ export function SetupWizard() {
 		<div className="relative w-full px-8 lg:px-16 py-12 lg:py-20 overflow-hidden">
 			{(transitioning || connecting) && (
 				<div className="fixed inset-0 bg-bg-canvas/60 backdrop-blur-md z-50 flex flex-col items-center justify-center space-y-4">
-					<Loader2 className="size-6 text-primary-500 animate-spin" />
+					<Spinner className="size-6 text-primary-500" />
 					<p className="text-xs text-fg-muted">{connecting ? "Connecting to Discord…" : "Loading…"}</p>
 				</div>
 			)}
+
+			<div className="mx-auto mb-10 w-full max-w-2xl">
+				<StepProgress current={step} />
+			</div>
 
 			<div key={step} className="motion-page mx-auto flex flex-col items-center space-y-8">
 				{step === "DISCORD_CONNECT" && <ConnectStep oauthError={oauthError} loading={connecting} onConnect={connect} />}

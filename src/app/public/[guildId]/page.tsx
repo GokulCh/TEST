@@ -106,7 +106,7 @@ export default async function PublicHome({
 						Explore the community
 					</p>
 				</div>
-				<div className="grid gap-4 md:grid-cols-3">
+				<div className="motion-stagger grid gap-4 md:grid-cols-3">
 					{[
 						[
 							"Players",
@@ -144,7 +144,7 @@ export default async function PublicHome({
 					))}
 				</div>
 			</section>
-			<section className="mx-auto grid max-w-[95rem] gap-4 px-5 pb-24 sm:px-8 md:grid-cols-2 lg:grid-cols-4">
+			<section className="motion-stagger mx-auto grid max-w-[95rem] gap-4 px-5 pb-24 sm:px-8 md:grid-cols-2 lg:grid-cols-4">
 				{[
 					[
 						"About",
