@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { PageBuilderEditor } from "@/components/public/page-builder-editor";
+import { PublicEditLauncher } from "@/components/public/public-edit-launcher";
 import {
 	ArrowRight,
 	ChevronRight,
@@ -14,10 +16,13 @@ import { getPublicStats, getPublicGuildName, getActiveSeason } from "./server-da
 
 export default async function PublicHome({
 	params,
+	searchParams,
 }: {
 	params: Promise<{ guildId: string }>;
+	searchParams: Promise<{ edit?: string }>;
 }) {
 	const { guildId } = await params;
+	const { edit } = await searchParams;
 	// Use relative paths for subdomain routing
 	const base = "";
 	const [publicPlayers, stats, guildName, activeSeason] = await Promise.all([
@@ -35,6 +40,12 @@ export default async function PublicHome({
 	] as [string, string][];
 	return (
 		<div>
+			{edit === "1" && (
+				<div className="fixed inset-0 z-40 overflow-auto bg-background/95 backdrop-blur-sm">
+					<PageBuilderEditor guildId={guildId} guildName={guildName} />
+				</div>
+			)}
+			{edit !== "1" && <PublicEditLauncher />}
 			<section className="relative overflow-hidden border-b border-white/[0.06]">
 				<div className="pointer-events-none absolute right-[8%] top-16 hidden size-56 rotate-12 rounded-[2rem] border border-cyan-300/10 lg:block" />
 				<div className="pointer-events-none absolute right-[11%] top-24 hidden size-56 rotate-12 rounded-[2rem] border border-cyan-300/10 lg:block" />
