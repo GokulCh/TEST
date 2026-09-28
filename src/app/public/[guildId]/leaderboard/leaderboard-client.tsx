@@ -3,7 +3,7 @@
 import { Crown, Search, TrendingUp, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import type { PublicPlayer, PublicRank } from "../data";
-import { PublicCard, SectionHeading } from "../public-shell";
+import { PublicCard, PublicSection, SectionHeading } from "../public-shell";
 import { ALL_RANKS, matchesRank, PublicSelect, rankOptions } from "../public-filters";
 
 export default function LeaderboardPage({
@@ -75,7 +75,7 @@ export default function LeaderboardPage({
   }, []);
 
   return (
-    <main className="mx-auto max-w-[95rem] px-5 py-16 sm:px-8 sm:py-24">
+    <PublicSection>
       <SectionHeading
         eyebrow={`${season} rankings`}
         title="The climb starts here."
@@ -247,6 +247,6 @@ export default function LeaderboardPage({
           </div>
         </PublicCard>
       </div>
-    </main>
+    </PublicSection>
   );
 }

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 import { PunishmentsSection } from "@/features/moderation/components/punishments-section"
 import { StrikesSection } from "@/features/moderation/components/strikes-section"
 

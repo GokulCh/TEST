@@ -4,7 +4,7 @@
 
 import type { ReactNode } from "react";
 import {
-	AlertCircle, ArrowLeft, ArrowRight, Bot, CheckCircle2, ExternalLink, Globe, Loader2, MessageSquareCode, Paintbrush, PlusCircle,
+	AlertCircle, ArrowLeft, ArrowRight, Bot, CheckCircle2, ExternalLink, Globe, MessageSquareCode, Paintbrush, PlusCircle,
 	RefreshCw, Search, ShieldCheck, Sliders, Sparkles,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/panel/page-shell";
@@ -20,6 +20,51 @@ const heroTitle = "text-hero text-fg-default text-center font-bold tracking-tigh
 function Badge({ children, tone = "primary" }: { children: ReactNode; tone?: "primary" | "success" }) {
 	const cls = tone === "success" ? "bg-success/10 border-success/20 text-success" : "bg-primary-50 border-primary-500/20 text-primary-500 select-none";
 	return <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-medium ${cls}`}>{children}</div>;
+}
+
+/** The wizard's full step order, for the persistent progress track. */
+export const WIZARD_STEPS = [
+	{ id: "DISCORD_CONNECT", label: "Sign in" },
+	{ id: "SERVER_SELECT", label: "Server" },
+	{ id: "PROVISION_DOMAIN", label: "Domain" },
+	{ id: "THEME_SELECT", label: "Theme" },
+	{ id: "BOT_INVITE", label: "Invite bot" },
+	{ id: "SUCCESS_MOCK", label: "Done" },
+] as const;
+
+/** Numbered track across the whole flow; each per-step screen still shows its own finer-grained badge underneath. */
+export function StepProgress({ current }: { current: (typeof WIZARD_STEPS)[number]["id"] }) {
+	const activeIndex = WIZARD_STEPS.findIndex((s) => s.id === current);
+	return (
+		<ol className="mx-auto flex w-full max-w-2xl items-start" aria-label="Setup progress">
+			{WIZARD_STEPS.map((s, i) => {
+				const done = i < activeIndex;
+				const active = i === activeIndex;
+				return (
+					<li key={s.id} className="flex flex-1 flex-col items-center last:flex-none">
+						<div className="flex w-full items-center">
+							<span
+								aria-current={active ? "step" : undefined}
+								className={`grid size-6 shrink-0 place-items-center rounded-full border text-[11px] font-semibold transition-colors duration-200 ${
+									done
+										? "border-primary-500 bg-primary-500 text-white"
+										: active
+											? "border-primary-500 bg-primary-50 text-primary-500"
+											: "border-border-subtle bg-panel-bg/40 text-fg-muted"
+								}`}
+							>
+								{done ? <CheckCircle2 className="size-3.5" /> : i + 1}
+							</span>
+							{i < WIZARD_STEPS.length - 1 && (
+								<span className={`h-px flex-1 transition-colors duration-200 ${done ? "bg-primary-500" : "bg-border-subtle"}`} />
+							)}
+						</div>
+						<span className={`mt-1.5 hidden text-[11px] font-medium sm:block ${active ? "text-fg-default" : "text-fg-muted"}`}>{s.label}</span>
+					</li>
+				);
+			})}
+		</ol>
+	);
 }
 
 function BackButton({ onClick, children = "Back" }: { onClick: () => void; children?: ReactNode }) {

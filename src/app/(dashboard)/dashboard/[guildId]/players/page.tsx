@@ -1,7 +1,8 @@
 "use client";
 
-import { ArrowUpDown, Award, Calendar, Clock, Eye, Filter, GitCompare, Loader2, Search, ShieldCheck } from "lucide-react";
+import { ArrowUpDown, Award, Calendar, Clock, Eye, Filter, GitCompare, Search, ShieldCheck } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Spinner } from "@/components/panel/form-parts";
 import { CompareToggle, LoadingBlock, RefreshButton } from "@/components/panel/data-table";
 import { useGuildData } from "@/hooks/use-guild-data";
 import OptionDropdown from "@/components/ui/OptionDropdown";
@@ -161,7 +162,7 @@ export default function Page() {
 
 			{loading && (
 				<div className="flex items-center justify-center py-16">
-					<Loader2 className="size-6 animate-spin text-primary-500" />
+					<Spinner className="size-6 text-primary-500" />
 				</div>
 			)}
 

@@ -41,6 +41,40 @@ export function PageSkeleton() {
 	);
 }
 
+/** Placeholder shaped like a table page (header, a toolbar, table rows) for routes whose content is a `DataTable`. */
+export function TablePageSkeleton({ rows = 8 }: { rows?: number }) {
+	return (
+		<div className="mx-auto w-full max-w-7xl space-y-6" aria-busy="true" aria-label="Loading">
+			<div className="flex items-end justify-between gap-4 border-b border-border-subtle pb-5">
+				<div className="space-y-2.5">
+					<Skeleton className="h-3 w-40" />
+					<Skeleton className="h-7 w-64" />
+				</div>
+				<Skeleton className="h-9 w-32" />
+			</div>
+			<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+				<Skeleton className="h-10 flex-1 rounded-xl" />
+				<Skeleton className="h-9 w-28 shrink-0 rounded-lg" />
+			</div>
+			<div className="overflow-hidden rounded-xl border border-border-subtle bg-panel-bg/40">
+				<div className="border-b border-border-subtle bg-bg-canvas/40 p-4">
+					<Skeleton className="h-3 w-1/3" />
+				</div>
+				<div className="divide-y divide-border-subtle/40">
+					{Array.from({ length: rows }, (_, i) => (
+						<div key={i} className="flex items-center gap-6 px-4 py-3.5">
+							<Skeleton className="h-3 w-16" />
+							<Skeleton className="h-3 flex-1" />
+							<Skeleton className="hidden h-3 w-24 sm:block" />
+							<Skeleton className="h-3 w-12" />
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	);
+}
+
 /** The bits of a `useSectionForm` result the shell needs; pass the whole form as `form`. */
 interface ShellForm {
 	submit: () => Promise<unknown>;

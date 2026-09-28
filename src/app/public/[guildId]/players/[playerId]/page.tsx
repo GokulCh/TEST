@@ -2,7 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, Flame, Swords, Trophy } from "@/components/shared/icons"
 import type { ComponentType } from "react"
-import { PublicCard } from "../../public-shell"
+import { PublicCard, PublicSection } from "../../public-shell"
 import { getGuildPlayers } from "../../player-data"
 import { getActiveSeason } from "../../server-data"
 
@@ -20,7 +20,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ guildId
     ["Streak", `${player.streak}W`, Flame],
   ]
 
-  return <div className="mx-auto max-w-[95rem] px-5 py-16 sm:px-8 sm:py-24">
+  return <PublicSection>
     <Link href="/players" className="mb-10 inline-flex items-center gap-2 text-xs font-bold text-white/45 transition-colors hover:text-cyan-300"><ArrowLeft className="size-3.5" /> Back to players</Link>
     <PublicCard className="overflow-hidden">
       <div className="h-32 bg-gradient-to-r from-cyan-400/25 via-violet-400/15 to-transparent" />
@@ -32,5 +32,5 @@ export default async function PlayerPage({ params }: { params: Promise<{ guildId
         <div className="mt-10 grid gap-3 sm:grid-cols-4">{stats.map(([label, value, Icon]) => <div key={label} className="rounded-xl bg-black/20 p-4"><Icon className="size-4 text-cyan-300" /><p className="mt-4 text-xs text-white/35">{label}</p><p className="mt-1 text-xl font-bold">{value}</p></div>)}</div>
       </div>
     </PublicCard>
-  </div>
+  </PublicSection>
 }

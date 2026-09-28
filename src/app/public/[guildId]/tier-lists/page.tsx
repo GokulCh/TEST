@@ -5,7 +5,7 @@ import { ArrowLeft, Clipboard, Download, Palette, Plus, RotateCcw, Search, Trash
 import { toBlob } from "html-to-image"
 import useSWR from "swr"
 import { use, useMemo, useRef, useState } from "react"
-import { PublicCard, SectionHeading } from "../public-shell"
+import { PublicCard, PublicSection, SectionHeading } from "../public-shell"
 
 type PoolPlayer = { id: string; name: string }
 type Tier = { id: string; label: string; color: string; players: string[] }
@@ -148,7 +148,7 @@ export default function TierListsPage({ params }: { params: Promise<{ guildId: s
   }
 
   return (
-    <main className="mx-auto max-w-[95rem] px-5 py-16 sm:px-8 sm:py-24">
+    <PublicSection>
       <Link href="/" className="mb-10 inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-white/55 hover:border-cyan-300/30 hover:text-cyan-200">
         <ArrowLeft className="size-3.5" /> Community hub
       </Link>
@@ -245,6 +245,6 @@ export default function TierListsPage({ params }: { params: Promise<{ guildId: s
           )}
         </div>
       </PublicCard>
-    </main>
+    </PublicSection>
   )
 }

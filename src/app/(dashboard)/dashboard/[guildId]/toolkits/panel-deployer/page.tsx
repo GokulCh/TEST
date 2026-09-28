@@ -7,7 +7,7 @@ import { useGuildSnapshot } from "@/hooks/useGuildSnapshot";
 import ChannelDropdown from "@/components/ui/ChannelDropdown";
 
 import { PageShell } from "@/components/panel/page-shell";
-import { Button } from "@/components/panel/form-parts";
+import { Button, InfoCard } from "@/components/panel/form-parts";
 type ActionType =
 	| "ticket_create"
 	| "assign_role"
@@ -176,14 +176,7 @@ export default function Page() {
 					</div>
 
 					{active && (
-						<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 shadow-xs text-left">
-							<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-								<FileCode className="size-4 text-primary-500" />
-								<h3 className="text-sm font-semibold text-fg-default">
-									Editor — {active.name}
-								</h3>
-							</div>
-
+						<InfoCard icon={<FileCode className="size-4 text-primary-500" />} title={`Editor — ${active.name}`}>
 							<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
 								<div className="space-y-1">
 									<label className="block text-xs font-medium text-fg-muted">
@@ -424,23 +417,17 @@ export default function Page() {
 									/>
 								</div>
 							</div>
-						</div>
+						</InfoCard>
 					)}
 				</div>
 
 				<div className="space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 h-fit text-left">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Send className="size-4 text-cyan-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Channel Dispatcher
-							</h3>
-						</div>
+					<InfoCard icon={<Send className="size-4 text-cyan-500" />} title="Channel Dispatcher">
 						<p className="text-xs text-fg-muted leading-relaxed">
 							Deploying writes deployed_channel_id and deployed_message_id so the bot
 							can refresh the panel in place on config changes.
 						</p>
-					</div>
+					</InfoCard>
 
 					<div className="p-4 border border-dashed border-border-subtle bg-panel-bg/5 rounded-xl space-y-2 text-left">
 						<div className="flex items-center gap-1.5 text-[13px] font-semibold text-fg-default">

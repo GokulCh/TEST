@@ -9,6 +9,7 @@
 
 import { createContext, useContext, useId, type ComponentProps, type ReactNode } from "react";
 import { AlertCircle, Loader2, Plus, Trash2 } from "lucide-react";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { cn } from "@/lib/utils";
 
 /* ── Buttons & badges ───────────────────────────────────────────────────── */
@@ -349,6 +350,37 @@ export function EmptyState({ children, icon }: { children: ReactNode; icon?: Rea
 /** Shimmering placeholder block; size it with className. */
 export function Skeleton({ className }: { className?: string }) {
 	return <div aria-hidden className={cn("skeleton rounded-lg", className)} />;
+}
+
+/* ── Feedback ───────────────────────────────────────────────────────────── */
+
+/** Inline spinner; size and colour follow `className` (defaults to a muted 16px glyph). */
+export function Spinner({ className }: { className?: string }) {
+	return <Loader2 aria-hidden className={cn("size-4 animate-spin text-fg-muted", className)} />;
+}
+
+/** Mounts once at the app root so any `Tooltip` below it can open. */
+export const TooltipProvider = TooltipPrimitive.Provider;
+
+/** Hover/focus label for an icon button or truncated value. Wraps a single focusable child. */
+export function Tooltip({ content, children, side = "top", delayDuration = 200 }: { content: ReactNode; children: ReactNode; side?: "top" | "right" | "bottom" | "left"; delayDuration?: number }) {
+	if (!content) return <>{children}</>;
+	return (
+		<TooltipPrimitive.Root delayDuration={delayDuration}>
+			<TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
+			<TooltipPrimitive.Portal>
+				<TooltipPrimitive.Content
+					side={side}
+					sideOffset={6}
+					collisionPadding={8}
+					className="motion-pop z-[1060] rounded-lg border border-border-subtle bg-panel-bg px-2.5 py-1.5 text-xs font-medium text-fg-default shadow-xl shadow-black/20"
+				>
+					{content}
+					<TooltipPrimitive.Arrow className="fill-panel-bg" />
+				</TooltipPrimitive.Content>
+			</TooltipPrimitive.Portal>
+		</TooltipPrimitive.Root>
+	);
 }
 
 /* ── Row actions ────────────────────────────────────────────────────────── */

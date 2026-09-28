@@ -7,7 +7,7 @@ import { useGuildConfig } from "@/features/dashboard/config-provider";
 import { useSectionForm } from "@/hooks/use-section-form";
 
 import { PageShell } from "@/components/panel/page-shell";
-import { Button } from "@/components/panel/form-parts";
+import { Button, InfoCard } from "@/components/panel/form-parts";
 type ThemeKey = "CLASSIC" | "CYBERPUNK" | "NEON";
 
 interface BannerLayout {
@@ -66,14 +66,7 @@ export default function Page() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* CONFIG PANEL */}
 				<div className="lg:col-span-2 space-y-6">
-					<div className="p-5 rounded-xl border border-border-subtle bg-panel-bg/40 space-y-4 shadow-xs">
-						<div className="flex items-center gap-2 border-b border-border-subtle/50 pb-2.5">
-							<Palette className="size-4 text-primary-500" />
-							<h3 className="text-sm font-semibold text-fg-default">
-								Graphic Properties
-							</h3>
-						</div>
-
+					<InfoCard icon={<Palette className="size-4 text-primary-500" />} title="Graphic Properties">
 						{/* Layout Key + Saved Registry */}
 						<div className="flex flex-wrap items-end gap-3">
 							<div className="space-y-1.5 flex-1 min-w-[180px]">
@@ -179,7 +172,7 @@ export default function Page() {
 								))}
 							</div>
 						</div>
-					</div>
+					</InfoCard>
 
 					{/* REGISTRY JSON PAYLOAD */}
 					<div className="p-4 border border-border-subtle bg-panel-bg/10 rounded-xl space-y-2 text-left">

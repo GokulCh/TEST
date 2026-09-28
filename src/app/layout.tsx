@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@/components/shared/theme-provider"
 import { Toaster } from "@/components/shared/toaster"
+import { TooltipProvider } from "@/components/panel/form-parts"
 import type { Metadata } from "next"
 import "./globals.css"
 
@@ -28,8 +29,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         <ThemeProvider>
-          <div className="motion-page contents">{children}</div>
-          <Toaster />
+          <TooltipProvider delayDuration={200}>
+            <div className="motion-page contents">{children}</div>
+            <Toaster />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

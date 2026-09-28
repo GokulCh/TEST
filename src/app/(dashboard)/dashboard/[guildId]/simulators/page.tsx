@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 import { EloCalculatorSection } from "@/features/simulators/components/elo-calculator-section"
 import { PartyCalculatorSection } from "@/features/simulators/components/party-calculator-section"
 import { QueueCalculatorSection } from "@/features/simulators/components/queue-calculator-section"
