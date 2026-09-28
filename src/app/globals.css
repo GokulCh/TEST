@@ -1,0 +1,465 @@
+﻿@import "tailwindcss";
+
+/* Keep numeric fields compact and consistent across the dashboard. */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ==========================================================================
+   1. CORE THEME CONFIGURATION (Tailwind v4 @theme Architecture)
+   ========================================================================== */
+@theme {
+	/* --- Typography Core Engine --- */
+	--font-sans: "Geist", system-ui, -apple-system, sans-serif;
+	--font-display: "Geist", var(--font-sans);
+	--font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+	/* --- Direct Variable Bindings (Decoupled Light/Dark Mappings) --- */
+	--color-bg-canvas: var(--bg-canvas);
+	--color-fg-default: var(--fg-default);
+	--color-fg-muted: var(--fg-muted);
+	--color-border-subtle: var(--border-subtle);
+		--color-panel-bg: var(--panel-bg);
+		--color-surface-raised: var(--surface-raised);
+		--color-surface-inset: var(--surface-inset);
+		--color-accent-purple: var(--accent-purple);
+		--color-accent-cyan: var(--accent-cyan);
+		--color-focus-ring: var(--focus-ring);
+
+
+	/* --- Absolute Structural Naming Scales --- */
+	--color-primary-50: var(--primary-50);
+	--color-primary-500: var(--primary-500); /* Core Action Accent */
+	--color-primary-600: var(--primary-600);
+
+	--color-secondary-50: var(--secondary-50);
+	--color-secondary-500: var(--secondary-500); /* Secondary Highlight */
+	--color-secondary-600: var(--secondary-600);
+
+	--color-tertiary-50: var(--tertiary-50);
+	--color-tertiary-500: var(
+		--tertiary-500
+	); /* Destructive Actions / Highlights */
+	--color-tertiary-600: var(--tertiary-600);
+
+	/* --- UI Functional States --- */
+	--color-success: oklch(0.72 0.16 150);
+	--color-warning: oklch(0.78 0.17 75);
+	--color-danger: oklch(0.63 0.22 25);
+
+	/* --- Typography Fluid Scaling Scale --- */
+	--text-title-hero: clamp(2.25rem, 6vw, 3.75rem);
+	--text-title-main: clamp(1.5rem, 4vw, 2.25rem);
+	--text-title-card: 1.25rem;
+	--text-desc-base: 1rem;
+	--text-desc-muted: 0.875rem;
+
+	/* --- Structural Layout System Tokens --- */
+	--radius-panel: 12px;
+	--radius-control: 6px;
+
+	/* --- Custom Z-Index Stacking Context Scale --- */
+	--z-index-dropdown: 1000;
+	--z-index-sticky: 1020;
+	--z-index-fixed: 1030;
+	--z-index-modal: 1040;
+	--z-index-popover: 1050;
+	--z-index-tooltip: 1060;
+}
+
+/* ==========================================================================
+   2. EXPLICIT INTERIOR PERCEPTUAL STRUCTURAL THEMES
+   ========================================================================== */
+:root {
+	/* --- Light Theme Palette Configs --- */
+	--bg-canvas: oklch(0.985 0.004 260);
+	--fg-default: oklch(0.15 0.01 260);
+	--fg-muted: oklch(0.45 0.01 260);
+	--border-subtle: oklch(0.872 0.012 260);
+		--panel-bg: oklch(0.97 0.006 260);
+		--surface-raised: oklch(0.99 0.004 260);
+		--surface-inset: oklch(0.93 0.008 260);
+		--accent-purple: oklch(0.58 0.2 295);
+		--accent-cyan: oklch(0.72 0.15 205);
+		--focus-ring: oklch(0.62 0.18 250);
+		--glow-intensity: 0.06;
+
+
+	/* Naming Standard Scales Bound To Light Coordinates */
+	--primary-50: oklch(0.96 0.03 250);
+	--primary-500: oklch(0.52 0.16 250);
+	--primary-600: oklch(0.44 0.15 250);
+
+	--secondary-50: oklch(0.96 0.03 290);
+	--secondary-500: oklch(0.5 0.18 290);
+	--secondary-600: oklch(0.42 0.17 290);
+
+	--tertiary-50: oklch(0.95 0.04 20);
+	--tertiary-500: oklch(0.6 0.2 20);
+	--tertiary-600: oklch(0.5 0.19 20);
+}
+
+html.dark {
+	/* --- Pitch Midnight Sapphire System Theme Configs --- */
+	--bg-canvas: oklch(0.13 0.008 260);
+	--fg-default: oklch(0.95 0 0);
+	--fg-muted: oklch(0.65 0 0);
+	--border-subtle: oklch(0.23 0.012 260);
+	--panel-bg: oklch(0.08 0.01 260);
+	--surface-raised: oklch(0.19 0.018 260);
+	--surface-inset: oklch(0.105 0.012 260);
+	--accent-purple: oklch(0.68 0.22 295);
+	--accent-cyan: oklch(0.76 0.16 205);
+	--focus-ring: oklch(0.72 0.18 250);
+	--glow-intensity: 0.25;
+
+	/* Naming Standard Scales Bound To Sapphire Coordinates */
+	--primary-50: oklch(0.25 0.05 250);
+	--primary-500: oklch(0.62 0.18 250);
+	--primary-600: oklch(0.54 0.17 250);
+
+	--secondary-50: oklch(0.22 0.05 290);
+	--secondary-500: oklch(0.58 0.21 290);
+	--secondary-600: oklch(0.5 0.2 290);
+
+	--tertiary-50: oklch(0.22 0.05 20);
+	--tertiary-500: oklch(0.63 0.22 20);
+	--tertiary-600: oklch(0.53 0.21 20);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not(.light) {
+		/* Automatic System Mode Fallback Hooks */
+		--bg-canvas: oklch(0.13 0.008 260);
+		--fg-default: oklch(0.95 0 0);
+		--fg-muted: oklch(0.65 0 0);
+		--border-subtle: oklch(0.23 0.012 260);
+		--panel-bg: oklch(0.16 0.014 260);
+		--surface-raised: oklch(0.19 0.018 260);
+		--surface-inset: oklch(0.105 0.012 260);
+		--accent-purple: oklch(0.68 0.22 295);
+		--accent-cyan: oklch(0.76 0.16 205);
+		--focus-ring: oklch(0.72 0.18 250);
+		--glow-intensity: 0.18;
+
+		--primary-50: oklch(0.25 0.05 250);
+		--primary-500: oklch(0.62 0.18 250);
+		--primary-600: oklch(0.54 0.17 250);
+
+		--secondary-50: oklch(0.22 0.05 290);
+		--secondary-500: oklch(0.58 0.21 290);
+		--secondary-600: oklch(0.5 0.2 290);
+
+		--tertiary-50: oklch(0.22 0.05 20);
+		--tertiary-500: oklch(0.63 0.22 20);
+		--tertiary-600: oklch(0.53 0.21 20);
+	}
+}
+
+/* ==========================================================================
+   3. GLOBAL BASE LAYER STANDARDIZATIONS
+   ========================================================================== */
+@layer base {
+	* {
+		border-color: var(--color-border-subtle);
+	}
+
+	html,
+	body {
+		background-color: var(--color-bg-canvas);
+		color: var(--color-fg-default);
+		font-family: var(--font-sans);
+		min-height: 100vh;
+		scroll-behavior: smooth;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/* Structural Native Component Form Resets */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		letter-spacing: -0.025em;
+		color: var(--color-fg-default);
+	}
+
+	/* Optimized Native Code Block Defaults */
+		code,
+		pre {
+			font-family: var(--font-mono);
+			font-size: 0.9em;
+			line-height: 1.5;
+		}
+
+	/* Custom Scrollbar Handling */
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+	::-webkit-scrollbar-track {
+		background: var(--color-bg-canvas);
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--color-border-subtle);
+		border-radius: 4px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--color-primary-500);
+	}
+}
+
+/* ==========================================================================
+   4. APPLIED PRODUCTION CORE ABSTRACTION UTILITIES
+   ========================================================================== */
+@keyframes public-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes page-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-enter { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-enter { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes pop-enter { from { opacity: 0; transform: translateY(-4px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes bar-enter { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@keyframes check-pop { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+
+/* fill-mode is "backwards", not "both": a finished transform left on the element would make it a stacking context and trap dropdowns under later siblings. */
+.public-enter, .motion-page { animation: page-enter 360ms cubic-bezier(.22,1,.36,1) backwards; }
+.motion-page:has(.no-page-motion) { animation: none !important; }
+.motion-fade { animation: fade-enter 240ms ease-out both; }
+.motion-modal { animation: modal-enter 220ms cubic-bezier(.22,1,.36,1) both; }
+.motion-pop { animation: pop-enter 160ms cubic-bezier(.22,1,.36,1) both; }
+.motion-bar { animation: bar-enter 260ms cubic-bezier(.22,1,.36,1) both; }
+.motion-check { animation: check-pop 320ms cubic-bezier(.22,1,.36,1) both; }
+/* Children fade up in sequence. */
+.motion-stagger > * { animation: page-enter 360ms cubic-bezier(.22,1,.36,1) backwards; }
+.motion-stagger > *:nth-child(2) { animation-delay: 40ms; }
+.motion-stagger > *:nth-child(3) { animation-delay: 80ms; }
+.motion-stagger > *:nth-child(4) { animation-delay: 120ms; }
+.motion-stagger > *:nth-child(n+5) { animation-delay: 160ms; }
+.motion-interactive { transition: transform 180ms ease, opacity 180ms ease, border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease; }
+.motion-interactive:hover { transform: translateY(-2px); }
+.motion-interactive:active { transform: translateY(0) scale(.99); }
+
+/* Loading placeholder: a soft moving highlight instead of a hard pulse. */
+.skeleton {
+  background-color: color-mix(in oklab, var(--panel-bg) 60%, transparent);
+  background-image: linear-gradient(100deg, transparent 30%, color-mix(in oklab, var(--fg-muted) 10%, transparent) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* Radix popovers, dialogs and menus expose data-state; animate them without a plugin. */
+[data-radix-popper-content-wrapper] > [data-state="open"] { animation: pop-enter 160ms cubic-bezier(.22,1,.36,1) both; }
+[data-slot="overlay"][data-state="open"] { animation: fade-enter 200ms ease-out both; }
+[data-slot="dialog"][data-state="open"] { animation: modal-enter 220ms cubic-bezier(.22,1,.36,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .public-enter, .motion-page, .motion-fade, .motion-modal, .motion-pop, .motion-bar, .motion-check, .motion-stagger > *, .skeleton { animation: none !important; }
+  .motion-interactive, .motion-interactive:hover, .motion-interactive:active { transition: none !important; transform: none !important; }
+}
+
+@layer base {
+	html { color-scheme: light; }
+	html.dark { color-scheme: dark; }
+
+	/* Native selects that cannot use a data-backed dropdown follow the theme. In the base layer so utility classes can override. */
+	select {
+		appearance: none;
+		min-height: 2.25rem;
+		border: 1px solid var(--border-subtle);
+		border-radius: 0.5rem;
+		background-color: color-mix(in oklab, var(--color-bg-canvas) 40%, transparent);
+		color: var(--color-fg-default);
+		padding: 0 2.25rem 0 0.75rem;
+		background-image: linear-gradient(45deg, transparent 50%, var(--color-fg-muted) 50%), linear-gradient(135deg, var(--color-fg-muted) 50%, transparent 50%);
+		background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%;
+		background-repeat: no-repeat;
+		background-size: 5px 5px, 5px 5px;
+		cursor: pointer;
+		transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+	}
+	select:focus-visible { outline: none; border-color: color-mix(in oklab, var(--color-primary-500) 60%, transparent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary-500) 20%, transparent); }
+	select option, select optgroup { background: var(--color-panel-bg); color: var(--color-fg-default); padding: 0.65rem; }
+
+	/* One focus treatment for every keyboard-reachable control that doesn't draw its own. */
+	:where(button, a, [role="switch"], [role="tab"], summary):focus-visible {
+		outline: 2px solid color-mix(in oklab, var(--color-primary-500) 70%, transparent);
+		outline-offset: 2px;
+	}
+	/* Fallback ring for bare inputs; controls that style their own focus (focus:outline-none) override it. */
+	:where(input, textarea):focus-visible { outline: 2px solid color-mix(in oklab, var(--color-primary-500) 60%, transparent); outline-offset: 1px; }
+	::selection { background: color-mix(in oklab, var(--color-primary-500) 30%, transparent); }
+}
+.public-card { transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease, box-shadow 220ms ease; }
+.public-card:hover { box-shadow: 0 18px 50px rgba(0,0,0,.18); }
+@media (prefers-reduced-motion: reduce) { .public-card, .public-card:hover { transition: none; transform: none; } select { transition: none; } }
+
+@layer utilities {
+		/* Keep dense dashboard labels readable without changing the visual system. */
+		.text-\[8px\],
+		.text-\[9px\],
+		.text-\[10px\] {
+			font-size: 0.6875rem !important;
+			line-height: 1.4 !important;
+		}
+
+		.text-\[11px\],
+		.text-xs {
+			font-size: 0.8125rem !important;
+			line-height: 1.45 !important;
+		}
+
+		/* --- Advanced Typographic Layout Shortcuts --- */
+	.text-hero {
+		font-size: var(--text-title-hero);
+		line-height: 1.1;
+		font-weight: 800;
+		letter-spacing: -0.04em;
+	}
+
+	.text-title {
+		font-size: var(--text-title-main);
+		line-height: 1.25;
+		font-weight: 700;
+	}
+
+	.text-description {
+		font-size: var(--text-desc-base);
+		color: var(--color-fg-muted);
+		line-height: 1.6;
+	}
+
+	.text-muted-sm {
+		font-size: var(--text-desc-muted);
+		color: var(--color-fg-muted);
+		line-height: 1.5;
+	}
+
+	/* --- Dashboard Complex Frame Structural Containers --- */
+	.panel-container {
+		background-color: var(--color-panel-bg);
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius-panel);
+		padding: 1.5rem;
+		transition: box-shadow 0.2s ease-in-out;
+	}
+
+	.interactive-control {
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius-control);
+		background-color: var(--color-bg-canvas);
+		padding: 0.5rem 1rem;
+		color: var(--color-fg-default);
+		font-size: 0.875rem;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.interactive-control:focus {
+		outline: none;
+		border-color: var(--color-primary-500);
+		box-shadow: 0 0 0 2px rgba(40, 100, 250, var(--glow-intensity));
+	}
+
+	.interactive-control:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		background-color: var(--color-panel-bg);
+	}
+
+	/* --- Complex Structural Glow Modifications --- */
+	.glow-primary {
+		box-shadow: 0 0 25px 2px rgba(40, 100, 250, var(--glow-intensity));
+	}
+
+	.glow-secondary {
+		box-shadow: 0 0 25px 2px rgba(180, 50, 250, var(--glow-intensity));
+	}
+
+	/* --- Production Page Structural Micro Layout Shorthands --- */
+	.page-layout-wrapper {
+		max-width: 80rem; /* 1280px master desktop constraint grid */
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+		.flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-size: 0.8125rem;
+			font-weight: 600;
+			line-height: 1.2;
+			color: var(--color-fg-muted);
+		}
+
+		.surface-inset {
+			background: var(--color-surface-inset);
+			border: 1px solid color-mix(in oklch, var(--color-border-subtle) 78%, transparent);
+		}
+
+		.button-primary,
+		.button-secondary {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5rem;
+			min-height: 2.75rem;
+			border-radius: 0.625rem;
+			padding: 0.65rem 1.15rem;
+			font-size: 0.875rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+		}
+		.button-primary:active,
+		.button-secondary:active { transform: scale(.98); }
+
+		.button-primary {
+			background: var(--color-primary-500);
+			color: white;
+			box-shadow: 0 10px 28px color-mix(in oklch, var(--color-primary-500) 22%, transparent);
+		}
+
+		.button-primary:hover { background: var(--color-primary-600); transform: translateY(-1px); }
+		.button-secondary { border: 1px solid var(--color-border-subtle); background: var(--color-surface-raised); color: var(--color-fg-default); }
+		.button-secondary:hover { border-color: color-mix(in oklch, var(--color-primary-500) 55%, transparent); background: var(--color-panel-bg); }
+
+		.status-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			border-radius: 999px;
+			padding: 0.25rem 0.65rem;
+			font-size: 0.75rem;
+			font-weight: 600;
+		}
+
+		.status-success { border: 1px solid color-mix(in oklch, var(--color-success) 28%, transparent); background: color-mix(in oklch, var(--color-success) 9%, transparent); color: var(--color-success); }
+
+		.status-warning { border: 1px solid color-mix(in oklch, var(--color-warning) 30%, transparent); background: color-mix(in oklch, var(--color-warning) 10%, transparent); color: var(--color-warning); }
+
+		.command-preview { box-shadow: 0 24px 80px color-mix(in oklch, var(--color-primary-500) 10%, transparent); }
+	}
+
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+		}

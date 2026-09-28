@@ -1,0 +1,29 @@
+import { PUBLIC_PORTAL_ROOT_DOMAIN } from "@/lib/config-public-url"
+
+export type PublicPlayer = {
+  id: string
+  name: string
+  slug: string
+  rank: string
+  elo: number
+  wins: number
+  games: number
+  streak: number
+  kills: number
+  deaths: number
+  bedsBroken: number
+  mvps: number
+  avatar: string
+}
+
+/** A rank as the guild configured it (name and colour), highest first. */
+export type PublicRank = { name: string; color?: string }
+
+export type PublicGame = { id: string; mode: string; map: string; winner: string; score: string; time: string }
+
+export const guildDisplayName = (guildId: string) => guildId === "demo" ? "PRBW NETWORK" : guildId.replace(/[-_]/g, " ").toUpperCase()
+export const guildDomain = (guildId: string) => `${guildId === "demo" ? "prbw" : guildId}.${PUBLIC_PORTAL_ROOT_DOMAIN}`
+
+export function slugifyName(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
